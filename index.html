@@ -243,7 +243,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   </div>
   <span class="snote" id="snote"></span>
 </div>
-
+ 
 <!-- MODE ROW (U14 / U16) -->
 <div id="mode-row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
   <div class="seg" id="mode-seg">
@@ -259,7 +259,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
     <select id="asel" onchange="onAthlete()"></select>
   </div>
 </div>
-
+ 
 <!-- BW MODE ROW -->
 <div id="bw-mode-row" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
   <div class="seg" id="bw-gseg">
@@ -273,7 +273,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
     <option value="14">Born 2014 → U14 2026-27</option>
   </select>
 </div>
-
+ 
 <!-- REGIONALS MODE ROW -->
 <div id="reg-mode-row" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
   <div class="seg" id="reg-gseg">
@@ -287,7 +287,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   </select>
   <select id="reg-cf" onchange="renderReg()"><option value="">All clubs</option></select>
 </div>
-
+ 
 <!-- ATHLETE AREA -->
 <div id="ath-area" style="display:none">
   <div class="tabs">
@@ -305,7 +305,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   <div class="pnl" id="p-field"></div>
   <div class="pnl" id="p-career"></div>
 </div>
-
+ 
 <!-- TEAM AREA -->
 <div id="team-area" style="display:none">
   <div style="display:flex;gap:0;margin-bottom:10px">
@@ -317,7 +317,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   </div>
   <div id="team-content"></div>
 </div>
-
+ 
 <!-- BW AREA -->
 <div id="bw-area" style="display:none">
   <div class="bw-hdr">
@@ -339,7 +339,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   <div class="pnl" id="bw-pp"></div>
   <div class="pnl" id="bw-wt"></div>
 </div>
-
+ 
 <!-- REGIONALS AREA -->
 <div id="reg-area" style="display:none">
   <div class="reg-hdr">
@@ -361,9 +361,9 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   <div class="pnl" id="reg-sp"></div>
   <div class="pnl" id="reg-cx"></div>
 </div>
-
+ 
 <div id="empty-state" class="empty">Select a club and athlete above to explore their profile.</div>
-
+ 
 <script>
 // Self-contained mini chart engine — no CDN needed
 class Chart {
@@ -382,18 +382,18 @@ class Chart {
     const opts = cfg.options || {};
     const isHoriz = opts.indexAxis === 'y';
     const isStacked = opts.scales?.x?.stacked;
-
+ 
     // Size canvas to container
     const W = canvas.parentElement ? canvas.parentElement.offsetWidth || 400 : 400;
     const H = canvas.parentElement ? canvas.parentElement.offsetHeight || 200 : 200;
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, W, H);
-
+ 
     const pad = { top: 8, right: 12, bottom: isHoriz ? 28 : 36, left: isHoriz ? 80 : 36 };
     const cW = W - pad.left - pad.right;
     const cH = H - pad.top - pad.bottom;
-
+ 
     if (isHoriz) this._drawHoriz(ctx, datasets, labels, cW, cH, pad, W, H);
     else if (isStacked) this._drawStacked(ctx, datasets, labels, cW, cH, pad, W, H);
     else this._drawVert(ctx, datasets, labels, cW, cH, pad, W, H);
@@ -406,7 +406,7 @@ class Chart {
     const n = data.length;
     const gap = 2;
     const barW = Math.max(2, (cW - gap * (n - 1)) / n);
-
+ 
     // Y axis
     ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -415,7 +415,7 @@ class Chart {
       ctx.fillStyle = '#999'; ctx.font = '9px system-ui'; ctx.textAlign = 'right';
       ctx.fillText(Math.round(max * i / 4), pad.left - 3, y + 3);
     }
-
+ 
     // Bars
     data.forEach((v, i) => {
       const bH = (v / max) * cH;
@@ -429,7 +429,7 @@ class Chart {
       ctx.lineTo(x + barW, y + bH); ctx.lineTo(x, y + bH); ctx.lineTo(x, y + r);
       ctx.quadraticCurveTo(x, y, x + r, y);
       ctx.closePath(); ctx.fill();
-
+ 
       // Label
       ctx.fillStyle = '#666'; ctx.font = '9px system-ui'; ctx.textAlign = 'center';
       ctx.save(); ctx.translate(x + barW / 2, H - pad.bottom + 4);
@@ -444,7 +444,7 @@ class Chart {
     const maxT = Math.max(...totals, 1);
     const gap = 4;
     const barW = Math.max(4, (cW - gap * (n - 1)) / n);
-
+ 
     // Grid
     ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -453,7 +453,7 @@ class Chart {
       ctx.fillStyle = '#999'; ctx.font = '10px system-ui'; ctx.textAlign = 'right';
       ctx.fillText(Math.round(maxT * i / 4), pad.left - 3, y + 3);
     }
-
+ 
     // Stacked bars — group by same 'stack' key
     const stacks = {};
     datasets.forEach(ds => {
@@ -461,11 +461,11 @@ class Chart {
       if (!stacks[key]) stacks[key] = [];
       stacks[key].push(ds);
     });
-
+ 
     const stackKeys = Object.keys(stacks);
     const nStacks = stackKeys.length;
     const subW = barW / nStacks;
-
+ 
     labels.forEach((lbl, i) => {
       const x0 = pad.left + i * (barW + gap);
       stackKeys.forEach((key, si) => {
@@ -494,7 +494,7 @@ class Chart {
     const maxOpt = this.cfg.options?.scales?.x?.max;
     const allVals = datasets.flatMap(ds => ds.data);
     const maxV = maxOpt || Math.max(...allVals, 1);
-
+ 
     // X axis gridlines
     ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -503,14 +503,14 @@ class Chart {
       ctx.fillStyle = '#999'; ctx.font = '10px system-ui'; ctx.textAlign = 'center';
       ctx.fillText(Math.round(maxV * i / 4), x, H - 6);
     }
-
+ 
     // Y labels
     labels.forEach((lbl, i) => {
       const y = pad.top + i * (barH * datasets.length + gap) + barH * datasets.length / 2;
       ctx.fillStyle = '#555'; ctx.font = '11px system-ui'; ctx.textAlign = 'right';
       ctx.fillText(lbl, pad.left - 6, y + 4);
     });
-
+ 
     // Bars
     datasets.forEach((ds, di) => {
       const color = ds.backgroundColor;
@@ -533,15 +533,13 @@ class Chart {
 <script>
 // ═══ ALL DATA ════════════════════════════════════════════════════════════════
 const U14=[{"n":"Bertell, Kaeli","c":"TARP","g":"W","y":2013,"r":"1","t":492,"gs":200,"sl":200,"sg":92,"runs":[[1,100],[1,100],[1,100],[1,100],[1,100],[2,80],[0,0],[1,100],[8,32],[10,26],[3,60]]},{"n":"Connolly, Katherine","c":"MBSEF","g":"W","y":2012,"r":"2","t":435,"gs":150,"sl":140,"sg":145,"runs":[[4,50],[4,50],[0,0],[2,80],[10,26],[1,100],[3,60],[68,0],[5,45],[11,24],[1,100]]},{"n":"Kaplan, Ocoee","c":"SARS","g":"W","y":2012,"r":"3","t":426,"gs":86,"sl":160,"sg":180,"runs":[[11,24],[10,26],[4,50],[75,0],[7,36],[4,50],[2,80],[2,80],[1,100],[2,80],[4,50]]},{"n":"Curtis, Lillian","c":"MBSEF","g":"W","y":2012,"r":"4","t":402,"gs":140,"sl":132,"sg":130},{"n":"Kuzel, Kamila","c":"SARS","g":"W","y":2012,"r":"5","t":400,"gs":140,"sl":120,"sg":140},{"n":"Hanchett, Veera","c":"TWP","g":"W","y":2012,"r":"6","t":287,"gs":85,"sl":140,"sg":62},{"n":"Lien, Tekla","c":"SARS","g":"W","y":2012,"r":"7","t":279,"gs":58,"sl":71,"sg":150},{"n":"Welker, Libby","c":"SARS","g":"W","y":2012,"r":"8","t":246,"gs":85,"sl":85,"sg":76},{"n":"Malstrom, Ila","c":"MBSEF","g":"W","y":2012,"r":"9","t":202,"gs":68,"sl":65,"sg":69},{"n":"Brueggemann, Alice","c":"MBSEF","g":"W","y":2012,"r":"10","t":199,"gs":109,"sl":90,"sg":0,"runs":[[0,0],[13,20],[5,45],[0,0],[2,80],[9,29],[8,32],[5,45],[null,0],[0,0],[0,0]]},{"n":"Altman, Naomi","c":"CSAT","g":"W","y":2012,"r":"11","t":195,"gs":65,"sl":90,"sg":40},{"n":"Webb, Sutton","c":"SARS","g":"W","y":2013,"r":"12","t":190,"gs":66,"sl":50,"sg":74,"runs":[[6,40],[10,26],[27,4],[8,32],[14,18],[13,20],[14,18],[21,10],[12,22],[5,45],[9,29]]},{"n":"Malstrom, Lee","c":"MBSEF","g":"W","y":2012,"r":"13","t":177,"gs":34,"sl":54,"sg":89},{"n":"Callaghan, Juliet","c":"CMAC","g":"W","y":2012,"r":"14","t":160,"gs":65,"sl":45,"sg":50},{"n":"Hoffman, Scarlet","c":"CSAT","g":"W","y":2013,"r":"Alt 1","t":148,"gs":90,"sl":36,"sg":22,"runs":[[29,2],[18,13],[0,0],[0,0],[4,50],[6,40],[7,36],[0,0],[16,15],[0,0],[24,7]]},{"n":"Baroni, Jenna","c":"SARS","g":"W","y":2013,"r":"Alt 2","t":124,"gs":56,"sl":28,"sg":40,"runs":[[32,0],[20,11],[13,20],[49,0],[5,45],[0,0],[24,7],[23,8],[15,16],[18,13],[11,24]]},{"n":"Barbieri-Minter, Makenna","c":"SARS","g":"W","y":2012,"r":"Alt 3","t":119,"gs":33,"sl":58,"sg":28},{"n":"Gidley, Elsa","c":"SARS","g":"W","y":2013,"r":"Alt 4","t":115,"gs":62,"sl":23,"sg":30,"runs":[[10,26],[20,11],[81,0],[18,13],[19,12],[7,36],[21,10],[39,0],[21,10],[13,20],[34,0]]},{"n":"Garren, Cailtyn","c":"MBSEF","g":"W","y":2013,"r":"Alt 5","t":109,"gs":36,"sl":38,"sg":35,"runs":[[13,20],[0,0],[28,3],[22,9],[17,14],[15,16],[12,22],[15,16],[13,20],[16,15],[21,10]]},{"n":"Doyle, Madailein","c":"CMAC","g":"W","y":2012,"r":"Alt 6","t":99,"gs":33,"sl":50,"sg":16},{"n":"Stewart, Anna","c":"SPAC","g":"W","y":2012,"r":"Alt 7","t":94,"gs":12,"sl":58,"sg":24,"runs":[[25,6],[39,0],[6,40],[0,0],[25,6],[40,0],[18,13],[14,18],[18,13],[20,11],[22,9]]},{"n":"Sullivan, Eiden","c":"TARP","g":"W","y":2013,"r":"Alt 8","t":77,"gs":38,"sl":38,"sg":1,"runs":[[15,16],[19,12],[14,18],[13,20],[12,22],[22,9],[30,1],[17,14],[32,0],[46,0],[30,1]]},{"n":"Tarnow, Maerin","c":"MBSEF","g":"W","y":2013,"r":"Alt 9","t":76,"gs":29,"sl":7,"sg":40,"runs":[[16,15],[17,14],[76,0],[0,0],[0,0],[0,0],[33,0],[24,7],[10,26],[0,0],[17,14]]},{"n":"Gaffney, Emery","c":"CMAC","g":"W","y":2013,"r":"Alt 10","t":70,"gs":20,"sl":11,"sg":39,"runs":[[23,8],[29,2],[37,0],[0,0],[0,0],[19,12],[20,11],[0,0],[28,3],[0,0],[7,36]]},{"n":"Virdeh, Tarlan","c":"SPAC","g":"W","y":2012,"r":"Alt 11","t":68,"gs":27,"sl":9,"sg":32,"runs":[[43,0],[50,0],[60,0],[0,0],[18,13],[17,14],[44,0],[22,9],[24,7],[19,12],[13,20]]},{"n":"Purchase, Florence","c":"CMAC","g":"W","y":2013,"r":"Alt 12","t":65,"gs":16,"sl":33,"sg":16,"runs":[[35,0],[46,0],[18,13],[26,5],[15,16],[42,0],[28,3],[13,20],[23,8],[23,8],[32,0]]},{"n":"Albright, Stella","c":"SARS","g":"W","y":2012,"r":"Alt 13","t":64,"gs":7,"sl":38,"sg":19},{"n":"Graham, Brooke","c":"CMAC","g":"W","y":2013,"r":"Alt 14","t":55,"gs":13,"sl":15,"sg":27,"runs":[[28,3],[49,0],[51,0],[0,0],[26,5],[23,8],[16,15],[35,0],[30,1],[17,14],[18,13]]},{"n":"Hopkins, Lena","c":"TWP","g":"W","y":2013,"r":"Alt 15","t":53,"gs":29,"sl":11,"sg":13,"runs":[[30,1],[14,18],[38,0],[24,7],[20,11],[24,7],[32,0],[27,4],[27,4],[24,7],[25,6]]},{"n":"Duff, Claire","c":"SARS","g":"W","y":2013,"r":"Alt 16","t":50,"gs":10,"sl":35,"sg":5,"runs":[[50,0],[33,0],[20,11],[11,24],[24,7],[28,3],[23,8],[34,0],[26,5],[31,0],[40,0]]},{"n":"White, Olivia","c":"LPRT","g":"W","y":2012,"r":"Alt 17","t":49,"gs":19,"sl":12,"sg":18},{"n":"Giordano, Rachel","c":"CSAT","g":"W","y":2012,"r":"Alt 18","t":47,"gs":8,"sl":39,"sg":0},{"n":"Shipman, Madison","c":"TARP","g":"W","y":2012,"r":"Alt 19","t":44,"gs":26,"sl":14,"sg":4},{"n":"Entrop, Sloane","c":"SPAC","g":"W","y":2013,"r":"Alt 20","t":37,"gs":16,"sl":21,"sg":0,"runs":[[27,4],[26,5],[25,6],[21,10],[29,2],[20,11],[37,0],[20,11],[36,0],[0,0],[44,0]]},{"n":"Fisher, Caia","c":"SPAC","g":"W","y":2012,"r":"Alt 22","t":34,"gs":0,"sl":34,"sg":0,"runs":[[42,0],[38,0],[29,2],[14,18],[0,0],[0,0],[27,4],[15,16],[57,0],[0,0],[48,0]]},{"n":"Prett, Tatum","c":"TARP","g":"W","y":2013,"r":"Alt 23","t":34,"gs":8,"sl":16,"sg":10},{"n":"Garren, Makaela","c":"MBSEF","g":"W","y":2013,"r":"TAlt 24","t":32,"gs":11,"sl":5,"sg":16,"runs":[[0,0],[28,3],[26,5],[38,0],[23,8],[29,2],[31,0],[33,0],[18,13],[28,3],[0,0]]},{"n":"Beyreuther, Hadley","c":"SARS","g":"W","y":2013,"r":"Alt 24","t":28,"gs":0,"sl":14,"sg":14,"runs":[[45,0],[55,0],[30,1],[19,12],[31,0],[34,0],[64,0],[29,2],[29,2],[25,6],[23,8]]},{"n":"Siebens, Aili","c":"MRST","g":"W","y":2013,"r":"Alt 26","t":25,"gs":8,"sl":17,"sg":0,"runs":[[57,0],[47,0],[43,0],[23,8],[27,4],[27,4],[22,9],[26,5],[60,0],[42,0],[51,0]]},{"n":"Ozegovic, Amina","c":"SPAC","g":"W","y":2013,"r":"Alt 28","t":21,"gs":0,"sl":10,"sg":11,"runs":[[38,0],[41,0],[24,7],[36,0],[36,0],[32,0],[29,2],[28,3],[0,0],[33,0],[20,11]]},{"n":"Rich, Kaitlyn","c":"CMAC","g":"W","y":2013,"r":"Alt 31","t":10,"gs":0,"sl":10,"sg":0,"runs":[[46,0],[45,0],[21,10],[32,0],[38,0],[48,0],[42,0],[37,0],[46,0],[43,0],[45,0]]},{"n":"Tennyson, Charlotte","c":"BART","g":"W","y":2013,"r":"Alt 33","t":6,"gs":0,"sl":6,"sg":0},{"n":"Rauber, Isabel","c":"MBSEF","g":"W","y":2013,"r":"Alt 35","t":4,"gs":1,"sl":0,"sg":3,"runs":[[41,0],[37,0],[44,0],[34,0],[30,1],[47,0],[44,0],[42,0],[50,0],[48,0],[28,3]]},{"n":"Pettersen, Kenzie","c":"SPAC","g":"W","y":2013,"r":"Alt 38","t":1,"gs":0,"sl":0,"sg":1,"runs":[[48,0],[52,0],[48,0],[47,0],[43,0],[36,0],[51,0],[43,0],[37,0],[30,1],[46,0]]},{"n":"Underwood, Emeline","c":"SPAC","g":"W","y":2013,"r":"","t":0,"gs":0,"sl":0,"sg":0,"runs":[[53,0],[56,0],[55,0],[39,0],[31,0],[44,0],[59,0],[85,0],[53,0],[44,0],[33,0]]},{"n":"Underwood, Nora","c":"SPAC","g":"W","y":2013,"r":"","t":0,"gs":0,"sl":0,"sg":0,"runs":[[58,0],[48,0],[52,0],[51,0],[46,0],[67,0],[66,0],[0,0],[65,0],[61,0],[63,0]]},{"n":"Weisert, Sophia","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"SALINAS, Amelia","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Bravenec, Elizabeth","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Weaver, Sloan","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Grabos, Hudson","c":"CSAT","g":"M","y":2012,"r":"1","t":550,"gs":200,"sl":200,"sg":150,"runs":[[1,100],[1,100],[1,100],[0,0],[1,100],[2,80],[1,100],[1,100],[4,50],[1,100],[0,0]]},{"n":"Bonura, Nico","c":"MRT","g":"M","y":2013,"r":"2","t":470,"gs":180,"sl":160,"sg":130,"runs":[[11,24],[12,22],[14,18],[2,80],[2,80],[1,100],[5,45],[2,80],[0,0],[2,80],[4,50]]},{"n":"Craveiro, Cade","c":"MBSEF","g":"M","y":2012,"r":"3","t":362,"gs":80,"sl":82,"sg":200,"runs":[[0,0],[2,80],[0,0],[12,22],[0,0],[31,0],[0,0],[3,60],[1,100],[0,0],[1,100]]},{"n":"Landwehr, Solen","c":"SARS","g":"M","y":2012,"r":"4","t":340,"gs":120,"sl":180,"sg":40},{"n":"Lovejoy, Sawyer","c":"CSAT","g":"M","y":2012,"r":"5","t":322,"gs":90,"sl":120,"sg":112,"runs":[[5,45],[0,0],[3,60],[3,60],[9,29],[5,45],[4,50],[4,50],[8,32],[11,24],[2,80]]},{"n":"Wright, Gus","c":"MBSEF","g":"M","y":2012,"r":"6","t":275,"gs":100,"sl":35,"sg":140},{"n":"Dix, Wyatt","c":"SARS","g":"M","y":2013,"r":"7","t":268,"gs":100,"sl":72,"sg":96,"runs":[[6,40],[4,50],[6,40],[8,32],[4,50],[9,29],[11,24],[14,18],[7,36],[3,60],[10,26]]},{"n":"VanZutphen, Beckett","c":"SPAC","g":"M","y":2012,"r":"8","t":260,"gs":84,"sl":71,"sg":105,"runs":[[15,16],[0,0],[0,0],[10,26],[11,24],[3,60],[0,0],[5,45],[3,60],[0,0],[5,45]]},{"n":"Li, Ryan","c":"CMAC","g":"M","y":2012,"r":"T9","t":240,"gs":86,"sl":96,"sg":58,"runs":[[4,50],[10,26],[15,16],[7,36],[10,26],[7,36],[3,60],[7,36],[0,0],[10,26],[8,32]]},{"n":"Irving, Boden","c":"CSAT","g":"M","y":2012,"r":"T9","t":240,"gs":80,"sl":79,"sg":81,"runs":[[2,80],[0,0],[9,29],[4,50],[0,0],[0,0],[12,22],[56,0],[11,24],[5,45],[7,36]]},{"n":"Stewart, Charlie","c":"CMAC","g":"M","y":2012,"r":"11","t":188,"gs":46,"sl":61,"sg":81},{"n":"Kelly, Leo","c":"MRT","g":"M","y":2013,"r":"12","t":180,"gs":49,"sl":51,"sg":80,"runs":[[7,36],[18,13],[20,11],[19,12],[23,8],[18,13],[9,29],[12,22],[6,40],[9,29],[6,40]]},{"n":"Yoo, Soren","c":"MRT","g":"M","y":2012,"r":"Alt 1","t":175,"gs":85,"sl":62,"sg":28},{"n":"Ambauen, Brig","c":"SARS","g":"M","y":2013,"r":"Alt 2","t":166,"gs":68,"sl":69,"sg":29,"runs":[[8,32],[7,36],[11,24],[5,45],[26,5],[0,0],[16,15],[11,24],[16,15],[22,9],[17,14]]},{"n":"Rohrbach, Micah","c":"MRST","g":"M","y":2012,"r":"Alt 3","t":160,"gs":54,"sl":68,"sg":38},{"n":"Richards, Lund","c":"SARS","g":"M","y":2012,"r":"Alt 4","t":158,"gs":23,"sl":74,"sg":61},{"n":"Hone, Ethan","c":"TAS","g":"M","y":2013,"r":"Alt 5","t":130,"gs":61,"sl":23,"sg":46,"runs":[[0,0],[5,45],[24,7],[28,3],[15,16],[15,16],[36,0],[15,16],[10,26],[13,20],[18,13]]},{"n":"Jones, Tennyson","c":"MBSEF","g":"M","y":2013,"r":"Talt 6","t":120,"gs":26,"sl":82,"sg":12,"runs":[[29,2],[0,0],[4,50],[15,16],[16,15],[20,11],[8,32],[28,3],[20,11],[0,0],[30,1]]},{"n":"Hatfield, Luke","c":"MRST","g":"M","y":2013,"r":"Alt 8","t":114,"gs":25,"sl":60,"sg":29,"runs":[[21,10],[17,14],[13,20],[6,40],[20,11],[29,2],[0,0],[72,0],[23,8],[20,11],[14,18]]},{"n":"Lull, August","c":"MBSEF","g":"M","y":2013,"r":"Alt 9","t":97,"gs":33,"sl":18,"sg":46,"runs":[[12,22],[20,11],[23,8],[21,10],[24,7],[21,10],[29,2],[30,1],[22,9],[12,22],[11,24]]},{"n":"Craig, Logan","c":"TWP","g":"M","y":2013,"r":"Alt 11","t":88,"gs":52,"sl":0,"sg":36,"runs":[[15,16],[22,9],[73,0],[37,0],[8,32],[13,20],[0,0],[0,0],[13,20],[15,16],[21,10]]},{"n":"Bouffard, Auguste","c":"CMAC","g":"M","y":2013,"r":"Alt 12","t":87,"gs":30,"sl":40,"sg":17,"runs":[[28,3],[14,18],[18,13],[13,20],[19,12],[24,7],[13,20],[18,13],[26,5],[25,6],[20,11]]},{"n":"Ithomitis, Logan","c":"MSSRT","g":"M","y":2013,"r":"Alt 14","t":62,"gs":42,"sl":20,"sg":0,"runs":[[14,18],[13,20],[17,14],[31,0],[20,11],[12,22],[25,6],[0,0],[31,0],[45,0],[45,0]]},{"n":"Jarrett, Gage","c":"MRST","g":"M","y":2013,"r":"Talt 16","t":61,"gs":21,"sl":18,"sg":22,"runs":[[27,4],[0,0],[42,0],[32,0],[22,9],[19,12],[24,7],[20,11],[18,13],[30,1],[22,9]]},{"n":"Olson, Gavin","c":"SPAC","g":"M","y":2013,"r":"Alt 17","t":56,"gs":28,"sl":28,"sg":0,"runs":[[0,0],[16,15],[21,10],[17,14],[18,13],[28,3],[17,14],[23,8],[null,0],[null,0],[null,0]]},{"n":"Beukema, Nicholas","c":"MRST","g":"M","y":2013,"r":"TAlt 18","t":54,"gs":20,"sl":13,"sg":21,"runs":[[19,12],[23,8],[27,4],[29,2],[41,0],[44,0],[28,3],[22,9],[32,0],[17,14],[24,7]]},{"n":"Arnold, Xavier","c":"TAS","g":"M","y":2013,"r":"Alt 21","t":38,"gs":13,"sl":15,"sg":10,"runs":[[0,0],[25,6],[0,0],[35,0],[24,7],[0,0],[0,0],[16,15],[0,0],[21,10],[0,0]]},{"n":"Lane, Porter","c":"MBSEF","g":"M","y":2013,"r":"Alt 22","t":37,"gs":13,"sl":17,"sg":7,"runs":[[18,13],[0,0],[19,12],[0,0],[0,0],[48,0],[0,0],[26,5],[35,0],[24,7],[36,0]]},{"n":"McCallum, Ian","c":"SARS","g":"M","y":2013,"r":"Alt 23","t":33,"gs":26,"sl":7,"sg":0,"runs":[[57,0],[52,0],[43,0],[24,7],[45,0],[10,26],[0,0],[57,0],[36,0],[54,0],[55,0]]},{"n":"Schneider, Carter","c":"MSSRT","g":"M","y":2013,"r":"Alt 24","t":32,"gs":20,"sl":12,"sg":0,"runs":[[23,8],[19,12],[58,0],[0,0],[0,0],[34,0],[37,0],[19,12],[42,0],[41,0],[47,0]]},{"n":"Conta, Maceo","c":"CMAC","g":"M","y":2013,"r":"Alt 25","t":29,"gs":11,"sl":0,"sg":18,"runs":[[26,5],[27,4],[44,0],[52,0],[30,1],[25,6],[31,0],[40,0],[21,10],[27,4],[23,8]]},{"n":"Waldman, Culver","c":"MBSEF","g":"M","y":2013,"r":"Alt 27","t":26,"gs":0,"sl":22,"sg":4,"runs":[[44,0],[34,0],[59,0],[25,6],[32,0],[41,0],[15,16],[34,0],[37,0],[32,0],[27,4]]},{"n":"Gibbs, Timothy","c":"SPAC","g":"M","y":2012,"r":"Alt 39","t":5,"gs":0,"sl":0,"sg":5,"runs":[[56,0],[51,0],[39,0],[54,0],[0,0],[45,0],[0,0],[32,0],[0,0],[34,0],[26,5]]},{"n":"Guldi, Graham","c":"SPAC","g":"M","y":2013,"r":"TAlt 42","t":1,"gs":0,"sl":1,"sg":0,"runs":[[0,0],[37,0],[30,1],[39,0],[42,0],[39,0],[34,0],[31,0],[39,0],[35,0],[32,0]]},{"n":"Brindza, Tobin","c":"SPAC","g":"M","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Hill, Sawyer","c":"SPAC","g":"M","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0}];
-
+ 
 const U16=[{"n":"Pelland, Harper","c":"CMAC","g":"W","y":2010,"r":"1","t":820,"sl":360,"gs":200,"sg":260,"races":[[1,100],[3,60],[3,60],[3,60],[2,80],[1,100],[2,80],[2,80],[1,100],[1,100]]},{"n":"Osborn, Canyon","c":"CMAC","g":"W","y":2010,"r":"2","t":680,"sl":100,"gs":300,"sg":280,"races":[[null,0],[1,100],[1,100],[1,100],[1,100],[2,80],[1,100],[1,100],[null,0],[null,0]]},{"n":"Hart, Brighton","c":"CMAC","g":"W","y":2010,"r":"3","t":495,"sl":180,"gs":220,"sg":95,"races":[[null,0],[null,0],[2,80],[2,80],[4,50],[5,45],[null,0],[3,60],[2,80],[1,100]]},{"n":"Kuzel, Teagan","c":"SARS","g":"W","y":2010,"r":"4","t":461,"sl":140,"gs":131,"sg":190,"races":[[null,0],[2,80],[4,50],[7,36],[2,80],[3,60],[4,50],[5,45],[null,0],[3,60]]},{"n":"Buyukcetin, Luna","c":"SPAC","g":"W","y":2011,"r":"5","t":292,"sl":45,"gs":117,"sg":130,"races":[[9,29],[15,16],[6,40],[5,45],[5,45],[6,40],[5,45],[8,32],[null,0],[null,0]]},{"n":"Lambert, Piper","c":"MRT","g":"W","y":2011,"r":"6","t":286,"sl":90,"gs":92,"sg":104,"races":[[null,0],[6,40],[11,24],[8,32],[7,36],[7,36],[8,32],[7,36],[null,0],[4,50]]},{"n":"Paul, Lexi","c":"MRT","g":"W","y":2010,"r":"7","t":280,"sl":118,"gs":60,"sg":102,"races":[[11,24],[14,18],[17,14],[11,24],[6,40],[10,26],[7,36],[12,22],[6,40],[7,36]]},{"n":"Ludlow, Julia","c":"CMAC","g":"W","y":2011,"r":"8","t":279,"sl":60,"gs":109,"sg":110,"races":[[null,0],[null,0],[5,45],[6,40],[null,0],[4,50],[3,60],[11,24],[3,60],[null,0]]},{"n":"Lindblade, Camille","c":"MRT","g":"W","y":2010,"r":"9","t":248,"sl":108,"gs":50,"sg":90,"races":[[7,36],[12,22],[21,10],[20,11],[9,29],[8,32],[9,29],[9,29],[4,50],[null,0]]},{"n":"Rydell, Ingrid","c":"SARS","g":"W","y":2010,"r":"10","t":237,"sl":76,"gs":89,"sg":72,"races":[[8,32],[11,24],[8,32],[12,22],[8,32],[14,18],[12,22],[6,40],[11,24],[9,29]]},{"n":"Oie, Freya","c":"SARS","g":"W","y":2010,"r":"11","t":230,"sl":98,"gs":68,"sg":64,"races":[[6,40],[16,15],[9,29],[9,29],[10,26],[11,24],[11,24],[17,14],[9,29],[null,0]]},{"n":"Lanza, Giuliana","c":"CMAC","g":"W","y":2011,"r":"12","t":219,"sl":85,"gs":86,"sg":48,"races":[[5,45],[20,11],[10,26],[10,26],[14,18],[15,16],[14,18],[4,50],[14,18],[12,22]]},{"n":"Harding, Anna","c":"MRT","g":"W","y":2011,"r":"13","t":192,"sl":82,"gs":56,"sg":54,"races":[[4,50],[13,20],[16,15],[18,13],[15,16],[13,20],[10,26],[10,26],[10,26],[8,32]]},{"n":"Hopkins, Ella","c":"TWP","g":"W","y":2010,"r":"14","t":191,"sl":88,"gs":58,"sg":45,"races":[[3,60],[9,29],[14,18],[16,15],[16,15],[16,15],[17,14],[13,20],[13,20],[null,0]]},{"n":"Koehler, Maya","c":"CMAC","g":"W","y":2011,"r":"15","t":181,"sl":58,"gs":68,"sg":55,"races":[[12,22],[18,13],[12,22],[14,18],[13,20],[17,14],[15,16],[8,32],[12,22],[12,22]]},{"n":"McLaughlin, Nora","c":"BART","g":"W","y":2010,"r":"16","t":177,"sl":95,"gs":36,"sg":46,"races":[[2,80],[10,26],[26,5],[25,6],[12,22],[19,12],[18,13],[23,8],[8,32],[null,0]]},{"n":"Jones, Josie","c":"CMAC","g":"W","y":2011,"r":"17","t":174,"sl":62,"gs":76,"sg":36,"races":[[14,18],[21,10],[7,36],[13,20],[20,11],[20,11],[21,10],[14,18],[7,36],[null,0]]},{"n":"McDonald, Sofie","c":"SARS","g":"W","y":2011,"r":"18","t":162,"sl":58,"gs":68,"sg":36,"races":[[16,15],[22,9],[13,20],[15,16],[17,14],[18,13],[16,15],[12,22],[16,15],[null,0]]},{"n":"Castillo, Pepi","c":"SPAC","g":"W","y":2010,"r":"19","t":157,"sl":64,"gs":27,"sg":66,"races":[[10,26],[17,14],[23,8],[21,10],[11,24],[12,22],[13,20],[22,9],[null,0],[11,24]]},{"n":"Gaffney, Greta","c":"CMAC","g":"W","y":2011,"r":"20","t":144,"sl":52,"gs":43,"sg":49,"races":[[18,13],[23,8],[15,16],[17,14],[21,10],[21,10],[20,11],[18,13],[17,14],[null,0]]},{"n":"Koehn, Josie","c":"MHSEF","g":"W","y":2011,"r":"21","t":130,"sl":28,"gs":52,"sg":50},{"n":"Roe, Tessa","c":"TAS","g":"W","y":2010,"r":"22","t":129,"sl":42,"gs":45,"sg":42},{"n":"White, Lydia","c":"LPRT","g":"W","y":2011,"r":"23","t":119,"sl":58,"gs":30,"sg":31},{"n":"Roe, Nora","c":"TAS","g":"W","y":2011,"r":"24","t":113,"sl":44,"gs":42,"sg":27},{"n":"Beukema, Kirsten","c":"MRST","g":"W","y":2011,"r":"25","t":100,"sl":56,"gs":17,"sg":27},{"n":"Lindblade, Helene","c":"MRT","g":"W","y":2011,"r":"26","t":81,"sl":40,"gs":27,"sg":14},{"n":"Smith, Lucy","c":"SPAC","g":"W","y":2011,"r":"27","t":63,"sl":26,"gs":24,"sg":13,"races":[[null,0],[21,10],[19,12],[19,12],[18,13],[null,0],[null,0],[null,0],[15,16],[null,0]]},{"n":"Phelps, Sophie","c":"TAS","g":"W","y":2010,"r":"28","t":60,"sl":22,"gs":15,"sg":23},{"n":"Bourne, Mila","c":"SARS","g":"W","y":2011,"r":"30","t":48,"sl":22,"gs":18,"sg":8},{"n":"Osborn, Ivy","c":"CMAC","g":"W","y":2011,"r":"32","t":44,"sl":22,"gs":14,"sg":8},{"n":"Swadener, Lydia","c":"MHSEF","g":"W","y":2011,"r":"33","t":42,"sl":18,"gs":13,"sg":11},{"n":"Butler, Hazel","c":"WPSC","g":"W","y":2010,"r":"34","t":41,"sl":12,"gs":15,"sg":14},{"n":"Moran, Emma","c":"SARS","g":"W","y":2011,"r":"39","t":21,"sl":9,"gs":6,"sg":6},{"n":"Loy, Juliet","c":"SPAC","g":"W","y":2010,"r":"44","t":12,"sl":12,"gs":0,"sg":0,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[24,7],[26,5]]},{"n":"Copson, Piper","c":"SPAC","g":"W","y":2010,"r":"T46","t":8,"sl":8,"gs":0,"sg":0,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[23,8],[null,0]]},{"n":"Jarrett, Cadel","c":"MRST","g":"M","y":2010,"r":"1","t":665,"sl":336,"gs":154,"sg":175,"races":[[1,100],[7,36],[5,45],[9,29],[2,80],[5,45],[4,50],[2,80],[1,100],[1,100]]},{"n":"Curtis, Finnley","c":"MBSEF","g":"M","y":2010,"r":"2","t":500,"sl":100,"gs":200,"sg":200,"races":[[null,0],[1,100],[1,100],[1,100],[null,0],[1,100],[1,100],[null,0],[null,0],[null,0]]},{"n":"Purchase, Rupert","c":"CMAC","g":"M","y":2010,"r":"3","t":456,"sl":215,"gs":127,"sg":114,"races":[[5,45],[6,40],[8,32],[5,45],[5,45],[9,29],[6,40],[4,50],[4,50],[2,80]]},{"n":"Kusske, Leland","c":"MSSRT","g":"M","y":2010,"r":"4","t":455,"sl":200,"gs":155,"sg":100,"races":[[2,80],[null,0],[3,60],[4,50],[null,0],[6,40],[3,60],[5,45],[3,60],[3,60]]},{"n":"Pavlovcic, Filip","c":"CMAC","g":"M","y":2011,"r":"5","t":428,"sl":200,"gs":124,"sg":104,"races":[[3,60],[4,50],[6,40],[11,24],[7,36],[7,36],[8,32],[3,60],[5,45],[5,45]]},{"n":"Ford, Sam","c":"MBSEF","g":"M","y":2010,"r":"6","t":385,"sl":45,"gs":160,"sg":180,"races":[[null,0],[5,45],[2,80],[2,80],[1,100],[2,80],[null,0],[null,0],[null,0],[null,0]]},{"n":"Ireland, Colin","c":"MRST","g":"M","y":2010,"r":"7","t":384,"sl":64,"gs":130,"sg":190,"races":[[8,32],[8,32],[4,50],[6,40],[4,50],[3,60],[2,80],[6,40],[null,0],[null,0]]},{"n":"Lechleitner, Riley","c":"LPRT","g":"M","y":2010,"r":"8","t":348,"sl":136,"gs":146,"sg":66,"races":[[7,36],[3,60],[10,26],[13,20],[13,20],[13,20],[10,26],[1,100],[6,40],[null,0]]},{"n":"Petett, Trae","c":"CMAC","g":"M","y":2010,"r":"9","t":240,"sl":180,"gs":60,"sg":0,"races":[[null,0],[2,80],[null,0],[3,60],[null,0],[null,0],[null,0],[null,0],[1,100],[null,0]]},{"n":"Siebens, Joren","c":"MRST","g":"M","y":2010,"r":"10","t":238,"sl":102,"gs":49,"sg":87,"races":[[6,40],[10,26],[18,13],[14,18],[8,32],[10,26],[9,29],[14,18],[7,36],[null,0]]},{"n":"Kruse, Ivan","c":"TAS","g":"M","y":2011,"r":"11","t":231,"sl":72,"gs":79,"sg":80,"races":[[4,50],[null,0],[9,29],[10,26],[3,60],[4,50],[5,45],[8,32],[3,60],[null,0]]},{"n":"Bouffard, Thierry","c":"CMAC","g":"M","y":2011,"r":"12","t":218,"sl":75,"gs":77,"sg":66,"races":[[9,29],[9,29],[7,36],[8,32],[6,40],[8,32],[7,36],[9,29],[11,24],[null,0]]},{"n":"Lechleitner, Mark","c":"LPRT","g":"M","y":2011,"r":"13","t":204,"sl":74,"gs":74,"sg":56,"races":[[10,26],[11,24],[13,20],[12,22],[9,29],[11,24],[11,24],[7,36],[10,26],[null,0]]},{"n":"Erbe, Gabriel","c":"MBSEF","g":"M","y":2010,"r":"14","t":185,"sl":66,"gs":70,"sg":49,"races":[[11,24],[12,22],[11,24],[7,36],[10,26],[12,22],[13,20],[10,26],[12,22],[null,0]]},{"n":"Walenta, Jacob","c":"MBSEF","g":"M","y":2010,"r":"15","t":179,"sl":68,"gs":63,"sg":48,"races":[[13,20],[14,18],[14,18],[4,50],[11,24],[14,18],[12,22],[12,22],[14,18],[null,0]]},{"n":"Nguyen, Tohma","c":"SPAC","g":"M","y":2010,"r":"37","t":30,"sl":7,"gs":12,"sg":11,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[27,4],[24,7],[19,12],[24,7],[null,0]]},{"n":"Stewart, Liam","c":"SPAC","g":"M","y":2010,"r":"38","t":29,"sl":3,"gs":6,"sg":20,"races":[[null,0],[null,0],[28,3],[null,0],[18,13],[28,3],[27,4],[28,3],[null,0],[28,3]]},{"n":"Petek, Brady","c":"SPAC","g":"M","y":2011,"r":"40","t":19,"sl":10,"gs":0,"sg":9,"races":[[null,0],[29,2],[null,0],[null,0],[22,9],[null,0],[null,0],[null,0],[30,1],[24,7]]},{"n":"Fisher, Griffin","c":"SPAC","g":"M","y":2010,"r":"","t":0,"sl":0,"gs":0,"sg":0,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0]]}];
-
+ 
 const BW25_M=[{n:"Olson, Gavin",c:"SPAC",by:13,sq:1,sqSc:30.25,gs:1,sl:2},{n:"Guldi, Graham",c:"SPAC",by:13,sq:16,sqSc:27.0,gs:16,sl:21},{n:"Colombo, Dylan",c:"SPAC",by:13,sq:27,sqSc:25.5,gs:28,sl:null},{n:"Buyukcetin, Luca",c:"SPAC",by:14,sq:58,sqSc:21.75,gs:36,sl:7},{n:"Smith, Rafael",c:"SPAC",by:14,sq:76,sqSc:20.0,gs:56,sl:62},{n:"Stewart, Coen",c:"SPAC",by:14,sq:77,sqSc:20.0,gs:null,sl:40},{n:"Stephenson, Carter",c:"SPAC",by:14,sq:99,sqSc:16.5,gs:82,sl:91},{n:"Bouffard, Auguste",c:"CMAC",by:13,sq:33,sqSc:24.0,gs:2,sl:1},{n:"Dix, Wyatt",c:"SARS",by:13,sq:36,sqSc:23.75,gs:4,sl:20},{n:"Kelly, Leo",c:"MRT",by:13,sq:39,sqSc:23.5,gs:8,sl:null},{n:"Hone, Ethan",c:"TAS",by:13,sq:42,sqSc:23.5,gs:11,sl:17},{n:"Bonura, Nico",c:"MRT",by:13,sq:75,sqSc:20.0,gs:6,sl:3},{n:"Ambauen, Brig",c:"SARS",by:13,sq:54,sqSc:22.25,gs:10,sl:4},{n:"Hatfield, Luke",c:"MRST",by:13,sq:8,sqSc:28.0,gs:26,sl:22},{n:"Jones, Tennyson",c:"MBSEF",by:13,sq:7,sqSc:28.0,gs:12,sl:null},{n:"Schneider, Carter",c:"MSSRT",by:13,sq:47,sqSc:23.0,gs:5,sl:25},{n:"Ithomitis, Logan",c:"MSSRT",by:13,sq:49,sqSc:22.75,gs:22,sl:8},{n:"Jarrett, Gage",c:"MRST",by:13,sq:34,sqSc:24.0,gs:31,sl:18},{n:"Lull, August",c:"MBSEF",by:13,sq:60,sqSc:21.5,gs:15,sl:14},{n:"Conta, Maceo",c:"CMAC",by:13,sq:2,sqSc:29.5,gs:20,sl:12},{n:"McCallum, Ian",c:"SARS",by:13,sq:22,sqSc:25.75,gs:34,sl:28}];
 const BW25_W=[{n:"Bertell, Kaeli",c:"TARP",by:13,sq:1,sqSc:33.0,gs:1,sl:1},{n:"Ozegovic, Amina",c:"SPAC",by:13,sq:9,sqSc:28.25,gs:6,sl:5},{n:"Entrop, Sloane",c:"SPAC",by:13,sq:10,sqSc:27.875,gs:11,sl:14},{n:"Pettersen, Kenzie",c:"SPAC",by:13,sq:14,sqSc:27.25,gs:50,sl:25},{n:"Underwood, Emeline",c:"SPAC",by:13,sq:17,sqSc:26.875,gs:15,sl:24},{n:"Underwood, Nora",c:"SPAC",by:13,sq:49,sqSc:23.125,gs:47,sl:36},{n:"Chang, Harper",c:"SPAC",by:14,sq:33,sqSc:25.0,gs:24,sl:32},{n:"Brindza, Liesel",c:"SPAC",by:14,sq:70,sqSc:21.375,gs:86,sl:72},{n:"Stephenson, Addie",c:"SPAC",by:14,sq:73,sqSc:21.125,gs:83,sl:83},{n:"Johnson, Roslyn",c:"SPAC",by:14,sq:98,sqSc:16.5,gs:95,sl:85},{n:"Hoffman, Scarlet",c:"CSAT",by:13,sq:5,sqSc:30.75,gs:10,sl:8},{n:"Baroni, Jenna",c:"SARS",by:13,sq:8,sqSc:28.875,gs:4,sl:null},{n:"Webb, Sutton",c:"SARS",by:13,sq:44,sqSc:23.625,gs:2,sl:null},{n:"Gidley, Elsa",c:"SARS",by:13,sq:23,sqSc:25.75,gs:8,sl:13},{n:"Garren, Cailtyn",c:"MBSEF",by:13,sq:11,sqSc:27.75,gs:13,sl:10},{n:"Siebens, Aili",c:"MRST",by:13,sq:39,sqSc:24.375,gs:12,sl:4},{n:"Gaffney, Emery",c:"CMAC",by:13,sq:71,sqSc:21.375,gs:3,sl:3},{n:"Purchase, Florence",c:"CMAC",by:13,sq:7,sqSc:29.625,gs:25,sl:9},{n:"Graham, Brooke",c:"CMAC",by:13,sq:12,sqSc:27.625,gs:null,sl:20},{n:"Duff, Claire",c:"SARS",by:13,sq:28,sqSc:25.25,gs:null,sl:26},{n:"Tarnow, Maerin",c:"MBSEF",by:13,sq:19,sqSc:26.5,gs:null,sl:17},{n:"Hopkins, Lena",c:"WPSC",by:13,sq:2,sqSc:31.25,gs:9,sl:7},{n:"Rauber, Isabel",c:"MBSEF",by:13,sq:37,sqSc:24.5,gs:16,sl:26},{n:"Beyreuther, Hadley",c:"SARS",by:13,sq:77,sqSc:20.125,gs:27,sl:15},{n:"Tennyson, Charlotte",c:"BART",by:13,sq:36,sqSc:24.5,gs:14,sl:11},{n:"Sullivan, Eiden",c:"TARP",by:13,sq:35,sqSc:24.625,gs:32,sl:12},{n:"Brown, Lily",c:"LPRT",by:14,sq:53,sqSc:22.75,gs:7,sl:null}];
 const BW_MAP={"olson, gavin":{r:"Alt 17",t:56,tr:"drop"},"guldi, graham":{r:"TAlt 42",t:1,tr:"drop"},"colombo, dylan":{r:"TAlt 33",t:12,tr:"drop"},"bouffard, auguste":{r:"Alt 12",t:87,tr:"rise"},"dix, wyatt":{r:"7",t:268,tr:"rise"},"bonura, nico":{r:"2",t:470,tr:"rise"},"ambauen, brig":{r:"Alt 2",t:166,tr:"rise"},"kelly, leo":{r:"12",t:180,tr:"rise"},"jones, tennyson":{r:"Talt 6",t:120,tr:"rise"},"hatfield, luke":{r:"Alt 8",t:114,tr:"rise"},"schneider, carter":{r:"Alt 24",t:32,tr:"drop"},"ithomitis, logan":{r:"Alt 14",t:62,tr:"rise"},"jarrett, gage":{r:"Talt 16",t:61,tr:"rise"},"lull, august":{r:"Alt 9",t:97,tr:"rise"},"conta, maceo":{r:"Alt 25",t:29,tr:"drop"},"bertell, kaeli":{r:"1",t:492,tr:"rise"},"ozegovic, amina":{r:"Alt 28",t:21,tr:"drop"},"entrop, sloane":{r:"Alt 20",t:37,tr:"drop"},"pettersen, kenzie":{r:"Alt 38",t:1,tr:"drop"},"hoffman, scarlet":{r:"Alt 1",t:148,tr:"rise"},"baroni, jenna":{r:"Alt 2",t:124,tr:"rise"},"webb, sutton":{r:"12",t:190,tr:"rise"},"gidley, elsa":{r:"Alt 4",t:115,tr:"rise"},"garren, cailtyn":{r:"Alt 5",t:109,tr:"rise"},"siebens, aili":{r:"Alt 26",t:25,tr:"drop"},"gaffney, emery":{r:"Alt 10",t:70,tr:"drop"},"purchase, florence":{r:"Alt 12",t:65,tr:"neutral"},"graham, brooke":{r:"Alt 14",t:55,tr:"neutral"},"duff, claire":{r:"Alt 16",t:50,tr:"drop"},"tarnow, maerin":{r:"Alt 9",t:76,tr:"rise"},"rauber, isabel":{r:"Alt 35",t:4,tr:"drop"},"beyreuther, hadley":{r:"Talt 24",t:28,tr:"neutral"},"tennyson, charlotte":{r:"Alt 33",t:6,tr:"drop"},"sullivan, eiden":{r:"Alt 8",t:77,tr:"rise"},"hopkins, lena":{r:"Alt 15",t:53,tr:"drop"},"mccallum, ian":{r:"Alt 23",t:33,tr:"neutral"}};
-
-<!-- REGIONALS DATA + ALL LOGIC -->
-<script>
+ 
 // ══ REGIONALS DATA ══
 const RW=[{n:"Moe, Taryn",c:"JHSC",pnw:false,sg:1,gs:1,sl:4,sgT:"41.20",gsT:"1:27",slT:"1:19"},{n:"Wilson, Ivy",c:"TPT",pnw:false,sg:2,gs:2,sl:2,sgT:"41.53",gsT:"1:28",slT:"1:18"},{n:"Osborn, Canyon",c:"CMAC",pnw:true,sg:4,gs:3,sl:3,sgT:"43.01",gsT:"1:28",slT:"1:18"},{n:"Daly, Sydney",c:"PCSS",pnw:false,sg:5,gs:4,sl:1,sgT:"43.22",gsT:"1:28",slT:"1:17"},{n:"Ayers, Meila",c:"SBA",pnw:false,sg:3,gs:5,sl:null,sgT:"42.85",gsT:"1:29",slT:null},{n:"Lattanzi, Alessa",c:"RM",pnw:false,sg:10,gs:7,sl:9,sgT:"44.20",gsT:"1:31",slT:"1:22"},{n:"Smiley, Jasmine",c:"SVSEF",pnw:false,sg:11,gs:10,sl:11,sgT:"44.48",gsT:"1:31",slT:"1:22"},{n:"Lanzkowsky, Yael",c:"PCSS",pnw:false,sg:21,gs:8,sl:6,sgT:"45.34",gsT:"1:31",slT:"1:20"},{n:"Wenger, Peyton",c:"BSSEF",pnw:false,sg:12,gs:null,sl:null,sgT:"44.49",gsT:null,slT:null},{n:"Stein, Lilia",c:"PCSS",pnw:false,sg:16,gs:13,sl:8,sgT:"44.77",gsT:"1:32",slT:"1:21"},{n:"Kuzel, Teagan",c:"SARS",pnw:true,sg:7,gs:18,sl:15,sgT:"43.51",gsT:"1:33",slT:"1:23"},{n:"Pelland, Harper",c:"CMAC",pnw:true,sg:15,gs:12,sl:13,sgT:"44.69",gsT:"1:32",slT:"1:23"},{n:"Tyler, Lila",c:"PCSS",pnw:false,sg:20,gs:14,sl:7,sgT:"45.33",gsT:"1:32",slT:"1:20"},{n:"Hart, Brighton",c:"CMAC",pnw:true,sg:22,gs:9,sl:null,sgT:"45.36",gsT:"1:31",slT:null},{n:"DeGennaro, Neena",c:"SVSEF",pnw:false,sg:14,gs:6,sl:68,sgT:"44.63",gsT:"1:31",slT:"1:39"},{n:"Schlosser, Zuzana",c:"NSST",pnw:false,sg:24,gs:16,sl:10,sgT:"45.57",gsT:"1:32",slT:"1:22"},{n:"Cronin, Avery",c:"NSST",pnw:false,sg:26,gs:15,sl:22,sgT:"45.79",gsT:"1:32",slT:"1:25"},{n:"Cooper, Reilly",c:"RM",pnw:false,sg:27,gs:22,sl:12,sgT:"45.80",gsT:"1:33",slT:"1:23"},{n:"Ludlow, Julia",c:"CMAC",pnw:true,sg:25,gs:23,sl:24,sgT:"45.61",gsT:"1:33",slT:"1:25"},{n:"Buyukcetin, Luna",c:"SPAC",pnw:true,sg:19,gs:32,sl:null,sgT:"45.07",gsT:"1:35",slT:null},{n:"White, Ava",c:"LPRT",pnw:true,sg:18,gs:null,sl:38,sgT:"44.78",gsT:null,slT:"1:29"},{n:"Lambert, Piper",c:"MRT",pnw:true,sg:42,gs:28,sl:33,sgT:"47.62",gsT:"1:34",slT:"1:28"},{n:"Paul, Lexi",c:"MRT",pnw:true,sg:38,gs:null,sl:40,sgT:"47.10",gsT:null,slT:"1:30"},{n:"Lindblade, Camille",c:"MRT",pnw:true,sg:45,gs:43,sl:29,sgT:"47.84",gsT:"1:38",slT:"1:26"},{n:"Tanner, Bea",c:"CMAC",pnw:true,sg:51,gs:54,sl:28,sgT:"48.48",gsT:"1:40",slT:"1:26"},{n:"Elgee, Eloise",c:"SARS",pnw:true,sg:36,gs:null,sl:54,sgT:"47.07",gsT:null,slT:"1:33"},{n:"Mak, Olive",c:"CMAC",pnw:true,sg:63,gs:37,sl:35,sgT:"50.29",gsT:"1:37",slT:"1:28"},{n:"Brown, Kate",c:"SARS",pnw:true,sg:41,gs:55,sl:null,sgT:"47.55",gsT:"1:40",slT:null},{n:"Richter, Carly",c:"SARS",pnw:true,sg:62,gs:39,sl:55,sgT:"49.86",gsT:"1:37",slT:"1:33"},{n:"Castillo, Pepi",c:"SPAC",pnw:true,sg:40,gs:69,sl:56,sgT:"47.41",gsT:"1:43",slT:"1:34"},{n:"Morrill, Marin",c:"CMAC",pnw:true,sg:52,gs:63,sl:51,sgT:"48.50",gsT:"1:42",slT:"1:33"},{n:"Halcott, Lucy",c:"TAS",pnw:true,sg:57,gs:61,sl:48,sgT:"49.39",gsT:"1:41",slT:"1:31"},{n:"Brueggemann, Annalise",c:"MBSEF",pnw:true,sg:54,gs:57,sl:62,sgT:"48.87",gsT:"1:40",slT:"1:37"},{n:"Pederson, Ada",c:"SARS",pnw:true,sg:69,gs:51,sl:60,sgT:"50.96",gsT:"1:39",slT:"1:35"},{n:"Robertson, Louann",c:"MBSEF",pnw:true,sg:67,gs:56,sl:null,sgT:"50.74",gsT:"1:40",slT:null},{n:"Schanel, Sabrina",c:"MBSEF",pnw:true,sg:60,gs:null,sl:65,sgT:"49.57",gsT:null,slT:"1:37"}];
 const RM=[{n:"Gilmour, Cree",c:"RM",pnw:false,sg:1,gs:1,sl:3,sgT:"40.41",gsT:"1:21",slT:"1:16"},{n:"Ditullio, Dominic",c:"BSSEF",pnw:false,sg:3,gs:2,sl:2,sgT:"40.84",gsT:"1:22",slT:"1:16"},{n:"Brown, Nate",c:"RM",pnw:false,sg:5,gs:4,sl:1,sgT:"41.15",gsT:"1:24",slT:"1:15"},{n:"Cunningham, Carl",c:"TPT",pnw:false,sg:4,gs:6,sl:null,sgT:"41.14",gsT:"1:25",slT:null},{n:"Knight, Cedar",c:"SB",pnw:false,sg:8,gs:8,sl:4,sgT:"41.75",gsT:"1:25",slT:"1:17"},{n:"Petett, Trae",c:"CMAC",pnw:true,sg:11,gs:5,sl:null,sgT:"42.18",gsT:"1:24",slT:null},{n:"Bengtson, Colter",c:"SVSEF",pnw:false,sg:7,gs:13,sl:5,sgT:"41.65",gsT:"1:26",slT:"1:19"},{n:"Kinsman, Asher",c:"RM",pnw:false,sg:2,gs:16,sl:null,sgT:"40.78",gsT:"1:26",slT:null},{n:"Dain, Alexander",c:"SB",pnw:false,sg:15,gs:null,sl:6,sgT:"42.41",gsT:null,slT:"1:19"},{n:"Beebe, William",c:"PCSS",pnw:false,sg:16,gs:7,sl:10,sgT:"42.44",gsT:"1:25",slT:"1:20"},{n:"Johnson, Feren",c:"PCSS",pnw:false,sg:23,gs:3,sl:11,sgT:"43.07",gsT:"1:23",slT:"1:21"},{n:"Flood, Corbin",c:"SVSEF",pnw:false,sg:10,gs:17,sl:41,sgT:"42.12",gsT:"1:26",slT:"1:29"},{n:"Ireland, Colin",c:"MRST",pnw:true,sg:null,gs:null,sl:15,sgT:null,gsT:null,slT:"1:21"},{n:"Harder, Elijah",c:"BSSEF",pnw:false,sg:21,gs:14,sl:9,sgT:"43.00",gsT:"1:26",slT:"1:20"},{n:"Purchase, Rupert",c:"CMAC",pnw:true,sg:48,gs:null,sl:21,sgT:"44.38",gsT:null,slT:"1:22"},{n:"Jarrett, Cadel",c:"MRST",pnw:true,sg:26,gs:22,sl:null,sgT:"43.13",gsT:"1:26",slT:null},{n:"Lechleitner, Riley",c:"LPRT",pnw:true,sg:70,gs:29,sl:24,sgT:"47.18",gsT:"1:27",slT:"1:23"},{n:"Tarnow, Calder",c:"MBSEF",pnw:true,sg:53,gs:37,sl:null,sgT:"44.86",gsT:"1:29",slT:null},{n:"Rau, Andrew",c:"LPRT",pnw:true,sg:64,gs:43,sl:34,sgT:"45.37",gsT:"1:30",slT:"1:27"},{n:"Baskett, Garrett",c:"WPSC",pnw:true,sg:51,gs:45,sl:36,sgT:"44.68",gsT:"1:31",slT:"1:27"},{n:"Muller, Greyson",c:"SARS",pnw:true,sg:50,gs:null,sl:45,sgT:"44.61",gsT:null,slT:"1:31"},{n:"Pavlovcic, Filip",c:"CMAC",pnw:true,sg:60,gs:39,sl:null,sgT:"45.10",gsT:"1:29",slT:null},{n:"Balsimo, Micco",c:"SARS",pnw:true,sg:43,gs:53,sl:null,sgT:"44.19",gsT:"1:32",slT:null},{n:"Curtis, Finnley",c:"MBSEF",pnw:true,sg:null,gs:null,sl:47,sgT:null,gsT:null,slT:"1:31"},{n:"Bouffard, Clovis",c:"CMAC",pnw:true,sg:44,gs:49,sl:null,sgT:"44.29",gsT:"1:31",slT:null},{n:"Priest, Kellen",c:"CMAC",pnw:true,sg:71,gs:60,sl:39,sgT:"47.36",gsT:"1:33",slT:"1:29"},{n:"McCarry, Collin",c:"CMAC",pnw:true,sg:61,gs:61,sl:40,sgT:"45.15",gsT:"1:33",slT:"1:29"},{n:"Crespo, Xavier",c:"MRT",pnw:true,sg:53,gs:59,sl:null,sgT:"44.86",gsT:"1:33",slT:null},{n:"Berg, Blake",c:"MBSEF",pnw:true,sg:null,gs:null,sl:55,sgT:null,gsT:null,slT:"2:08"}];
@@ -589,10 +587,10 @@ function getList(){return getData().filter(a=>a.g===curGender&&(!curClub||a.c===
 function fldRank(a,mods){const mine=calcSc(a,mods).total;return getField().filter(x=>x!==a&&!x.incoming).filter(x=>calcSc(x,{}).total>mine).length+1;}
 function plBadge(p){if(p===null||p===undefined)return`<span class="dnfc">—</span>`;const cls=p===1?'plb1':p===2?'plb2':p===3?'plb3':p<=10?'plbt':'';return cls?`<span class="plb ${cls}">${p}</span>`:`<span style="font-size:12px;color:#888">${p}</span>`;}
 function tIcon(t){return t==='rise'?'<span class="au">▲</span>':t==='drop'?'<span class="ad">▼</span>':'<span class="as2">→</span>';}
-
+ 
 // ══ STATE ══
 let ag='u14',curSeason=2026,curMode='athlete',curGender='W',curClub='',curIdx=-1,wiMods={},teamGender='combined',expandedClub=null,trajChart=null,teamChart=null,bwGender='M',regGender='W',regChart=null;
-
+ 
 // ══ CONTROLS ══
 function setAG(v){
   ag=v;curClub='';curIdx=-1;wiMods={};expandedClub=null;
@@ -649,7 +647,7 @@ function renderEmpty(){document.getElementById('empty-state').style.display='blo
 function showTab(id){const tabs=['profile','scorecard','whatif','target','field','career'];document.querySelectorAll('.tabs .tb').forEach((b,i)=>b.className='tb'+(tabs[i]===id?' on':''));document.querySelectorAll('#ath-area .pnl').forEach(p=>p.className='pnl'+(p.id===`p-${id}`?' on':''));({profile:renderProfile,scorecard:renderScorecard,whatif:renderWI,target:renderTarget,field:renderField,career:renderCareer})[id]();}
 function goToAth(ri){curIdx=ri;wiMods={};setMode('athlete');document.getElementById('ath-ctrl').style.display='flex';document.getElementById('empty-state').style.display='none';document.getElementById('ath-area').style.display='block';document.getElementById('team-area').style.display='none';showTab('profile');}
 function jumpTeamPrev(){setAG('u16');setSeason(2027);setMode('teams');}
-
+ 
 // ══ PROFILE ══
 function renderProfile(){
   const c=cfg(),a=getData()[curIdx];
@@ -716,7 +714,7 @@ function renderIncProf(a){
 <p style="font-size:11px;color:#888;margin-bottom:11px;font-style:italic">Note: U16 uses cumulative scoring — these U14 scores are a qualitative indicator only.</p>
 <div class="pc"><div class="sl" style="margin-top:0">Best U14 results</div>${bH}</div>`;
 }
-
+ 
 // ══ SCORECARD ══
 function renderScorecard(){
   const c=cfg(),a=getData()[curIdx],sc=calcSc(a,{});
@@ -727,7 +725,7 @@ function renderScorecard(){
   document.getElementById('p-scorecard').innerHTML=`<div class="mg mg-3 mb-10"><div class="m"><div class="l">GS qual</div><div class="v">${sc.gs}</div></div><div class="m"><div class="l">SL qual</div><div class="v">${sc.sl}</div></div><div class="m"><div class="l">SG qual</div><div class="v">${sc.sg}</div></div></div><p class="sub">${c.scoring==='best2'?'Green = counts (best 2 per discipline).':'Green = all scored races count.'}</p><div class="rg">${cards}</div>`;
 }
 function makeU14SC(a){const c=CFG.u14,disc=c.raceDisciplines,runs=a.runs||[],cnt=[];['GS','SL','SG'].forEach(d=>{const idx=c.discIdx[d];const pts=idx.map(i=>({i,p:runs[i]&&runs[i][1]||0})).sort((a,b)=>b.p-a.p);pts.slice(0,2).forEach(x=>{if(x.p>0)cnt.push(x.i);});});return'<div class="rg">'+runs.map((r,i)=>{const d=disc[i],pts=r&&r[1]||0,pl=r&&r[0],iC=cnt.includes(i);const isDNF=pl===null||pl===0||pl==='DNF'||pl==='DSQ';const ps=isDNF?(pl||'—'):`${pl}${pl===1?'st':pl===2?'nd':pl===3?'rd':'th'}`;return`<div class="rc${iC?' cnt':''}"><div class="rh"><span class="dp dp${d.toLowerCase()}">${d}</span><span class="rpts">${pts}<span style="font-size:10px;font-weight:400"> pts</span></span></div><div class="rs">${c.raceLabels[i]}</div><div class="rs">${ps}</div><div class="pbw"><div class="pb2${iC?' cnt':''}" style="width:${pts>0?Math.round((pts/100)*100):0}%"></div></div>${iC?'<div class="cbadge">counting</div>':''}</div>`;}).join('')+'</div>';}
-
+ 
 // ══ WHAT-IF ══
 function renderWI(){
   const c=cfg(),a=getData()[curIdx];
@@ -746,7 +744,7 @@ function updWI(){
   const arrow=diff>0?`<span class="au">▲ ${diff} better</span>`:diff<0?`<span class="ad">▼ ${Math.abs(diff)} worse</span>`:`<span class="as2">no change</span>`;
   document.getElementById('wi-res').innerHTML=`<div style="background:#f5f5f5;border-radius:10px;padding:10px;margin-top:9px"><div class="rrow"><span class="rl">GS</span><span class="rv">${orig.gs} → <b>${mod.gs}</b></span></div><div class="rrow"><span class="rl">SL</span><span class="rv">${orig.sl} → <b>${mod.sl}</b></span></div><div class="rrow"><span class="rl">SG</span><span class="rv">${orig.sg} → <b>${mod.sg}</b></span></div><div class="rrow"><span class="rl">Total</span><span class="rv" style="font-size:17px">${mod.total} pts</span></div><div class="rrow"><span class="rl">Rank</span><div style="display:flex;align-items:center;gap:6px"><span class="rv">#${or} → <b>#${mr}</b></span>${arrow}</div></div></div>`;
 }
-
+ 
 // ══ TARGET ══
 function renderTarget(){
   const c=cfg(),a=getData()[curIdx];
@@ -762,7 +760,7 @@ function renderTarget(){
   const ipN=c.status==='inprogress'?'<div class="inprog">Season in progress — additional races remain.</div>':'';
   document.getElementById('p-target').innerHTML=`<h2>Points target</h2><p class="sub">Drag to pick a rank, see the points gap.</p>${ipN}<div class="tr2"><label>Target rank</label><input type="range" id="tsl" min="1" max="${max}" step="1" value="${tgt}" oninput="renderTarget()"><span class="tv">#${tgt}</span></div><div class="tr2"><label>Score at rank</label><span class="tv" style="color:#2563eb">${tgtSc} pts</span></div><div class="tr2"><label>Gap</label><span class="tv" style="color:${needed>0?'#dc2626':'#16a34a'}">${needed>0?'+'+needed+' needed':'There ✓'}</span></div><div class="sl">Discipline breakdown</div>${bar('GS',sc.gs,gsN,'gs')}${bar('SL',sc.sl,slN,'sl')}${bar('SG',sc.sg,sgN,'sg')}${note}`;
 }
-
+ 
 // ══ FIELD VIEW — all athletes all clubs ranked by points ══
 function renderField(){
   const c=cfg(),a=getData()[curIdx];
@@ -798,7 +796,7 @@ ${incNote}
 <div class="fscroll">${rows}</div>`;
   setTimeout(()=>{const h=document.querySelector('.hlr');if(h)h.scrollIntoView({behavior:'smooth',block:'center'});},80);
 }
-
+ 
 // ══ CAREER ARC ══
 function renderCareer(){
   const c=cfg(),a=getData()[curIdx],sc=calcSc(a,{});
@@ -820,7 +818,7 @@ function renderCareer(){
   const aR=isRet?agPeers.map(p=>{const ri=c.data.indexOf(p);return`<div class="ttr"><span class="trb trb-o">Aging out</span><span style="flex:1;cursor:pointer;color:#2563eb" onclick="goToAth(${ri})">${p.n}</span><span style="color:#888">${calcSc(p,{}).total} pts</span></div>`;}).join(''):'';
   document.getElementById('p-career').innerHTML=`<h2>${agL} Career Arc</h2><p class="sub">Two-year ${agL} eligibility window.</p><table class="ctbl"><thead><tr><th>Season</th><th>Status</th><th class="r">GS</th><th class="r">SL</th><th class="r">SG</th><th class="r">Total</th><th>Rank</th></tr></thead><tbody>${rowsH}</tbody></table><div class="${isRet?'banr':'ban ban-b'}"><div style="font-size:13px;font-weight:600;margin-bottom:2px">${isRet?'Returning 2026–27':agL+' Career Complete'}</div><div style="font-size:12px;color:#555">${isRet?`Final ${agL} year.`:`Moves to ${agL==='U14'?'U16':'U18'}.`}</div></div>${peers.length>0?`<div class="sl" style="margin-top:0">Club teammates — cohort ${a.y}</div>${pR}`:''}${isRet&&agPeers.length>0?`<div class="sl">Club ${agL} teammates aging out</div>${aR}`:''}`;
 }
-
+ 
 // ══ TEAMS ══
 function buildTeamStats(gf){
   const c=cfg(),isPrev=ag==='u16'&&curSeason===2027;
@@ -879,7 +877,7 @@ function renderTeams(){
 }
 function showTTeamTab(club,tab){['ttr-','ttt-'].forEach((p,i)=>{const el=document.getElementById(p+club);if(el)el.style.display=i===(tab==='roster'?0:1)?'block':'none';});const det=document.getElementById(`td-${club}`);if(det)det.querySelectorAll('.ttb').forEach((b,i)=>b.className='ttb'+(i===(tab==='roster'?0:1)?' on':''));}
 function toggleTeam(club){expandedClub=expandedClub===club?null:club;renderTeams();}
-
+ 
 // ══ BUDDY WERNER ══
 function bwData(){return bwGender==='M'?BW25_M:BW25_W;}
 function bwComp(a){return Math.round((a.sqSc/35)*60)+(PP[a.gs]||0)+(PP[a.sl]||0);}
@@ -914,7 +912,7 @@ function renderBWWt(){
   const cards=show.slice(0,16).map((a,i)=>{const comp=bwComp(a),out=outlook(a),iS=a.c==='SPAC';const star=i===0&&!cf?'<span class="star-b">★ Top incoming</span>':iS?'<span class="star-b" style="background:#dbeafe;color:#1e40af">SPAC</span>':'';let special='';if(a.n==='Buyukcetin, Luca')special='<div style="font-size:11px;color:#92400e;margin-top:3px;padding:4px 7px;background:#fffbeb;border-radius:4px">⚡ Sibling of Luna Buyukcetin (SPAC U16 Women #5). Elite SL at U12 is rare.</div>';if(a.n==='Olsson, Pep')special='<div style="font-size:11px;color:#166534;margin-top:3px;padding:4px 7px;background:#dcfce7;border-radius:4px">♦ 2nd in BW SL as first-year U12. CSAT SL depth could be exceptional in 2026-27.</div>';return`<div class="wcard ${i<3&&!cf?'feat':''} ${iS?'spac-w':''}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><div><div class="wcnm">${ord(i+1)} ${a.n}${star}</div><div class="wcmt"><span>${a.c}</span><span class="${a.by===14?'by14p':'by13p'}">Born ${a.by} → U14 2026-27</span></div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700">${comp}</div><div style="font-size:10px;color:#888">composite</div></div></div><div class="wcs"><div class="wcs-s"><div class="wssl">SQ</div><div class="wssv">${plBadge(a.sq)}</div></div><div class="wcs-s"><div class="wssl">GS</div><div class="wssv">${plBadge(a.gs)}</div></div><div class="wcs-s"><div class="wssl">SL</div><div class="wssv">${plBadge(a.sl)}</div></div></div><div style="color:${out.col};font-weight:600;font-size:12px;margin-bottom:2px">${out.l}</div><div style="font-size:12px;color:#888">${out.desc}</div>${special}</div>`;}).join('');
   document.getElementById('bw-wt').innerHTML=`<h2>Incoming U14 Watch — Born 2014</h2><p class="sub">Athletes entering U14 in 2026-27, ranked by BW 2025 composite score.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${cards}</div>`;
 }
-
+ 
 // ══ REGIONALS ══
 function regData(){return regGender==='W'?RW:RM;}
 function avgReg(a){const r=[a.sg,a.gs,a.sl].filter(v=>v!=null);return r.length?r.reduce((s,v)=>s+v,0)/r.length:999;}
@@ -922,7 +920,7 @@ function setRegG(g){regGender=g;document.querySelectorAll('#reg-gseg button').fo
 function populateRegClubs(){const s=document.getElementById('reg-cf');const cl=[...new Set(regData().filter(a=>a.pnw).map(a=>a.c))].sort();s.innerHTML='<option value="">All clubs</option>'+cl.map(c=>`<option value="${c}">${c}</option>`).join('');}
 function renderReg(){const tabs=['reg-rs','reg-cl','reg-sp','reg-cx'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'reg-rs';({['reg-rs']:renderRegRs,['reg-cl']:renderRegCl,['reg-sp']:renderRegSp,['reg-cx']:renderRegCx})[id]();}
 function showRegTab(id){const ids=['reg-rs','reg-cl','reg-sp','reg-cx'];document.querySelectorAll('#reg-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#reg-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));({['reg-rs']:renderRegRs,['reg-cl']:renderRegCl,['reg-sp']:renderRegSp,['reg-cx']:renderRegCx})[id]();}
-
+ 
 function renderRegRs(){
   let d=[...regData()];const vf=document.getElementById('reg-vf').value,cf=document.getElementById('reg-cf').value;
   if(cf)d=d.filter(a=>a.c===cf);if(vf==='pnw')d=d.filter(a=>a.pnw);
@@ -945,7 +943,7 @@ function renderRegRs(){
 <div class="tscroll"><table class="rtbl"><thead><tr><th>#</th><th>Athlete</th><th>Club</th>${hasSG?'<th class="r">SG</th>':''}<th class="r">GS</th><th class="r">SL</th><th class="r">Avg rank</th></tr></thead><tbody>${rows}</tbody></table></div>
 <p style="font-size:11px;color:#888;margin-top:6px">Avg rank = mean finish across completed events. Sorted by avg rank.</p>`;
 }
-
+ 
 function renderRegCl(){
   const d=regData().filter(a=>a.pnw),clubMap={};
   d.forEach(a=>{if(!clubMap[a.c])clubMap[a.c]={c:a.c,aths:[],sg:null,gs:null,sl:null};clubMap[a.c].aths.push(a);['sg','gs','sl'].forEach(ev=>{const r=a[ev];if(r!=null){const cur=clubMap[a.c][ev];if(cur===null||r<cur)clubMap[a.c][ev]=r;}});});
@@ -961,7 +959,7 @@ function renderRegCl(){
   }).join('');
   document.getElementById('reg-cl').innerHTML=`<h2>PNW Club Rankings — ${regGender==='W'?'Women':'Men'}</h2><p class="sub">Each club's best placement per event, averaged. Lower = better. Non-scoring event — no official team points.</p><div class="ban ban-b"><div class="bt">How to read this</div><div class="bd">Western Regionals draws talent from across the Western US. Rankings show each PNW club's best individual result per event, averaged, as a measure of competitive depth vs. the full field.</div></div><div style="border:1px solid #e5e5e5;border-radius:10px;overflow:hidden">${rows}</div>`;
 }
-
+ 
 function renderRegSp(){
   const spacW=RW.filter(a=>a.c==='SPAC'),spacM=RM.filter(a=>a.c==='SPAC');
   function card(a){
@@ -976,7 +974,7 @@ function renderRegSp(){
   const mCards=spacM.length>0?`<div class="sl">Men</div>${spacM.map(card).join('')}`:'';
   document.getElementById('reg-sp').innerHTML=`<h2>SPAC Athletes at Western Regionals</h2><p class="sub">Palisades Tahoe · March 13–15, 2026 · Competing against the full Western US field</p><div class="ban ban-a"><div class="bt">Context</div><div class="bd">Western Regionals draws Rocky Mountain, PNW, California, and Alaska programs. Placement in the top half of this field is highly competitive. PNW athletes often face their first exposure to a wider national-level field here.</div></div>${wCards}${mCards}`;
 }
-
+ 
 function renderRegCx(){
   const d=regData(),pnw=d.filter(a=>a.pnw);
   function evStat(ev){const all=d.filter(a=>a[ev]!=null).sort((a,b)=>a[ev]-b[ev]);const top10PNW=all.slice(0,10).filter(a=>a.pnw).length;const pnwBest=pnw.reduce((b,a)=>a[ev]&&a[ev]<(b||999)?a[ev]:b,null);return{top10PNW,pnwBest};}
@@ -992,9 +990,10 @@ function renderRegCx(){
 <div style="position:relative;height:180px;margin-top:8px"><canvas id="reg-chart"></canvas></div>`;
   setTimeout(()=>{const ctx=document.getElementById('reg-chart');if(!ctx)return;if(regChart){regChart.destroy();regChart=null;}const labels=['Super-G','GS','Slalom'];const pnwBests=[sg.pnwBest||0,gs.pnwBest||0,sl.pnwBest||0];const fSz=d.length;regChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Best PNW',data:pnwBests,backgroundColor:['#93c5fd','#86efac','#c4b5fd'],borderRadius:4},{label:'Field size',data:[fSz,fSz,fSz],backgroundColor:'rgba(0,0,0,.06)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:fSz+5,ticks:{font:{size:11}}},y:{ticks:{font:{size:12}}}}}});},50);
 }
-
+ 
 // ══ INIT ══
 updateSnote();populateClubs();populateAthletes();
 </script>
 </body>
 </html>
+ 
