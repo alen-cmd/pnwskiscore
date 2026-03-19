@@ -239,7 +239,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
       <button class="on" onclick="setSeason(2026)">2025–26</button>
       <button onclick="setSeason(2027)">2026–27 Preview</button>
     </div>
-    <button class="ppill" id="prev-btn" style="display:none" onclick="jumpTeamPrev()">⚡ U16 Team Preview</button>
+    <button class="ppill" id="prev-btn" style="display:none" onclick="jumpTeamPrev()">⚡ Team Preview</button>
   </div>
   <span class="snote" id="snote"></span>
 </div>
@@ -578,8 +578,15 @@ function calcSc(a,mods){
 }
 function getStatus(r,g){if(!r||r==='Incoming')return'incoming';const n=+r;const cut=g==='W'?cfg().qualCutW:cfg().qualCutM;if(!isNaN(n)&&n<=cut)return'qualified';if(r.toLowerCase().includes('alt'))return'alt';return'dev';}
 function getIncoming(){return U14.filter(a=>a.y===2012).map(a=>({...a,incoming:true,races:a.runs}));}
+function getIncomingU14(){
+  const toAth=(a,g)=>({n:a.n,c:a.c,g,y:2014,incoming:true,r:'',gs:PP[a.gs]||0,sl:PP[a.sl]||0,sg:0,t:(PP[a.gs]||0)+(PP[a.sl]||0),runs:[]});
+  return[...BW25_M.filter(a=>a.by===14).map(a=>toAth(a,'M')),...BW25_W.filter(a=>a.by===14).map(a=>toAth(a,'W'))];
+}
 function getData(){
-  if(curSeason===2027){const c=cfg();if(ag==='u16')return[...c.data.filter(a=>a.y===c.returnBY),...getIncoming()];return c.data.filter(a=>a.y===c.returnBY);}
+  if(curSeason===2027){const c=cfg();
+    if(ag==='u16')return[...c.data.filter(a=>a.y===c.returnBY),...getIncoming()];
+    if(ag==='u14')return[...c.data.filter(a=>a.y===c.returnBY),...getIncomingU14()];
+    return c.data.filter(a=>a.y===c.returnBY);}
   return cfg().data;
 }
 function getField(){return getData().filter(a=>a.g===curGender);}
@@ -613,12 +620,12 @@ function setAG(v){
 function setSeason(y){
   curSeason=y;curIdx=-1;wiMods={};expandedClub=null;
   document.querySelectorAll('#sseg button').forEach((b,i)=>b.className=i===(y===2026?0:1)?(y===2027?'on-a':'on'):'');
-  document.getElementById('prev-btn').style.display=ag==='u16'&&y===2027?'inline-flex':'none';
+  document.getElementById('prev-btn').style.display=(ag==='u16'||ag==='u14')&&y===2027?'inline-flex':'none';
   updateSnote();populateAthletes();renderEmpty();if(curMode==='teams')renderTeams();
 }
 function updateSnote(){
   const n=document.getElementById('snote'),c=cfg();
-  if(curSeason===2027){n.textContent=ag==='u16'?`Returning ${c.returnBY} + Incoming U14 (${c.ageBY})`:`Returning ${c.returnBY}-born`;n.className='snote w';}
+  if(curSeason===2027){n.textContent=ag==='u16'?`Returning ${c.returnBY} + Incoming U14 (${c.ageBY})`:ag==='u14'?`Returning 2013 + Incoming U12 (born 2014)`:`Returning ${c.returnBY}-born`;n.className='snote w';}
   else{n.textContent=c.seasonNote;n.className='snote'+(c.status==='inprogress'?' w':'');}
 }
 function setMode(m){
@@ -646,7 +653,7 @@ function onAthlete(){const v=document.getElementById('asel').value;curIdx=v===''
 function renderEmpty(){document.getElementById('empty-state').style.display='block';document.getElementById('ath-area').style.display='none';}
 function showTab(id){const tabs=['profile','scorecard','whatif','target','field','career'];document.querySelectorAll('.tabs .tb').forEach((b,i)=>b.className='tb'+(tabs[i]===id?' on':''));document.querySelectorAll('#ath-area .pnl').forEach(p=>p.className='pnl'+(p.id===`p-${id}`?' on':''));({profile:renderProfile,scorecard:renderScorecard,whatif:renderWI,target:renderTarget,field:renderField,career:renderCareer})[id]();}
 function goToAth(ri){curIdx=ri;wiMods={};setMode('athlete');document.getElementById('ath-ctrl').style.display='flex';document.getElementById('empty-state').style.display='none';document.getElementById('ath-area').style.display='block';document.getElementById('team-area').style.display='none';showTab('profile');}
-function jumpTeamPrev(){setAG('u16');setSeason(2027);setMode('teams');}
+function jumpTeamPrev(){setSeason(2027);setMode('teams');}
  
 // ══ PROFILE ══
 function renderProfile(){
@@ -821,14 +828,15 @@ function renderCareer(){
  
 // ══ TEAMS ══
 function buildTeamStats(gf){
-  const c=cfg(),isPrev=ag==='u16'&&curSeason===2027;
-  const allSrc=isPrev?[...c.data,...getIncoming()]:c.data;
+  const c=cfg(),isPrev=(ag==='u16'||ag==='u14')&&curSeason===2027;
+  const incomingFn=ag==='u14'?getIncomingU14:getIncoming;
+  const allSrc=isPrev?[...c.data,...incomingFn()]:c.data;
   const ath=gf==='combined'?allSrc:allSrc.filter(a=>a.g===gf);
   const clubs=[...new Set(ath.map(a=>a.c))];
   return clubs.map(club=>{
     const all=ath.filter(a=>a.c===club);
     const u16M=isPrev?c.data.filter(a=>a.c===club&&(gf==='combined'||a.g===gf)&&a.y===c.returnBY):all;
-    const incM=isPrev?getIncoming().filter(a=>a.c===club&&(gf==='combined'||a.g===gf)):[];
+    const incM=isPrev?incomingFn().filter(a=>a.c===club&&(gf==='combined'||a.g===gf)):[];
     const u16T=u16M.map(a=>({...a,...calcSc(a,{})}));
     const incT=incM.map(a=>({...a,gs:a.gs||0,sl:a.sl||0,sg:a.sg||0,total:a.t||0}));
     const tT=u16T.reduce((s,a)=>s+a.total,0);
@@ -843,7 +851,7 @@ function buildTeamStats(gf){
   }).filter(t=>t.members>0||t.incCount>0).sort((a,b)=>b.total-a.total);
 }
 function renderTeams(){
-  const stats=buildTeamStats(teamGender),c=cfg(),isPrev=ag==='u16'&&curSeason===2027;
+  const stats=buildTeamStats(teamGender),c=cfg(),isPrev=(ag==='u16'||ag==='u14')&&curSeason===2027;
   const maxT=Math.max(...stats.map(t=>t.total+(isPrev?t.incTotal:0)),1);const medals=['🥇','🥈','🥉'];
   const rows=stats.map((t,i)=>{
     const rk=i+1,color=tc(t.club),isExp=expandedClub===t.club,rkCls=rk===1?'gold':rk===2?'silver':rk===3?'bronze':'';
@@ -856,7 +864,10 @@ function renderTeams(){
     }).join('');
     const noS=(isPrev?t.u16Ath:t.allAth).filter(a=>a.total===0);
     const noRow=noS.length>0?`<div style="font-size:11px;color:#888;padding:3px 0;border-top:1px solid #f0f0f0;margin-top:3px">${noS.length} with 0 pts</div>`:'';
-    const incRows=isPrev&&t.incAth.length>0?`<div class="t-sec-h"><span class="t-sec-l">↑ Incoming from U14 (born ${c.ageBY})</span><span style="font-size:11px;color:#888">${t.incCount} athletes · ${t.incTotal} U14 pts*</span></div>`+t.incAth.map(a=>{const allD=getData(),ri=allD.indexOf(allD.find(x=>x.n===a.n&&x.c===a.c&&x.incoming));const gL=teamGender==='combined'?`<span style="font-size:10px;color:#9ca3af;margin-left:3px">${a.g}</span>`:'';return`<div class="ta-row"><span class="ta-rk" style="color:#d97706">U14</span><span class="ta-nm" onclick="goToAth(${ri})">${a.n}${gL}<span class="inc-sm">↑</span></span><div class="ta-d"><span>GS ${a.gs}</span><span>SL ${a.sl}</span><span>SG ${a.sg}</span></div><span class="ta-tot" style="color:#d97706">${a.total}*</span></div>`;}).join('')+`<div style="font-size:10px;color:#888;padding:3px 0">*U14 baseline — not comparable to U16 totals</div>`:'';
+    const incLabel=ag==='u14'?'↑ Incoming from U12 (born 2014)':'↑ Incoming from U14 (born '+c.ageBY+')';
+    const incPtsLabel=ag==='u14'?'BW pts*':'U14 pts*';
+    const incRkLabel=ag==='u14'?'U12':'U14';
+    const incRows=isPrev&&t.incAth.length>0?`<div class="t-sec-h"><span class="t-sec-l">${incLabel}</span><span style="font-size:11px;color:#888">${t.incCount} athletes · ${t.incTotal} ${incPtsLabel}</span></div>`+t.incAth.map(a=>{const allD=getData(),ri=allD.indexOf(allD.find(x=>x.n===a.n&&x.c===a.c&&x.incoming));const gL=teamGender==='combined'?`<span style="font-size:10px;color:#9ca3af;margin-left:3px">${a.g}</span>`:'';return`<div class="ta-row"><span class="ta-rk" style="color:#d97706">${incRkLabel}</span><span class="ta-nm" onclick="goToAth(${ri})">${a.n}${gL}<span class="inc-sm">↑</span></span><div class="ta-d"><span>GS ${a.gs}</span><span>SL ${a.sl}</span><span>SG ${a.sg}</span></div><span class="ta-tot" style="color:#d97706">${a.total}*</span></div>`;}).join('')+`<div style="font-size:10px;color:#888;padding:3px 0">*${ag==='u14'?'BW GS+SL pts — not comparable to U14 totals':'U14 baseline — not comparable to U16 totals'}</div>`:'';
     const retRowsH=c.data.filter(a=>a.c===t.club&&(teamGender==='combined'||a.g===teamGender)&&a.y===c.returnBY).map(a=>{const ri=c.data.indexOf(a);return`<div class="ttr"><span class="trb trb-r">Returning</span><span style="flex:1;cursor:pointer;color:#2563eb" onclick="goToAth(${ri})">${a.n}</span><span style="color:#888">${calcSc(a,{}).total}pts</span></div>`;}).join('');
     const outRowsH=c.data.filter(a=>a.c===t.club&&(teamGender==='combined'||a.g===teamGender)&&a.y===c.ageBY).map(a=>{const ri=c.data.indexOf(a);return`<div class="ttr"><span class="trb trb-o">Aged out</span><span style="flex:1;cursor:pointer;color:#2563eb" onclick="goToAth(${ri})">${a.n}</span><span style="color:#888">${calcSc(a,{}).total}pts</span></div>`;}).join('');
     const detInner=`<div class="tdg"><div class="tds"><div class="dl">${isPrev?'Returning':'Athletes'}</div><div class="dv">${t.members}</div></div>${isPrev?`<div class="tds"><div class="dl">Incoming</div><div class="dv" style="color:#d97706">${t.incCount}</div></div>`:''}<div class="tds"><div class="dl">Scoring</div><div class="dv">${t.scored}</div></div><div class="tds"><div class="dl">Qualifiers</div><div class="dv" style="${t.qualifiers>0?'color:#16a34a':''}">${t.qualifiers}${t.alts?`<span style="font-size:11px;color:#d97706"> +${t.alts}</span>`:''}</div></div></div>
@@ -865,14 +876,14 @@ function renderTeams(){
     <div id="ttr-${t.club}">${athRows||'<div style="font-size:12px;color:#888">No scoring athletes</div>'}${noRow}${incRows}</div>
     <div id="ttt-${t.club}" style="display:none"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px"><div class="tds"><div class="dl">Retained pts (${c.returnBY})</div><div class="dv" style="color:#1e40af">${t.retPts}</div></div><div class="tds"><div class="dl">Lost pts (${c.ageBY})</div><div class="dv" style="color:#991b1b">${t.lostPts}</div></div></div>${retRowsH}${outRowsH}</div>`;
     const incBadge=isPrev&&t.incCount>0?`<span class="inc-sm">+${t.incCount}</span>`:'';
-    const subLine=isPrev?`${t.members} returning · ${t.incCount} incoming from U14`:`${t.members} athletes · ${t.scored} scoring${t.qualifiers>0?` · ${t.qualifiers}Q`:''}`;
+    const subLine=isPrev?`${t.members} returning · ${t.incCount} incoming from ${ag==='u14'?'U12':'U14'}`:`${t.members} athletes · ${t.scored} scoring${t.qualifiers>0?` · ${t.qualifiers}Q`:''}`;
     const barHTML=isPrev?`<div class="tbdual" style="max-width:72px"><div class="tbd-r" style="width:${pct}%"></div><div class="tbd-i" style="width:${incPct}%"></div></div>`:`<div class="tbtr"><div class="tbfl" style="width:${pct}%;background:${color}"></div></div>`;
     return`<div><div class="tm-row ${isExp?'exp':''}" onclick="toggleTeam('${t.club}')"><span class="tkr ${rkCls}">${rk<=3?medals[rk-1]:rk}</span><div class="tav" style="background:${color}22;color:${color}">${t.club}</div><div style="flex:1"><div class="tnm">${t.club}${incBadge}</div><div class="tsb">${subLine}</div></div><div class="tdc"><div class="tdv" style="color:#1e40af">${t.gs}</div><div class="tdl">GS</div></div><div class="tdc"><div class="tdv" style="color:#4c1d95">${t.sl}</div><div class="tdl">SL</div></div><div class="tdc"><div class="tdv" style="color:#14532d">${t.sg}</div><div class="tdl">SG</div></div><div class="tpc"><div class="tpb">${t.total}</div>${isPrev&&t.incTotal>0?`<div style="font-size:10px;color:#d97706">+${t.incTotal}*</div>`:''}<div class="tpl">${isPrev?'ret.pts':'total pts'}</div></div><div class="tbc">${barHTML}</div><span style="font-size:10px;color:#888;width:12px;text-align:center">${isExp?'▲':'▼'}</span></div><div class="tdet ${isExp?'open':''}" id="td-${t.club}"><div class="tdi">${detInner}</div></div></div>`;
   }).join('');
   const totA=stats.reduce((s,t)=>s+t.members,0),totPts=stats.reduce((s,t)=>s+t.total,0);
   const ipB=ag==='u16'&&curSeason===2026?'<div class="inprog">U16 season in progress (as of 02/23/26) — final standings will shift.</div>':'';
-  const prevB=isPrev?`<div class="prev-ban"><b style="color:#92400e">⚡ U16 2026-27 Team Preview</b><br><span style="font-size:12px;color:#555"><b>Blue bars</b> = returning U16 (${c.returnBY}) by 2025-26 scores. <b>Amber bars</b> = incoming U14 graduates (${c.ageBY}) at U14 baseline.</span></div>`:'';
-  document.getElementById('team-content').innerHTML=`<div class="mg ${isPrev?'mg-4':'mg-3'}" style="margin-bottom:11px"><div class="m"><div class="l">Clubs</div><div class="v">${stats.length}</div></div><div class="m"><div class="l">${isPrev?'Returning':'Athletes'}</div><div class="v">${totA}</div></div>${isPrev?`<div class="m"><div class="l">Incoming U14</div><div class="v" style="color:#d97706">${stats.reduce((s,t)=>s+t.incCount,0)}</div></div>`:''}<div class="m"><div class="l">Total pts</div><div class="v">${totPts.toLocaleString()}</div></div></div><div class="cw2"><canvas id="tc2"></canvas></div>${prevB}${ipB}<div style="font-size:11px;color:#888;margin-bottom:8px">Click row to expand · Click athlete name to open profile.</div><div style="border:1px solid #e5e5e5;border-radius:10px;overflow:hidden">${rows}</div>`;
+  const prevB=isPrev?(ag==='u14'?`<div class="prev-ban"><b style="color:#92400e">⚡ U14 2026-27 Team Preview</b><br><span style="font-size:12px;color:#555"><b>Blue bars</b> = returning U14 (born 2013, their 2nd year). <b>Amber bars</b> = incoming from U12/BW (born 2014, entering U14).</span></div>`:`<div class="prev-ban"><b style="color:#92400e">⚡ U16 2026-27 Team Preview</b><br><span style="font-size:12px;color:#555"><b>Blue bars</b> = returning U16 (${c.returnBY}) by 2025-26 scores. <b>Amber bars</b> = incoming U14 graduates (${c.ageBY}) at U14 baseline.</span></div>`):'';
+  document.getElementById('team-content').innerHTML=`<div class="mg ${isPrev?'mg-4':'mg-3'}" style="margin-bottom:11px"><div class="m"><div class="l">Clubs</div><div class="v">${stats.length}</div></div><div class="m"><div class="l">${isPrev?'Returning':'Athletes'}</div><div class="v">${stats.reduce((s,t)=>s+t.members,0)}</div></div>${isPrev?`<div class="m"><div class="dl" style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px">Incoming ${ag==='u14'?'U12':'U14'}</div><div class="v" style="color:#d97706">${stats.reduce((s,t)=>s+t.incCount,0)}</div></div>`:''}<div class="m"><div class="l">Total pts</div><div class="v">${totPts.toLocaleString()}</div></div></div><div class="cw2"><canvas id="tc2"></canvas></div>${prevB}${ipB}<div style="font-size:11px;color:#888;margin-bottom:8px">Click row to expand · Click athlete name to open profile.</div><div style="border:1px solid #e5e5e5;border-radius:10px;overflow:hidden">${rows}</div>`;
   setTimeout(()=>{const ctx=document.getElementById('tc2');if(!ctx)return;if(teamChart){teamChart.destroy();teamChart=null;}const top=stats.slice(0,10);const ds=isPrev?[{label:'GS',data:top.map(t=>t.gs),backgroundColor:'#93c5fd',stack:'s',borderRadius:2},{label:'SL',data:top.map(t=>t.sl),backgroundColor:'#c4b5fd',stack:'s',borderRadius:2},{label:'SG',data:top.map(t=>t.sg),backgroundColor:'#86efac',stack:'s',borderRadius:2},{label:'Incoming',data:top.map(t=>t.incTotal),backgroundColor:'rgba(251,191,36,.35)',stack:'inc',borderRadius:2}]:[{label:'GS',data:top.map(t=>t.gs),backgroundColor:'#93c5fd',stack:'s',borderRadius:2},{label:'SL',data:top.map(t=>t.sl),backgroundColor:'#c4b5fd',stack:'s',borderRadius:2},{label:'SG',data:top.map(t=>t.sg),backgroundColor:'#86efac',stack:'s',borderRadius:2}];teamChart=new Chart(ctx,{type:'bar',data:{labels:top.map(t=>t.club),datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{stacked:true,ticks:{font:{size:11}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:11}}}},layout:{padding:{top:4}}}});},60);
 }
 function showTTeamTab(club,tab){['ttr-','ttt-'].forEach((p,i)=>{const el=document.getElementById(p+club);if(el)el.style.display=i===(tab==='roster'?0:1)?'block':'none';});const det=document.getElementById(`td-${club}`);if(det)det.querySelectorAll('.ttb').forEach((b,i)=>b.className='ttb'+(i===(tab==='roster'?0:1)?' on':''));}
@@ -996,4 +1007,3 @@ updateSnote();populateClubs();populateAthletes();
 </script>
 </body>
 </html>
- 
