@@ -1,230 +1,364 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#f0f2f7;
+  --surface:#ffffff;
+  --surface2:#f4f5f9;
+  --surface3:#eaecf3;
+  --border:#dde0ea;
+  --border2:#eaedf4;
+  --text:#0d1117;
+  --text2:#4a5168;
+  --text3:#8b93ab;
+  --blue:#2155d4;
+  --blue-glow:rgba(33,85,212,.12);
+  --blue-dim:#e8edfb;
+  --green:#0a7a3e;
+  --green-dim:#e6f7ee;
+  --amber:#b45309;
+  --amber-dim:#fef3dc;
+  --red:#c0392b;
+  --red-dim:#fdecea;
+  --purple:#5b21b6;
+  --purple-dim:#f0ebff;
+  --accent:#2155d4;
+  --gold:#b45309;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,sans-serif;font-size:14px;background:#fff;color:#1a1a1a;padding:12px 0 52px}
-/* TOP CONTROLS */
-.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;padding:9px 12px;background:#f5f5f5;border-radius:10px;border:1px solid #e5e5e5}
-.seg{display:flex;border:1px solid #d5d5d5;border-radius:7px;overflow:hidden}
-.seg button{padding:5px 11px;background:transparent;border:none;cursor:pointer;font-size:13px;color:#666}
-.seg button.on{background:#dbeafe;color:#1d4ed8;font-weight:500}
-.seg button.on-g{background:#dcfce7;color:#166534;font-weight:500}
-.seg button.on-a{background:#fef9c3;color:#854d0e;font-weight:500}
-.seg button.on-r{background:#f0fdf4;color:#166534;font-weight:500}
-.ppill{padding:5px 11px;border:1px solid #d97706;border-radius:7px;background:#fffbeb;color:#92400e;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap}
-.snote{font-size:11px;color:#888}.snote.w{color:#d97706;font-weight:500}
-select{padding:5px 8px;border:1px solid #d5d5d5;border-radius:7px;background:#fff;font-size:13px;cursor:pointer}
-/* METRICS */
-.mg{display:grid;gap:8px;margin-bottom:12px}
+body{font-family:'Barlow',system-ui,sans-serif;font-size:14px;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px}
+
+/* ── HEADER ── */
+.app-header{background:#0d1733;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;margin-bottom:20px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(41,121,255,.15)}
+.app-logo{display:flex;align-items:center;gap:12px}
+.app-logo-icon{width:32px;height:32px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:15px;clip-path:polygon(0 0,100% 0,100% 75%,88% 100%,0 100%)}
+.app-logo-text{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:.04em;text-transform:uppercase}
+.app-logo-sub{font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:-1px}
+.app-badge{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:4px 10px;background:transparent;color:var(--blue);border:1px solid var(--blue);letter-spacing:.1em;text-transform:uppercase}
+
+/* ── WRAP ── */
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+
+/* ── CTRL BAR ── */
+.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue)}
+.ctrl-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;white-space:nowrap}
+
+/* ── SEGMENTS ── */
+.seg{display:flex;background:var(--bg);border:1px solid var(--border);overflow:hidden;gap:1px}
+.seg button{padding:6px 13px;background:transparent;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);transition:all .12s;white-space:nowrap}
+.seg button:hover{background:var(--surface2);color:var(--text)}
+.seg button.on{background:var(--blue);color:#fff}
+.seg button.on-a{background:var(--amber);color:#000}
+.seg button.on-g{background:var(--green);color:#000}
+.seg button.on-r{background:var(--green);color:#000}
+
+select{padding:6px 10px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-family:'Barlow',sans-serif;color:var(--text);cursor:pointer;outline:none}
+select:focus{border-color:var(--blue)}
+select option{background:#ffffff}
+
+.ppill{padding:6px 13px;border:1px solid var(--amber);background:transparent;color:var(--amber);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:all .12s}
+.ppill:hover{background:var(--amber);color:#000}
+.snote{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.03em}
+.snote.w{color:var(--amber);font-weight:700}
+
+/* ── METRICS ── */
+.mg{display:grid;gap:8px;margin-bottom:14px}
 .mg-3{grid-template-columns:repeat(3,1fr)}.mg-4{grid-template-columns:repeat(4,1fr)}.mg-2{grid-template-columns:1fr 1fr}
-.m{background:#f5f5f5;border-radius:7px;padding:10px 12px}
-.m .l{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-.m .v{font-size:19px;font-weight:600}
-/* TABS */
-.tabs{display:flex;border-bottom:1px solid #e5e5e5;margin-bottom:12px;flex-wrap:wrap}
-.tb{padding:7px 11px;background:transparent;border:none;cursor:pointer;font-size:13px;color:#888;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tb.on{color:#2563eb;border-bottom-color:#2563eb;font-weight:500}
+.m{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--blue);padding:12px 14px}
+.m .l{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.m .v{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1;letter-spacing:-.01em}
+
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:14px;flex-wrap:wrap;gap:0}
+.tb{padding:9px 14px;background:transparent;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s;white-space:nowrap}
+.tb:hover{color:var(--text);background:var(--surface2)}
+.tb.on{color:var(--blue);border-bottom-color:var(--blue)}
 .pnl{display:none}.pnl.on{display:block}
-h2{font-size:16px;font-weight:600;margin-bottom:3px}
-p.sub{font-size:12px;color:#888;margin-bottom:10px}
-.sl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;margin-top:12px}
-.empty{padding:30px;text-align:center;color:#888;font-size:13px}
-/* CHIPS */
-.chip{font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px}
-.cq{background:#dcfce7;color:#166534}.ca{background:#fef9c3;color:#854d0e}.cd{background:#f5f5f5;color:#888;border:1px solid #e5e5e5}
-.cr{background:#dbeafe;color:#1e40af}.cage{background:#f5f5f5;color:#9ca3af;border:1px solid #e5e5e5}.cinc{background:#fef9c3;color:#854d0e;border:1px solid #fbbf24}
-/* PROFILE */
-.hero{display:flex;align-items:center;gap:14px;padding:12px;background:#f5f5f5;border-radius:10px;margin-bottom:11px}
-.av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;flex-shrink:0}
-.ai h1{font-size:16px;font-weight:600;margin-bottom:2px}
-.ai .ac{font-size:13px;color:#888}
-.ai .as{margin-top:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.pst{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:11px}
-.ps{background:#f5f5f5;border-radius:7px;padding:9px;text-align:center}
-.ps .pl{font-size:11px;color:#888;margin-bottom:2px}.ps .pv{font-size:18px;font-weight:600}.ps .pp{font-size:11px;color:#888;margin-top:1px}
-.db3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px}
-.dc{border-radius:7px;padding:11px;border:1px solid #e5e5e5}
-.dc .dt{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
-.dc .ds{font-size:20px;font-weight:600;margin-bottom:2px}
-.dc .dbw{height:4px;background:#e5e5e5;border-radius:2px;margin-bottom:3px}
-.dc .db{height:4px;border-radius:2px}
-.dc .dm{font-size:11px;color:#888}
-.gc{background:#eff6ff}.sc{background:#f5f3ff}.sgc{background:#f0fdf4}
-.pg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
-.pc{border-radius:10px;border:1px solid #e5e5e5;padding:11px}
-.brr{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #f0f0f0}.brr:last-child{border:none}
-.brp{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
-.bp1{background:#fef9c3;color:#854d0e}.bp2{background:#dbeafe;color:#1e40af}.bp3{background:#dcfce7;color:#166534}.bpo{background:#f5f5f5;color:#888}
-.pr{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.prl{font-size:12px;width:24px;font-weight:600}
-.ptrk{flex:1;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden}
-.pf{height:100%;border-radius:4px}
-.ptxt{font-size:11px;color:#888;width:50px;text-align:right}
-.cw{position:relative;height:155px;margin-top:5px}
-.cw2{position:relative;height:200px;margin-bottom:11px}
-.cdot{width:14px;height:14px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600}
-.cok{background:#dcfce7;color:#166534}.cdnf{background:#fee2e2;color:#991b1b}.cns{background:#f5f5f5;color:#9ca3af}
-.cbr{display:flex;gap:2px;flex-wrap:wrap;margin-top:4px}
-.dp{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;text-transform:uppercase}
-.dpgs{background:#dbeafe;color:#1e40af}.dpsl{background:#ede9fe;color:#4c1d95}.dpsg{background:#dcfce7;color:#166534}
-/* SCORECARD */
+
+h2{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;margin-bottom:3px;letter-spacing:.02em;text-transform:uppercase}
+p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
+.sl{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;margin-top:16px}
+.empty{padding:52px 20px;text-align:center;color:var(--text3);font-size:14px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--text3)}
+.empty::before{content:'⛷';font-size:32px;display:block;margin-bottom:10px;opacity:.3}
+
+/* ── CHIPS ── */
+.chip{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:3px 9px;letter-spacing:.06em;text-transform:uppercase}
+.cq{background:var(--green-dim);color:var(--green)}
+.ca{background:var(--amber-dim);color:var(--amber)}
+.cd{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.cr{background:var(--blue-dim);color:var(--blue)}
+.cage{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.cinc{background:var(--amber-dim);color:var(--amber)}
+
+/* ── PROFILE HERO ── */
+.hero{display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--blue);margin-bottom:14px}
+.av{width:58px;height:58px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;flex-shrink:0;clip-path:polygon(0 0,100% 0,100% 80%,80% 100%,0 100%)}
+.ai h1{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;margin-bottom:2px;letter-spacing:.02em;text-transform:uppercase}
+.ai .ac{font-size:13px;color:var(--text2)}
+.ai .as{margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+
+/* ── STAT PILLS ── */
+.pst{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.ps{background:var(--surface);border:1px solid var(--border);padding:12px;text-align:center;position:relative;overflow:hidden}
+.ps::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--blue)}
+.ps .pl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.ps .pv{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.ps .pp{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* ── DISC CARDS ── */
+.db3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.dc{padding:13px;border:1px solid var(--border)}
+.dc .dt{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.dc .ds{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;margin-bottom:5px;line-height:1}
+.dc .dbw{height:3px;background:rgba(255,255,255,.06);margin-bottom:5px}
+.dc .db{height:3px}
+.dc .dm{font-size:11px;color:var(--text2)}
+.gc{background:#eef3ff;border-color:#c5d4f8}.sc{background:#f5f0ff;border-color:#d4c5f8}.sgc{background:#edfaf3;border-color:#b8f0d4}
+
+.pg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pc{border:1px solid var(--border);padding:13px;background:var(--surface)}
+
+.brr{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border2)}.brr:last-child{border:none}
+.brp{width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;flex-shrink:0;clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%)}
+.bp1{background:#3d2000;color:var(--amber)}.bp2{background:var(--blue-dim);color:var(--blue)}.bp3{background:var(--green-dim);color:var(--green)}.bpo{background:var(--surface2);color:var(--text3)}
+
+.pr{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.prl{font-family:'Barlow Condensed',sans-serif;font-size:13px;width:26px;font-weight:700;letter-spacing:.04em}
+.ptrk{flex:1;height:6px;background:var(--border);overflow:hidden}
+.pf{height:100%}
+.ptxt{font-size:11px;color:var(--text3);width:52px;text-align:right;font-family:'DM Mono',monospace}
+.cw{position:relative;height:160px;margin-top:8px}
+.cw2{position:relative;height:200px;margin-bottom:14px}
+.cdot{width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'Barlow Condensed',sans-serif}
+.cok{background:var(--green-dim);color:var(--green)}.cdnf{background:var(--red-dim);color:var(--red)}.cns{background:var(--surface2);color:var(--text3)}
+.cbr{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.dp{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:2px 8px;text-transform:uppercase;letter-spacing:.06em}
+.dpgs{background:var(--blue-dim);color:var(--blue)}.dpsl{background:var(--purple-dim);color:var(--purple)}.dpsg{background:var(--green-dim);color:var(--green)}
+
+/* ── SCORECARD ── */
 .rg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.rc{background:#f5f5f5;border-radius:7px;padding:8px 10px;border:1px solid transparent}
-.rc.cnt{border-color:#86efac;background:#f0fdf4}
-.rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
-.rpts{font-size:15px;font-weight:600}
-.rs{font-size:11px;color:#888;margin-bottom:1px}
-.pbw{height:4px;background:#e5e5e5;border-radius:2px;margin-top:3px}
-.pb2{height:4px;border-radius:2px;background:#60a5fa}.pb2.cnt{background:#4ade80}
-.cbadge{font-size:10px;color:#166534;font-weight:600;margin-top:2px}
-/* WHATIF */
-.wg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.wc{background:#f5f5f5;border-radius:7px;padding:8px 10px}
-.wc select{width:100%;font-size:12px;padding:3px 6px;margin-top:3px}
-.wo{font-size:11px;color:#888;margin-top:2px}
-.wrst{padding:4px 9px;font-size:12px;cursor:pointer;border:1px solid #e5e5e5;border-radius:7px;background:transparent;color:#888}
-.rrow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f0f0f0}.rrow:last-child{border:none}
-.rl{font-size:13px;color:#888}.rv{font-size:14px;font-weight:600}
-.au{color:#16a34a}.ad{color:#dc2626}.as2{color:#888}
-/* TARGET */
-.tr2{display:flex;align-items:center;gap:10px;margin-bottom:11px;flex-wrap:wrap}
-.tr2 label{font-size:13px;color:#888;white-space:nowrap}
-.tr2 input[type=range]{flex:1;min-width:80px}
-.tv{font-size:15px;font-weight:600;min-width:35px;text-align:right}
-.gr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.gll{font-size:12px;color:#888;width:24px;text-align:right}
-.gtk{flex:1;height:16px;background:#f0f0f0;border-radius:3px;overflow:hidden}
-.gf{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:11px;font-weight:600;white-space:nowrap}
-.gfgs{background:#93c5fd;color:#1e3a8a}.gfsl{background:#c4b5fd;color:#3b0764}.gfsg{background:#86efac;color:#14532d}
-.gml{font-size:11px;color:#888;width:58px}
-/* FIELD VIEW - KEY FEATURE */
-.fscroll{max-height:380px;overflow-y:auto;border:1px solid #e5e5e5;border-radius:10px}
-.frow{display:flex;align-items:center;gap:6px;padding:5px 10px;border-bottom:1px solid #f0f0f0}.frow:last-child{border:none}
-.frank{font-size:12px;color:#888;width:34px;text-align:right;flex-shrink:0}
-.frank.qrank{color:#16a34a;font-weight:600}
-.frank.arank{color:#d97706}
-.fname{font-size:13px;flex:1}.fname.you{font-weight:600;color:#2563eb}
-.fclub{font-size:10px;color:#9ca3af;width:34px;flex-shrink:0}
-.fbw{width:100px;height:7px;background:#f0f0f0;border-radius:3px;overflow:hidden;flex-shrink:0}
-.fb{height:100%;background:#bfdbfe;border-radius:3px}.fb.you{background:#3b82f6}
-.fpts{font-size:12px;color:#888;width:28px;text-align:right;flex-shrink:0}
-.flbl{font-size:10px;font-weight:600;padding:1px 5px;border-radius:5px;flex-shrink:0}
-.fq{background:#dcfce7;color:#166534}.fa{background:#fef9c3;color:#854d0e}
-.hlr{background:#eff6ff}
-.inc-sm{font-size:9px;font-weight:600;padding:1px 4px;border-radius:6px;background:#fef9c3;color:#854d0e;margin-left:3px}
-.flegend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:#888;align-items:center}
-.fl-item{display:flex;align-items:center;gap:4px}
-.fl-dot{width:10px;height:10px;border-radius:2px}
-/* CAREER */
-.ctbl{width:100%;border-collapse:collapse;margin-bottom:11px}
-.ctbl th{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;text-align:left;border-bottom:1px solid #e5e5e5;background:#f5f5f5}
-.ctbl th.r{text-align:right}.ctbl td{padding:6px 8px;border-bottom:1px solid #f0f0f0;font-size:13px}.ctbl tr:last-child td{border:none}
-.cr1{background:#fff}.cr-ret{background:#eff6ff}.cr-aged{background:#f9fafb;opacity:.75}.cr-inc{background:#fffbeb}
-.sdot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
-.sdc{background:#4ade80}.sdr{background:#60a5fa}.sda{background:#d1d5db}.sdi{background:#fbbf24}
-.ttr{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #f0f0f0;font-size:12px}.ttr:last-child{border:none}
-.trb{font-size:10px;font-weight:600;padding:1px 5px;border-radius:6px;white-space:nowrap}
-.trb-r{background:#dbeafe;color:#1e40af}.trb-o{background:#fee2e2;color:#991b1b}
-.banr{background:#eff6ff;border:1px solid #bfdbfe;padding:10px 12px;border-radius:10px;margin-bottom:11px}
-.ban{padding:10px 12px;border-radius:10px;margin-bottom:10px;border:1px solid}
-.ban-b{background:#eff6ff;border-color:#bfdbfe}.ban-g{background:#f0fdf4;border-color:#86efac}.ban-a{background:#fffbeb;border-color:#fde68a}
-.bt{font-size:13px;font-weight:600;margin-bottom:2px}.bd{font-size:12px;color:#555}
-.inban{padding:10px 12px;background:#fffbeb;border-radius:10px;border:1px solid #fde68a;margin-bottom:11px}
-.inprog{padding:8px 11px;background:#fffbeb;border-radius:7px;border:1px solid #fde68a;margin-bottom:11px;font-size:12px;color:#92400e}
-.prev-ban{padding:10px 11px;border-radius:10px;margin-bottom:11px;border:1px solid #fde68a;background:#fffbeb}
-/* TEAMS */
-.tm-row{display:flex;align-items:center;cursor:pointer;padding:8px;border-bottom:1px solid #f0f0f0;transition:background .1s}
-.tm-row:hover{background:#f9fafb}.tm-row.exp{background:#eff6ff}
-.tkr{font-size:13px;font-weight:600;width:30px;text-align:right;padding-right:8px;color:#888}
-.tkr.gold{color:#b45309}.tkr.silver{color:#6b7280}.tkr.bronze{color:#78350f}
-.tav{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-right:8px}
-.tnm{font-size:14px;font-weight:600;flex:1}.tsb{font-size:11px;color:#888}
-.tdc{text-align:right;min-width:42px;padding-right:6px}.tdv{font-size:13px;font-weight:600}.tdl{font-size:10px;color:#888}
-.tpc{text-align:right;padding-right:6px;min-width:50px}.tpb{font-size:14px;font-weight:600}.tpl{font-size:10px;color:#888}
-.tbc{min-width:72px;padding-right:6px}.tbtr{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-top:1px}.tbfl{height:100%;border-radius:3px}
-.tdet{display:none;background:#f9fafb;border-bottom:1px solid #e5e5e5}.tdet.open{display:block}
-.tdi{padding:10px 11px}
-.tdg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
-.tds{background:#fff;border-radius:7px;padding:8px 10px}
-.tds .dl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}.tds .dv{font-size:16px;font-weight:600}
-.ta-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #f0f0f0}.ta-row:last-child{border:none}
-.ta-rk{font-size:12px;color:#888;width:48px;text-align:right}
-.ta-nm{flex:1;font-size:13px;cursor:pointer;color:#2563eb}.ta-nm:hover{text-decoration:underline}
-.ta-d{display:flex;gap:4px}.ta-d span{font-size:11px;color:#888}
-.ta-tot{font-size:13px;font-weight:600;width:34px;text-align:right}
-.qb{display:inline-block;font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;margin-left:3px}
-.qb-q{background:#dcfce7;color:#166534}.qb-a{background:#fef9c3;color:#854d0e}
-.t-sec-h{display:flex;align-items:center;gap:6px;padding:5px 0 4px;border-bottom:1px solid #e5e5e5;margin-bottom:4px;margin-top:8px}
-.t-sec-l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#92400e}
-.ttbs{display:flex;border-bottom:1px solid #e5e5e5;margin-bottom:7px}
-.ttb{padding:5px 9px;background:transparent;border:none;cursor:pointer;font-size:12px;color:#888;border-bottom:2px solid transparent;margin-bottom:-1px}
-.ttb.on{color:#2563eb;border-bottom-color:#2563eb;font-weight:500}
-.tbdual{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:1px}
-.tbd-r{height:100%;background:#60a5fa}.tbd-i{height:100%;background:#fbbf24;opacity:.7}
-.agbg{display:inline-flex;font-size:11px;font-weight:600;padding:2px 7px;border-radius:9px}
-.agbu14{background:#dbeafe;color:#1e40af}.agbu16{background:#dcfce7;color:#166534}
-/* BW */
-.bw-hdr{padding:11px 13px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;border-radius:10px;margin-bottom:12px;display:flex;align-items:flex-start;gap:11px}
-.bw-i{width:40px;height:40px;border-radius:8px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.bw-t{font-size:15px;font-weight:700;color:#92400e;margin-bottom:2px}.bw-s{font-size:12px;color:#b45309}
-.bw-bg{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
-.bw-b{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.rc{background:var(--surface);border:1px solid var(--border);padding:10px 12px;transition:all .12s}
+.rc.cnt{border-color:var(--green);background:var(--green-dim)}
+.rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.rpts{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.01em}
+.rs{font-size:11px;color:var(--text2);margin-bottom:2px}
+.pbw{height:3px;background:var(--border2);margin-top:5px}
+.pb2{height:3px;background:var(--blue)}.pb2.cnt{background:var(--green)}
+.cbadge{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--green);font-weight:700;margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── WHAT-IF ── */
+.wg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wc{background:var(--surface);border:1px solid var(--border);padding:10px 12px}
+.wc select{width:100%;font-size:12px;padding:4px 7px;margin-top:5px}
+.wo{font-size:11px;color:var(--text2);margin-top:4px}
+.wrst{padding:6px 12px;font-size:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text3);transition:all .12s}
+.wrst:hover{border-color:var(--red);color:var(--red)}
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border2)}.rrow:last-child{border:none}
+.rl{font-size:13px;color:var(--text2)}.rv{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700}
+.au{color:var(--green)}.ad{color:var(--red)}.as2{color:var(--text3)}
+
+/* ── TARGET ── */
+.tr2{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.tr2 label{font-size:13px;color:var(--text2);white-space:nowrap;font-weight:500}
+.tr2 input[type=range]{flex:1;min-width:80px;accent-color:var(--blue)}
+.tv{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;min-width:38px;text-align:right}
+.gr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.gll{font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--text2);width:28px;text-align:right;font-weight:700;letter-spacing:.04em}
+.gtk{flex:1;height:18px;background:var(--border);overflow:hidden}
+.gf{height:100%;display:flex;align-items:center;padding-left:7px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;white-space:nowrap;letter-spacing:.04em}
+.gfgs{background:var(--blue);color:#fff}.gfsl{background:var(--purple);color:#fff}.gfsg{background:var(--green);color:#000}
+.gml{font-size:11px;color:var(--text2);width:62px;font-family:'DM Mono',monospace}
+
+/* ── FIELD VIEW ── */
+.fscroll{max-height:420px;overflow-y:auto;border:1px solid var(--border);background:var(--surface)}
+.frow{display:flex;align-items:center;gap:6px;padding:6px 12px;border-bottom:1px solid var(--border2);transition:background .08s}.frow:last-child{border:none}
+.frow:hover{background:var(--surface2)}
+.frank{font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);width:36px;text-align:right;flex-shrink:0}
+.frank.qrank{color:var(--green);font-weight:500}.frank.arank{color:var(--amber)}
+.fname{font-size:13px;flex:1;font-weight:500}.fname.you{font-weight:700;color:var(--blue)}
+.fclub{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text3);width:38px;flex-shrink:0;letter-spacing:.04em}
+.fbw{width:90px;height:4px;background:var(--border);overflow:hidden;flex-shrink:0}
+.fb{height:100%;background:rgba(41,121,255,.35)}.fb.you{background:var(--blue)}
+.fpts{font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);width:32px;text-align:right;flex-shrink:0}
+.flbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:2px 7px;flex-shrink:0;letter-spacing:.06em;text-transform:uppercase}
+.fq{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,230,118,.3)}.fa{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,171,0,.3)}
+.hlr{background:#eef3fd !important;border-left:2px solid var(--blue)}
+.inc-sm{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;padding:1px 5px;background:var(--amber-dim);color:var(--amber);margin-left:5px;letter-spacing:.04em;text-transform:uppercase}
+.flegend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:var(--text2);align-items:center}
+.fl-item{display:flex;align-items:center;gap:5px}
+
+/* ── CAREER ── */
+.ctbl{width:100%;border-collapse:collapse;margin-bottom:14px}
+.ctbl th{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);background:var(--surface2)}
+.ctbl th.r{text-align:right}.ctbl td{padding:7px 10px;border-bottom:1px solid var(--border2);font-size:13px}.ctbl tr:last-child td{border:none}
+.cr1{background:var(--surface)}.cr-ret{background:var(--blue-dim)}.cr-aged{background:var(--surface2);opacity:.7}.cr-inc{background:var(--amber-dim)}
+.sdot{width:8px;height:8px;display:inline-block;margin-right:5px;vertical-align:middle}
+.sdc{background:#16a34a}.sdr{background:#2155d4}.sda{background:#d1d5db}.sdi{background:#d97706}
+.ttr{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border2);font-size:12px}.ttr:last-child{border:none}
+.trb{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:2px 8px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.trb-r{background:var(--blue-dim);color:var(--blue)}.trb-o{background:var(--red-dim);color:var(--red)}
+
+/* ── BANNERS ── */
+.banr{background:var(--blue-dim);border:1px solid rgba(41,121,255,.3);border-left:3px solid var(--blue);padding:12px 14px;margin-bottom:14px}
+.ban{padding:12px 14px;margin-bottom:12px;border:1px solid}
+.ban-b{background:var(--blue-dim);border-color:rgba(41,121,255,.3);border-left:3px solid var(--blue)}.ban-g{background:var(--green-dim);border-color:rgba(0,230,118,.3);border-left:3px solid var(--green)}.ban-a{background:var(--amber-dim);border-color:rgba(255,171,0,.3);border-left:3px solid var(--amber)}
+.bt{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;margin-bottom:3px;letter-spacing:.03em;text-transform:uppercase}.bd{font-size:12px;color:var(--text2)}
+.inban{padding:12px 14px;background:var(--amber-dim);border:1px solid rgba(255,171,0,.3);border-left:3px solid var(--amber);margin-bottom:14px}
+.inprog{padding:9px 13px;background:var(--amber-dim);border:1px solid rgba(255,171,0,.3);border-left:3px solid var(--amber);margin-bottom:14px;font-size:12px;color:var(--amber)}
+.prev-ban{padding:12px 14px;margin-bottom:14px;border:1px solid rgba(255,171,0,.3);border-left:3px solid var(--amber);background:var(--amber-dim)}
+
+/* ── TEAMS ── */
+.tm-row{display:flex;align-items:center;cursor:pointer;padding:10px 12px;border-bottom:1px solid var(--border2);transition:background .1s}
+.tm-row:hover{background:var(--surface2)}.tm-row.exp{background:var(--blue-dim);border-left:2px solid var(--blue)}
+.tkr{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:34px;text-align:right;padding-right:10px}
+.tkr.gold{color:var(--gold)}.tkr.silver{color:#8b93ab}.tkr.bronze{color:#b87333}
+.tav{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;flex-shrink:0;margin-right:10px;letter-spacing:.04em;clip-path:polygon(0 0,100% 0,100% 80%,80% 100%,0 100%)}
+.tnm{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex:1;letter-spacing:.03em;text-transform:uppercase}.tsb{font-size:11px;color:var(--text2)}
+.tdc{text-align:right;min-width:46px;padding-right:7px}.tdv{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800}.tdl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'Barlow Condensed',sans-serif;font-weight:700}
+.tpc{text-align:right;padding-right:7px;min-width:54px}.tpb{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800}.tpl{font-size:10px;color:var(--text3);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em}
+.tbc{min-width:74px;padding-right:7px}.tbtr{height:5px;background:var(--border);overflow:hidden;margin-top:3px}.tbfl{height:100%}
+.tdet{display:none;background:var(--surface2);border-bottom:1px solid var(--border)}.tdet.open{display:block}
+.tdi{padding:13px 14px}
+.tdg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
+.tds{background:var(--surface);border:1px solid var(--border);padding:9px 11px}
+.tds .dl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}.tds .dv{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800}
+.ta-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid var(--border2)}.ta-row:last-child{border:none}
+.ta-rk{font-family:'DM Mono',monospace;font-size:12px;color:var(--text3);width:52px;text-align:right}
+.ta-nm{flex:1;font-size:13px;cursor:pointer;color:var(--blue);font-weight:500}.ta-nm:hover{text-decoration:underline}
+.ta-d{display:flex;gap:5px}.ta-d span{font-size:11px;color:var(--text2)}
+.ta-tot{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:36px;text-align:right}
+.qb{font-family:'Barlow Condensed',sans-serif;display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;margin-left:4px;letter-spacing:.06em;text-transform:uppercase}
+.qb-q{background:var(--green-dim);color:var(--green)}.qb-a{background:var(--amber-dim);color:var(--amber)}
+.t-sec-h{display:flex;align-items:center;gap:7px;padding:6px 0 5px;border-bottom:1px solid var(--border);margin-bottom:5px;margin-top:10px}
+.t-sec-l{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--amber)}
+.ttbs{display:flex;border-bottom:1px solid var(--border2);margin-bottom:9px}
+.ttb{padding:6px 12px;background:transparent;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s}
+.ttb.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tbdual{display:flex;height:5px;overflow:hidden;margin-top:3px}
+.tbd-r{height:100%;background:var(--blue)}.tbd-i{height:100%;background:var(--amber);opacity:.8}
+.agbg{display:inline-flex;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;padding:2px 9px;letter-spacing:.06em;text-transform:uppercase}
+.agbu14{background:var(--blue-dim);color:var(--blue)}.agbu16{background:var(--green-dim);color:var(--green)}
+
+/* ── BW HEADER ── */
+.bw-hdr{padding:16px;background:#fef7e6;border:1px solid #f5d98a;border-left:4px solid var(--amber);margin-bottom:14px;display:flex;align-items:flex-start;gap:14px}
+.bw-i{width:46px;height:46px;background:#fde68a;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid #f5c842}
+.bw-t{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--amber);margin-bottom:3px;letter-spacing:.02em;text-transform:uppercase}.bw-s{font-size:12px;color:rgba(255,171,0,.7)}
+.bw-bg{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.bw-b{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:3px 9px;background:#fde68a;color:#92400e;border:1px solid #f5c842;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── TABLES ── */
 .rtbl{width:100%;border-collapse:collapse}
-.rtbl th{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;text-align:left;border-bottom:1px solid #e5e5e5;background:#f5f5f5;white-space:nowrap;position:sticky;top:0}
-.rtbl th.r{text-align:right}.rtbl td{padding:5px 8px;border-bottom:1px solid #f0f0f0;font-size:13px}
-.rtbl tr.sr{background:#eff6ff}
-.tscroll{max-height:400px;overflow-y:auto;border:1px solid #e5e5e5;border-radius:10px}
-.plb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:19px;border-radius:4px;font-size:11px;font-weight:600}
-.plb1{background:#fef9c3;color:#854d0e}.plb2{background:#dbeafe;color:#1e40af}.plb3{background:#dcfce7;color:#166534}.plbt{background:#f0f0f0;color:#888}
-.by13p{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;background:#dcfce7;color:#166534}
-.by14p{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;background:#dbeafe;color:#1e40af}
-.pp-row{display:grid;grid-template-columns:32px 1fr 110px 100px;gap:7px;align-items:center;padding:6px 8px;border-bottom:1px solid #f0f0f0}.pp-row:last-child{border:none}
-.pp-row.spp{background:#eff6ff}
-.pp-rk{font-size:13px;font-weight:600;text-align:center}.pp-nm{font-size:13px}
-.pp-bw,.pp-u14{display:flex;flex-direction:column;gap:1px}
-.pp-lb{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.04em}
-.pp-vl{font-size:13px;font-weight:600}
-.wcard{background:#f5f5f5;border-radius:10px;border:1px solid #e5e5e5;padding:11px;margin-bottom:8px}
-.wcard.feat{border:1px solid #fcd34d;background:#fffbeb}.wcard.spac-w{border-color:#bfdbfe;background:#eff6ff}
-.wcnm{font-size:14px;font-weight:600;margin-bottom:2px}
-.wcmt{font-size:12px;color:#888;display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-.wcs{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
-.wcs-s{text-align:center;background:#fff;border-radius:7px;padding:5px 8px;min-width:48px}
-.wssl{font-size:10px;color:#888;text-transform:uppercase;margin-bottom:1px}
-.wssv{font-size:14px;font-weight:600}
-.star-b{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:1px 6px;border-radius:8px;background:#fef9c3;color:#854d0e;margin-left:4px}
-/* REGIONALS */
-.reg-hdr{padding:11px 13px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:10px;margin-bottom:12px;display:flex;align-items:flex-start;gap:11px}
-.reg-i{width:40px;height:40px;border-radius:8px;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.reg-t{font-size:15px;font-weight:700;color:#1e40af;margin-bottom:2px}.reg-s{font-size:12px;color:#1d4ed8}
-.reg-bg{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
-.reg-b{font-size:10px;font-weight:600;padding:2px 6px;border-radius:8px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
-.pnw-row{background:#f0f9ff}
-.spac-row{background:#eff6ff}
-.tc2{font-size:11px;color:#888;font-variant-numeric:tabular-nums}
-.dnfc{color:#9ca3af;font-size:12px}
-.pnw-pill{font-size:9px;font-weight:600;padding:1px 5px;border-radius:6px;background:#dbeafe;color:#1e40af;margin-left:3px}
-.spac-pill{font-size:9px;font-weight:600;padding:1px 5px;border-radius:6px;background:#eff6ff;color:#2563eb;margin-left:3px}
-.cr-row{display:flex;align-items:center;gap:8px;padding:8px;border-bottom:1px solid #f0f0f0}.cr-row:last-child{border:none}
-.cr-row.spac-cr{background:#eff6ff}
-.crk{font-size:13px;font-weight:700;width:28px;text-align:right;padding-right:7px;color:#888}
-.crk.gold{color:#b45309}.crk.silver{color:#6b7280}.crk.bronze{color:#78350f}
-.crav{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-right:7px}
-.crnm{font-size:14px;font-weight:600;flex:1}.crsb{font-size:11px;color:#888}
-.crevc{text-align:right;min-width:45px;padding-right:5px}.crev{font-size:13px;font-weight:600}.crel{font-size:10px;color:#888}
-.crpc{text-align:right;padding-right:5px;min-width:48px}.crpv{font-size:14px;font-weight:600}.crpl{font-size:10px;color:#888}
-.crbc{min-width:70px}.crbtr{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-top:1px}.crbfl{height:100%;border-radius:3px}
-.acev-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:7px}
-.acev{text-align:center;background:#f9fafb;border-radius:7px;padding:7px 10px;min-width:66px}
-.acevl{font-size:10px;color:#888;text-transform:uppercase;margin-bottom:2px}
-.acevr{font-size:18px;font-weight:700}.acevt{font-size:11px;color:#888;margin-top:1px}
-.pnw-leg{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:#888;align-items:center}
-.lg-i{display:flex;align-items:center;gap:4px}
-.lg-d{width:10px;height:10px;border-radius:2px}
+.rtbl th{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);background:var(--surface2);white-space:nowrap;position:sticky;top:0}
+.rtbl th.r{text-align:right}.rtbl td{padding:6px 10px;border-bottom:1px solid var(--border2);font-size:13px}
+.rtbl tr.sr{background:var(--blue-dim)}
+.rtbl tr:hover{background:var(--surface2)}
+.tscroll{max-height:420px;overflow-y:auto;border:1px solid var(--border);background:var(--surface)}
+
+/* ── PLACE BADGES ── */
+.plb{display:inline-flex;align-items:center;justify-content:center;width:26px;height:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500}
+.plb1{background:#fef3dc;color:var(--amber)}.plb2{background:var(--blue-dim);color:var(--blue)}.plb3{background:var(--green-dim);color:var(--green)}.plbt{background:var(--surface2);color:var(--text3)}
+.by13p{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:2px 8px;background:var(--green-dim);color:var(--green);letter-spacing:.04em;text-transform:uppercase}
+.by14p{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:2px 8px;background:var(--blue-dim);color:var(--blue);letter-spacing:.04em;text-transform:uppercase}
+
+/* ── PIPELINE ── */
+.pp-row{display:grid;grid-template-columns:32px 1fr 110px 100px;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--border2)}.pp-row:last-child{border:none}
+.pp-row.spp{background:var(--blue-dim);border-left:2px solid var(--blue)}
+.pp-rk{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;text-align:center}.pp-nm{font-size:13px}
+.pp-bw,.pp-u14{display:flex;flex-direction:column;gap:2px}
+.pp-lb{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.pp-vl{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800}
+
+/* ── WATCH CARDS ── */
+.wcard{background:var(--surface);border:1px solid var(--border);padding:13px;margin-bottom:9px;transition:border-color .15s}
+.wcard:hover{border-color:var(--blue-mid)}
+.wcard.feat{border-color:rgba(255,171,0,.4);border-left:3px solid var(--amber);background:var(--amber-dim)}.wcard.spac-w{border-color:rgba(41,121,255,.35);border-left:3px solid var(--blue);background:var(--blue-dim)}
+.wcnm{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;margin-bottom:3px;letter-spacing:.02em;text-transform:uppercase}
+.wcmt{font-size:12px;color:var(--text2);display:flex;gap:7px;flex-wrap:wrap;margin-bottom:7px}
+.wcs{display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap}
+.wcs-s{text-align:center;background:var(--surface2);border:1px solid var(--border);padding:6px 10px;min-width:52px}
+.wssl{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--text3);text-transform:uppercase;font-weight:700;letter-spacing:.08em;margin-bottom:2px}
+.wssv{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800}
+.star-b{font-family:'Barlow Condensed',sans-serif;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:2px 8px;background:rgba(255,171,0,.15);color:var(--amber);margin-left:5px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── REGIONALS ── */
+.reg-hdr{padding:16px;background:#e8f0fd;border:1px solid #b8cdf5;border-left:4px solid var(--blue);margin-bottom:14px;display:flex;align-items:flex-start;gap:14px}
+.reg-i{width:46px;height:46px;background:#c5d4f8;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid #93b0f0}
+.reg-t{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--blue);margin-bottom:3px;letter-spacing:.02em;text-transform:uppercase}.reg-s{font-size:12px;color:rgba(41,121,255,.7)}
+.reg-bg{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.reg-b{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:3px 9px;background:#c5d4f8;color:#1e3a8a;border:1px solid #93b0f0;letter-spacing:.06em;text-transform:uppercase}
+.pnw-row{background:#f0f6ff}.spac-row{background:#e8f0fd}
+.tc2{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)}
+.dnfc{color:var(--text3);font-size:12px}
+.pnw-pill{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;padding:2px 6px;background:var(--blue-dim);color:var(--blue);margin-left:4px;letter-spacing:.04em;text-transform:uppercase}
+.spac-pill{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;padding:2px 6px;background:var(--blue-dim);color:var(--blue);margin-left:4px;letter-spacing:.04em;text-transform:uppercase}
+.cr-row{display:flex;align-items:center;gap:9px;padding:9px 12px;border-bottom:1px solid var(--border2)}.cr-row:last-child{border:none}
+.cr-row.spac-cr{background:var(--blue-dim);border-left:2px solid var(--blue)}
+.crk{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;width:32px;text-align:right;padding-right:8px}
+.crk.gold{color:var(--gold)}.crk.silver{color:#8b93ab}.crk.bronze{color:#b87333}
+.crav{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;flex-shrink:0;margin-right:8px;clip-path:polygon(0 0,100% 0,100% 80%,80% 100%,0 100%)}
+.crnm{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;flex:1;letter-spacing:.02em;text-transform:uppercase}.crsb{font-size:11px;color:var(--text2)}
+.crevc{text-align:right;min-width:48px;padding-right:6px}.crev{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800}.crel{font-size:10px;color:var(--text3);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em}
+.crpc{text-align:right;padding-right:6px;min-width:52px}.crpv{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800}.crpl{font-size:10px;color:var(--text3);text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em}
+.crbc{min-width:72px}.crbtr{height:5px;background:var(--border);overflow:hidden;margin-top:3px}.crbfl{height:100%}
+.acev-row{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.acev{text-align:center;background:var(--surface2);border:1px solid var(--border);padding:8px 12px;min-width:70px}
+.acevl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.acevr{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800}.acevt{font-size:11px;color:var(--text2);margin-top:2px;font-family:'DM Mono',monospace}
+.pnw-leg{display:flex;gap:11px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:var(--text2);align-items:center}
+.lg-i{display:flex;align-items:center;gap:5px}
+.lg-d{width:11px;height:11px}
+
+/* ── PROFILE ANIMATIONS ── */
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+@keyframes countUp{from{opacity:0;transform:translateY(6px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes glowPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 2px rgba(41,121,255,.2)}}
+.hero-anim{animation:slideUp .35s cubic-bezier(.22,1,.36,1) both}
+.stat-anim-0{animation:countUp .3s cubic-bezier(.22,1,.36,1) .05s both}
+.stat-anim-1{animation:countUp .3s cubic-bezier(.22,1,.36,1) .12s both}
+.stat-anim-2{animation:countUp .3s cubic-bezier(.22,1,.36,1) .19s both}
+.stat-anim-3{animation:countUp .3s cubic-bezier(.22,1,.36,1) .26s both}
+.disc-anim-0{animation:slideUp .32s cubic-bezier(.22,1,.36,1) .15s both}
+.disc-anim-1{animation:slideUp .32s cubic-bezier(.22,1,.36,1) .22s both}
+.disc-anim-2{animation:slideUp .32s cubic-bezier(.22,1,.36,1) .29s both}
+.name-flash{animation:glowPulse .6s ease .3s 1}
+
+/* ── WRC BADGE ── */
+.wrc-badge{font-family:'Barlow Condensed',sans-serif;display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;padding:2px 7px;background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;border:1px solid #f5c842;letter-spacing:.06em;text-transform:uppercase;margin-left:5px}
+.wrc-row{background:linear-gradient(90deg,#fffbeb,#ffffff)}
+.wrc-row-pnw{background:linear-gradient(90deg,#fef7e0,#ffffff)}
+.wrc-row-spac{background:linear-gradient(90deg,#eff6ff,#ffffff)}
+.div-badge{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;padding:2px 8px;letter-spacing:.08em;text-transform:uppercase}
+.div-A{background:#fee2e2;color:#991b1b}.div-F{background:#fef3c7;color:#92400e}
+.div-I{background:#ede9fe;color:#5b21b6}.div-N{background:#dcfce7;color:#166534}
+.div-P{background:#dbeafe;color:#1e40af}.div-X{background:#f5f5f5;color:#555}
+.div-R{background:#fce7f3;color:#9d174d}.div-E{background:#e0f2fe;color:#0c4a6e}
+.wrc-card{background:#fff;border:1px solid var(--border);border-left:3px solid #b45309;padding:13px;margin-bottom:9px}
+.wrc-card.pnw{border-left-color:var(--blue)}
+.wrc-event-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.wrc-ev{text-align:center;background:#fef7e6;border:1px solid #fde68a;padding:7px 12px;min-width:70px}
+.wrc-ev.pnw-ev{background:var(--blue-dim);border-color:var(--blue-mid)}
+.wrc-evl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.wrc-ev.pnw-ev .wrc-evl{color:var(--blue)}
+.wrc-evr{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800}
+.wrc-evt{font-size:11px;color:var(--text2);margin-top:1px;font-family:'DM Mono',monospace}
 </style>
 </head>
 <body>
+<header class="app-header">
+  <div class="app-logo">
+    <div class="app-logo-icon">⛷</div>
+    <div>
+      <div class="app-logo-text">PNW Ski Score</div>
+      <div class="app-logo-sub">Pacific Northwest · 2025–26 Season</div>
+    </div>
+  </div>
+  <span class="app-badge">SPAC · U14 · U16</span>
+</header>
+<div class="wrap">
 <!-- MASTER CONTROL -->
 <div class="ctrl">
   <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em">View</span>
@@ -243,7 +377,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   </div>
   <span class="snote" id="snote"></span>
 </div>
- 
+
 <!-- MODE ROW (U14 / U16) -->
 <div id="mode-row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
   <div class="seg" id="mode-seg">
@@ -259,7 +393,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
     <select id="asel" onchange="onAthlete()"></select>
   </div>
 </div>
- 
+
 <!-- BW MODE ROW -->
 <div id="bw-mode-row" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
   <div class="seg" id="bw-gseg">
@@ -273,21 +407,62 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
     <option value="14">Born 2014 → U14 2026-27</option>
   </select>
 </div>
- 
-<!-- REGIONALS MODE ROW -->
-<div id="reg-mode-row" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
-  <div class="seg" id="reg-gseg">
-    <button class="on" onclick="setRegG('W')">Women</button>
-    <button onclick="setRegG('M')">Men</button>
-  </div>
-  <select id="reg-vf" onchange="renderReg()">
-    <option value="all">All athletes</option>
+
+<!-- WRC MODE ROW -->
+  <select id="wrc-vf" onchange="renderWRC()">
+    <option value="all">All divisions</option>
     <option value="pnw">PNW only</option>
     <option value="top20">Top 20</option>
   </select>
-  <select id="reg-cf" onchange="renderReg()"><option value="">All clubs</option></select>
+  <select id="wrc-div" onchange="renderWRC()"><option value="">All divisions</option>
+    <option value="A">A — Alaska</option>
+    <option value="F">F — Far West</option>
+    <option value="I">I — Intermountain</option>
+    <option value="N">N — Northern</option>
+    <option value="P">P — Pacific NW</option>
+  </select>
 </div>
- 
+<!-- REGIONALS MODE ROW -->
+<div id="reg-mode-row" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
+  <div class="seg" id="reg-level-seg">
+    <button class="on-r" onclick="setRegLevel('u16')">U16 Regionals</button>
+    <button onclick="setRegLevel('u14')">U14 Regionals (WRC)</button>
+  </div>
+  <!-- U16 controls -->
+  <div id="reg-u16-ctrl" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <div class="seg" id="reg-gseg">
+      <button class="on" onclick="setRegG('W')">Women</button>
+      <button onclick="setRegG('M')">Men</button>
+    </div>
+    <select id="reg-vf" onchange="renderReg()">
+      <option value="all">All athletes</option>
+      <option value="pnw">PNW only</option>
+      <option value="top20">Top 20</option>
+    </select>
+    <select id="reg-cf" onchange="renderReg()"><option value="">All clubs</option></select>
+  </div>
+  <!-- U14/WRC controls -->
+  <div id="reg-u14-ctrl" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
+    <div class="seg" id="wrc-gseg">
+      <button class="on" onclick="setWRCG('W')">Women</button>
+      <button onclick="setWRCG('M')">Men</button>
+    </div>
+    <select id="wrc-vf" onchange="renderWRC()">
+      <option value="all">All athletes</option>
+      <option value="pnw">PNW only</option>
+      <option value="top20">Top 20</option>
+    </select>
+    <select id="wrc-div" onchange="renderWRC()">
+      <option value="">All divisions</option>
+      <option value="P">P — Pacific NW</option>
+      <option value="I">I — Intermountain</option>
+      <option value="F">F — Far West</option>
+      <option value="N">N — Northern</option>
+      <option value="A">A — Alaska</option>
+    </select>
+  </div>
+</div>
+
 <!-- ATHLETE AREA -->
 <div id="ath-area" style="display:none">
   <div class="tabs">
@@ -305,7 +480,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   <div class="pnl" id="p-field"></div>
   <div class="pnl" id="p-career"></div>
 </div>
- 
+
 <!-- TEAM AREA -->
 <div id="team-area" style="display:none">
   <div style="display:flex;gap:0;margin-bottom:10px">
@@ -317,7 +492,7 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   </div>
   <div id="team-content"></div>
 </div>
- 
+
 <!-- BW AREA -->
 <div id="bw-area" style="display:none">
   <div class="bw-hdr">
@@ -339,9 +514,11 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   <div class="pnl" id="bw-pp"></div>
   <div class="pnl" id="bw-wt"></div>
 </div>
- 
+
 <!-- REGIONALS AREA -->
 <div id="reg-area" style="display:none">
+  <!-- U16 content -->
+  <div id="reg-u16-area">
   <div class="reg-hdr">
     <div class="reg-i">⛷</div>
     <div>
@@ -360,10 +537,38 @@ p.sub{font-size:12px;color:#888;margin-bottom:10px}
   <div class="pnl" id="reg-cl"></div>
   <div class="pnl" id="reg-sp"></div>
   <div class="pnl" id="reg-cx"></div>
+  </div>
+  <!-- U14 / WRC content -->
+  <div id="reg-u14-area" style="display:none">
+    <div class="reg-hdr" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fcd34d;border-left-color:#b45309">
+      <div class="reg-i" style="background:#fde68a;border-color:#f5c842;font-size:22px">🏆</div>
+      <div>
+        <div class="reg-t" style="color:#92400e">U14 Western Regional Championship 2026</div>
+        <div class="reg-s" style="color:#b45309">Sugar Bowl, CA · March 20–22, 2026 · Full Western US field</div>
+        <div class="reg-bg">
+          <span class="reg-b" style="background:#fde68a;color:#92400e;border-color:#f5c842">Super-G (3/20)</span>
+          <span class="reg-b" style="background:#fde68a;color:#92400e;border-color:#f5c842">GS (3/21)</span>
+          <span class="reg-b" style="background:#fde68a;color:#92400e;border-color:#f5c842">SL (3/22)</span>
+          <span class="reg-b" style="background:#fde68a;color:#92400e;border-color:#f5c842">59W · 60M · 6 Divisions</span>
+        </div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tb on" onclick="showWRCTab('wrc-rs')">Full Results</button>
+      <button class="tb" onclick="showWRCTab('wrc-pnw')">PNW Standouts</button>
+      <button class="tb" onclick="showWRCTab('wrc-spac')">SPAC Athletes</button>
+      <button class="tb" onclick="showWRCTab('wrc-div')">By Division</button>
+    </div>
+    <div class="pnl on" id="wrc-rs"></div>
+    <div class="pnl" id="wrc-pnw"></div>
+    <div class="pnl" id="wrc-spac"></div>
+    <div class="pnl" id="wrc-div"></div>
+  </div>
 </div>
- 
+
+<!-- WRC content is now inside reg-u14-area above -->
 <div id="empty-state" class="empty">Select a club and athlete above to explore their profile.</div>
- 
+
 <script>
 // Self-contained mini chart engine — no CDN needed
 class Chart {
@@ -382,18 +587,18 @@ class Chart {
     const opts = cfg.options || {};
     const isHoriz = opts.indexAxis === 'y';
     const isStacked = opts.scales?.x?.stacked;
- 
+
     // Size canvas to container
     const W = canvas.parentElement ? canvas.parentElement.offsetWidth || 400 : 400;
     const H = canvas.parentElement ? canvas.parentElement.offsetHeight || 200 : 200;
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, W, H);
- 
+
     const pad = { top: 8, right: 12, bottom: isHoriz ? 28 : 36, left: isHoriz ? 80 : 36 };
     const cW = W - pad.left - pad.right;
     const cH = H - pad.top - pad.bottom;
- 
+
     if (isHoriz) this._drawHoriz(ctx, datasets, labels, cW, cH, pad, W, H);
     else if (isStacked) this._drawStacked(ctx, datasets, labels, cW, cH, pad, W, H);
     else this._drawVert(ctx, datasets, labels, cW, cH, pad, W, H);
@@ -406,7 +611,7 @@ class Chart {
     const n = data.length;
     const gap = 2;
     const barW = Math.max(2, (cW - gap * (n - 1)) / n);
- 
+
     // Y axis
     ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -415,7 +620,7 @@ class Chart {
       ctx.fillStyle = '#999'; ctx.font = '9px system-ui'; ctx.textAlign = 'right';
       ctx.fillText(Math.round(max * i / 4), pad.left - 3, y + 3);
     }
- 
+
     // Bars
     data.forEach((v, i) => {
       const bH = (v / max) * cH;
@@ -429,7 +634,7 @@ class Chart {
       ctx.lineTo(x + barW, y + bH); ctx.lineTo(x, y + bH); ctx.lineTo(x, y + r);
       ctx.quadraticCurveTo(x, y, x + r, y);
       ctx.closePath(); ctx.fill();
- 
+
       // Label
       ctx.fillStyle = '#666'; ctx.font = '9px system-ui'; ctx.textAlign = 'center';
       ctx.save(); ctx.translate(x + barW / 2, H - pad.bottom + 4);
@@ -444,7 +649,7 @@ class Chart {
     const maxT = Math.max(...totals, 1);
     const gap = 4;
     const barW = Math.max(4, (cW - gap * (n - 1)) / n);
- 
+
     // Grid
     ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -453,7 +658,7 @@ class Chart {
       ctx.fillStyle = '#999'; ctx.font = '10px system-ui'; ctx.textAlign = 'right';
       ctx.fillText(Math.round(maxT * i / 4), pad.left - 3, y + 3);
     }
- 
+
     // Stacked bars — group by same 'stack' key
     const stacks = {};
     datasets.forEach(ds => {
@@ -461,11 +666,11 @@ class Chart {
       if (!stacks[key]) stacks[key] = [];
       stacks[key].push(ds);
     });
- 
+
     const stackKeys = Object.keys(stacks);
     const nStacks = stackKeys.length;
     const subW = barW / nStacks;
- 
+
     labels.forEach((lbl, i) => {
       const x0 = pad.left + i * (barW + gap);
       stackKeys.forEach((key, si) => {
@@ -494,7 +699,7 @@ class Chart {
     const maxOpt = this.cfg.options?.scales?.x?.max;
     const allVals = datasets.flatMap(ds => ds.data);
     const maxV = maxOpt || Math.max(...allVals, 1);
- 
+
     // X axis gridlines
     ctx.strokeStyle = '#e5e5e5'; ctx.lineWidth = 1;
     for (let i = 0; i <= 4; i++) {
@@ -503,14 +708,14 @@ class Chart {
       ctx.fillStyle = '#999'; ctx.font = '10px system-ui'; ctx.textAlign = 'center';
       ctx.fillText(Math.round(maxV * i / 4), x, H - 6);
     }
- 
+
     // Y labels
     labels.forEach((lbl, i) => {
       const y = pad.top + i * (barH * datasets.length + gap) + barH * datasets.length / 2;
       ctx.fillStyle = '#555'; ctx.font = '11px system-ui'; ctx.textAlign = 'right';
       ctx.fillText(lbl, pad.left - 6, y + 4);
     });
- 
+
     // Bars
     datasets.forEach((ds, di) => {
       const color = ds.backgroundColor;
@@ -531,15 +736,20 @@ class Chart {
 }
 </script>
 <script>
+const WRC_M=[{n:"Owen Seymour",y:2012,div:"F",pnw:false,club:"DPST",sg:2,gs:1,sl:1,sgT:"42.63",gsT:"95.76",slT:"88.42",sgP:80,gsP:100,slP:100,tot:280},{n:"Benjamin Lu",y:2013,div:"F",pnw:false,club:"NSST",sg:1,gs:2,sl:3,sgT:"42.42",gsT:"97.98",slT:"92.81",sgP:100,gsP:80,slP:60,tot:240},{n:"James Thomas",y:2012,div:"I",pnw:false,club:"RM",sg:6,gs:5,sl:2,sgT:"44.17",gsT:"101.75",slT:"90.64",sgP:40,gsP:45,slP:80,tot:165},{n:"Finn Sundberg",y:2012,div:"A",pnw:false,club:"ASC",sg:9,gs:4,sl:4,sgT:"44.50",gsT:"101.19",slT:"93.75",sgP:29,gsP:50,slP:50,tot:129},{n:"Quinn Webster",y:2012,div:"I",pnw:false,club:"SB",sg:5,gs:3,sl:null,sgT:"44.02",gsT:"99.50",slT:null,sgP:45,gsP:60,slP:null,tot:105},{n:"Hudson Grabos",y:2012,div:"P",pnw:true,club:"CSAT",sg:17,gs:9,sl:5,sgT:"45.63",gsT:"102.43",slT:"94.74",sgP:14,gsP:29,slP:45,tot:88},{n:"Benjamin Blair",y:2012,div:"F",pnw:false,club:"TPT",sg:8,gs:6,sl:null,sgT:"44.31",gsT:"101.95",slT:null,sgP:32,gsP:40,slP:null,tot:72},{n:"Alex Grant",y:2013,div:"I",pnw:false,club:"SVSEF",sg:11,gs:8,sl:20,sgT:"45.07",gsT:"102.26",slT:"101.61",sgP:24,gsP:32,slP:11,tot:67},{n:"Julian Strangis",y:2012,div:"I",pnw:false,club:"PCSS",sg:23,gs:10,sl:8,sgT:"45.72",gsT:"102.94",slT:"96.45",sgP:8,gsP:26,slP:32,tot:66},{n:"Sylvain Buchbauer",y:2012,div:"N",pnw:false,club:"BSF",sg:4,gs:null,sl:18,sgT:"43.99",gsT:null,slT:"101.28",sgP:50,gsP:null,slP:13,tot:63},{n:"Zachary Lighthart",y:2012,div:"I",pnw:false,club:"JHSC",sg:3,gs:null,sl:null,sgT:"43.40",gsT:null,slT:null,sgP:60,gsP:null,slP:null,tot:60},{n:"Dylan Glover",y:2012,div:"I",pnw:false,club:"RM",sg:45,gs:18,sl:6,sgT:"47.66",gsT:"105.53",slT:"95.58",sgP:null,gsP:13,slP:40,tot:53},{n:"Remi Mitchell",y:2013,div:"F",pnw:false,club:"TPT",sg:13,gs:11,sl:null,sgT:"45.17",gsT:"103.16",slT:null,sgP:20,gsP:24,slP:null,tot:44},{n:"Jaxson Kelsay",y:2012,div:"N",pnw:false,club:"BSSEF",sg:12,gs:13,sl:null,sgT:"45.09",gsT:"104.65",slT:null,sgP:22,gsP:20,slP:null,tot:42},{n:"Perry Zemblidge",y:2012,div:"I",pnw:false,club:"PCSS",sg:31,gs:27,sl:7,sgT:"46.81",gsT:"106.99",slT:"95.94",sgP:null,gsP:4,slP:36,tot:40},{n:"Cameron Marshall",y:2013,div:"N",pnw:false,club:"BSSEF",sg:29,gs:24,sl:9,sgT:"46.53",gsT:"106.60",slT:"97.00",sgP:2,gsP:7,slP:29,tot:38},{n:"Asher Buchanan",y:2012,div:"F",pnw:false,club:"TPT",sg:18,gs:26,sl:13,sgT:"45.64",gsT:"106.74",slT:"99.44",sgP:13,gsP:5,slP:20,tot:38},{n:"Nico Bonura",y:2013,div:"P",pnw:true,club:"MRT",sg:10,gs:20,sl:null,sgT:"44.57",gsT:"105.99",slT:null,sgP:26,gsP:11,slP:null,tot:37},{n:"Ari Kinsman",y:2012,div:"I",pnw:false,club:"RM",sg:7,gs:null,sl:null,sgT:"44.19",gsT:null,slT:null,sgP:36,gsP:null,slP:null,tot:36},{n:"Patrick Hennessy",y:2012,div:"I",pnw:false,club:"PCSS",sg:null,gs:7,sl:null,sgT:null,gsT:"102.07",slT:null,sgP:null,gsP:36,slP:null,tot:36},{n:"Sam Mogari",y:2012,div:"F",pnw:false,club:"TPT",sg:null,gs:15,sl:14,sgT:null,gsT:"105.28",slT:"99.68",sgP:null,gsP:16,slP:18,tot:34},{n:"G. William Andrasko",y:2013,div:"I",pnw:false,club:"SBN",sg:15,gs:15,sl:null,sgT:"45.43",gsT:"105.28",slT:null,sgP:16,gsP:16,slP:null,tot:32},{n:"Sawyer Lovejoy",y:2012,div:"P",pnw:true,club:"CSAT",sg:22,gs:12,sl:null,sgT:"45.68",gsT:"104.12",slT:null,sgP:9,gsP:22,slP:null,tot:31},{n:"Bronson Karr",y:2013,div:"I",pnw:false,club:"PCSS",sg:36,gs:28,sl:10,sgT:"46.97",gsT:"107.14",slT:"97.09",sgP:null,gsP:3,slP:26,tot:29},{n:"Theron Andra",y:2012,div:"I",pnw:false,club:"SVSEF",sg:26,gs:31,sl:11,sgT:"46.22",gsT:"107.92",slT:"97.23",sgP:5,gsP:null,slP:24,tot:29},{n:"Charlie Bertram",y:2012,div:"F",pnw:false,club:"SBA",sg:41,gs:33,sl:12,sgT:"47.28",gsT:"108.87",slT:"98.85",sgP:null,gsP:null,slP:22,tot:22},{n:"Donovan Claytor",y:2013,div:"F",pnw:false,club:"TPT",sg:21,gs:19,sl:null,sgT:"45.67",gsT:"105.79",slT:null,sgP:10,gsP:12,slP:null,tot:22},{n:"Andy Doiron",y:2012,div:"F",pnw:false,club:"SBA",sg:14,gs:null,sl:null,sgT:"45.40",gsT:null,slT:null,sgP:18,gsP:null,slP:null,tot:18},{n:"Solen Landwehr",y:2012,div:"P",pnw:true,club:"SARS",sg:31,gs:14,sl:null,sgT:"46.81",gsT:"105.17",slT:null,sgP:null,gsP:18,slP:null,tot:18},{n:"Ando Porter",y:2013,div:"F",pnw:false,club:"MMST",sg:30,gs:17,sl:28,sgT:"46.72",gsT:"105.52",slT:"110.18",sgP:1,gsP:14,slP:3,tot:18},{n:"Gus Wright",y:2012,div:"P",pnw:true,club:"MBSEF",sg:27,gs:22,sl:27,sgT:"46.28",gsT:"106.57",slT:"107.23",sgP:4,gsP:9,slP:4,tot:17},{n:"Miles Cooper",y:2012,div:"F",pnw:false,club:"TPT",sg:31,gs:null,sl:15,sgT:"46.81",gsT:null,slT:"100.21",sgP:null,gsP:null,slP:16,tot:16},{n:"Benedict Zorkendorfer",y:2012,div:"I",pnw:false,club:"JHSC",sg:37,gs:29,sl:17,sgT:"47.05",gsT:"107.16",slT:"101.00",sgP:null,gsP:2,slP:14,tot:16},{n:"Cade Craveiro",y:2012,div:"P",pnw:true,club:"MBSEF",sg:16,gs:null,sl:null,sgT:"45.47",gsT:null,slT:null,sgP:15,gsP:null,slP:null,tot:15},{n:"Nate Snyder",y:2013,div:"I",pnw:false,club:"RM",sg:39,gs:null,sl:16,sgT:"47.20",gsT:null,slT:"100.41",sgP:null,gsP:null,slP:15,tot:15},{n:"Clark Schwall",y:2012,div:"F",pnw:false,club:"SBA",sg:18,gs:null,sl:null,sgT:"45.64",gsT:null,slT:null,sgP:13,gsP:null,slP:null,tot:13},{n:"Cameron Janssen",y:2012,div:"I",pnw:false,club:"PCSS",sg:28,gs:21,sl:null,sgT:"46.38",gsT:"106.21",slT:null,sgP:3,gsP:10,slP:null,tot:13},{n:"Elias Taylor",y:2012,div:"F",pnw:false,club:"TPT",sg:53,gs:null,sl:19,sgT:"50.33",gsT:null,slT:"101.40",sgP:null,gsP:null,slP:12,tot:12},{n:"Nolan Shaw",y:2012,div:"N",pnw:false,club:"FVSEF",sg:20,gs:null,sl:null,sgT:"45.66",gsT:null,slT:null,sgP:11,gsP:null,slP:null,tot:11},{n:"Cruz Crockett",y:2012,div:"I",pnw:false,club:"MWSC",sg:42,gs:null,sl:21,sgT:"47.31",gsT:null,slT:"102.52",sgP:null,gsP:null,slP:10,tot:10},{n:"James Beebe",y:2013,div:"I",pnw:false,club:"PCSS",sg:49,gs:34,sl:22,sgT:"47.95",gsT:"108.91",slT:"102.73",sgP:null,gsP:null,slP:9,tot:9},{n:"Angus Peightal",y:2012,div:"I",pnw:false,club:"JHSC",sg:null,gs:23,sl:null,sgT:null,gsT:"106.58",slT:null,sgP:null,gsP:8,slP:null,tot:8},{n:"Finn Pelkola",y:2012,div:"A",pnw:false,club:"ASC",sg:52,gs:40,sl:23,sgT:"50.05",gsT:"110.79",slT:"103.39",sgP:null,gsP:null,slP:8,tot:8},{n:"Jonah Mckenzie",y:2013,div:"I",pnw:false,club:"PCSS",sg:null,gs:30,sl:24,sgT:null,gsT:"107.20",slT:"103.57",sgP:null,gsP:1,slP:7,tot:8},{n:"Banks Antablin",y:2013,div:"I",pnw:false,club:"PCSS",sg:24,gs:null,sl:null,sgT:"46.02",gsT:null,slT:null,sgP:7,gsP:null,slP:null,tot:7},{n:"Boden Irving",y:2012,div:"P",pnw:true,club:"CSAT",sg:25,gs:null,sl:null,sgT:"46.05",gsT:null,slT:null,sgP:6,gsP:null,slP:null,tot:6},{n:"James Holman",y:2012,div:"I",pnw:false,club:"SVSEF",sg:43,gs:25,sl:null,sgT:"47.37",gsT:"106.66",slT:null,sgP:null,gsP:6,slP:null,tot:6},{n:"Charles Xiong",y:2012,div:"X",pnw:false,club:"SBA",sg:46,gs:null,sl:25,sgT:"47.73",gsT:null,slT:"105.08",sgP:null,gsP:null,slP:6,tot:6},{n:"Charlie Stewart",y:2012,div:"P",pnw:true,club:"CMAC",sg:38,gs:35,sl:26,sgT:"47.14",gsT:"109.23",slT:"105.58",sgP:null,gsP:null,slP:5,tot:5}];
+const WRC_W=[{n:"Mia Huey",y:2012,div:"I",pnw:false,club:"SVSEF",sg:1,gs:2,sl:3,sgT:"42.80",gsT:"100.53",slT:"92.42",sgP:100,gsP:80,slP:60,tot:240},{n:"Kaeli Bertell",y:2013,div:"P",pnw:true,club:"TARP",sg:6,gs:3,sl:1,sgT:"44.85",gsT:"100.81",slT:"90.32",sgP:40,gsP:60,slP:100,tot:200},{n:"Aurora Kaczmarek-Hill",y:2012,div:"N",pnw:false,club:"BSSEF",sg:2,gs:1,sl:null,sgT:"43.41",gsT:"100.26",slT:null,sgP:80,gsP:100,slP:null,tot:180},{n:"Savannah Pringle",y:2012,div:"I",pnw:false,club:"SVSEF",sg:9,gs:6,sl:2,sgT:"45.26",gsT:"102.29",slT:"91.90",sgP:29,gsP:40,slP:80,tot:149},{n:"Annabeth Au",y:2012,div:"F",pnw:false,club:"TPT",sg:3,gs:5,sl:6,sgT:"44.45",gsT:"102.22",slT:"96.30",sgP:60,gsP:45,slP:40,tot:145},{n:"Vivian Yuan",y:2013,div:"F",pnw:false,club:"TPT",sg:7,gs:4,sl:10,sgT:"44.87",gsT:"101.97",slT:"98.02",sgP:36,gsP:50,slP:26,tot:112},{n:"Alice Nam",y:2013,div:"F",pnw:false,club:"TPT",sg:11,gs:13,sl:5,sgT:"45.61",gsT:"104.48",slT:"93.85",sgP:24,gsP:20,slP:45,tot:89},{n:"Teagan Paden",y:2012,div:"F",pnw:false,club:"TPT",sg:4,gs:7,sl:null,sgT:"44.46",gsT:"102.35",slT:null,sgP:50,gsP:36,slP:null,tot:86},{n:"Audrey Tomaier",y:2012,div:"F",pnw:false,club:"MMST",sg:10,gs:10,sl:12,sgT:"45.36",gsT:"103.61",slT:"98.59",sgP:26,gsP:26,slP:22,tot:74},{n:"Kamila Kuzel",y:2012,div:"P",pnw:true,club:"SARS",sg:13,gs:9,sl:11,sgT:"45.69",gsT:"103.55",slT:"98.23",sgP:20,gsP:29,slP:24,tot:73},{n:"Kathrin Carlson",y:2012,div:"F",pnw:false,club:"NSST",sg:32,gs:18,sl:4,sgT:"47.35",gsT:"106.29",slT:"93.79",sgP:null,gsP:13,slP:50,tot:63},{n:"Ella Nemec",y:2012,div:"F",pnw:false,club:"TPT",sg:5,gs:14,sl:null,sgT:"44.60",gsT:"104.82",slT:null,sgP:45,gsP:18,slP:null,tot:63},{n:"Sydney Ervin",y:2012,div:"I",pnw:false,club:"PCSS",sg:8,gs:11,sl:null,sgT:"45.17",gsT:"103.68",slT:null,sgP:32,gsP:24,slP:null,tot:56},{n:"Isabelle Taylor",y:2013,div:"N",pnw:false,club:"BSSEF",sg:11,gs:null,sl:8,sgT:"45.61",gsT:null,slT:"97.56",sgP:24,gsP:null,slP:32,tot:56},{n:"Lillian Curtis",y:2012,div:"P",pnw:true,club:"MBSEF",sg:14,gs:8,sl:null,sgT:"45.92",gsT:"102.64",slT:null,sgP:18,gsP:32,slP:null,tot:50},{n:"Harper Janssen",y:2013,div:"I",pnw:false,club:"PCSS",sg:42,gs:25,sl:7,sgT:"48.22",gsT:"107.30",slT:"96.67",sgP:null,gsP:6,slP:36,tot:42},{n:"Kiana Manova",y:2012,div:"F",pnw:false,club:"TPT",sg:40,gs:27,sl:9,sgT:"48.03",gsT:"107.81",slT:"97.93",sgP:null,gsP:4,slP:29,tot:33},{n:"Tennyson Martin",y:2012,div:"F",pnw:false,club:"TPT",sg:16,gs:15,sl:34,sgT:"46.21",gsT:"105.60",slT:"110.76",sgP:15,gsP:16,slP:null,tot:31},{n:"Zosia Buchanan",y:2012,div:"F",pnw:false,club:"TPT",sg:15,gs:18,sl:null,sgT:"46.02",gsT:"106.29",slT:null,sgP:16,gsP:13,slP:null,tot:29},{n:"Makena Robbe",y:2012,div:"I",pnw:false,club:"GTSSF",sg:22,gs:21,sl:22,sgT:"46.83",gsT:"106.88",slT:"100.53",sgP:9,gsP:10,slP:9,tot:28},{n:"Katherine Connolly",y:2012,div:"P",pnw:true,club:"MBSEF",sg:null,gs:12,sl:null,sgT:null,gsT:"103.91",slT:null,sgP:null,gsP:22,slP:null,tot:22},{n:"Elsa Washburn",y:2012,div:"I",pnw:false,club:"PCSS",sg:18,gs:22,sl:null,sgT:"46.50",gsT:"107.04",slT:null,sgP:13,gsP:9,slP:null,tot:22},{n:"Violet Hanbury",y:2013,div:"F",pnw:false,club:"SBA",sg:21,gs:null,sl:19,sgT:"46.81",gsT:null,slT:"99.59",sgP:10,gsP:null,slP:12,tot:22},{n:"Simone Cummens",y:2013,div:"I",pnw:false,club:"ARC",sg:56,gs:33,sl:13,sgT:"55.47",gsT:"109.34",slT:"98.65",sgP:null,gsP:null,slP:20,tot:20},{n:"Hudson Hund",y:2012,div:"F",pnw:false,club:"MMST",sg:34,gs:17,sl:25,sgT:"47.53",gsT:"106.19",slT:"102.58",sgP:null,gsP:14,slP:6,tot:20},{n:"Kessa Drendel",y:2012,div:"N",pnw:false,club:"FVSEF",sg:43,gs:47,sl:14,sgT:"48.33",gsT:"112.80",slT:"99.02",sgP:null,gsP:null,slP:18,tot:18},{n:"Naomi Altman",y:2012,div:"P",pnw:true,club:"CSAT",sg:50,gs:28,sl:16,sgT:"49.39",gsT:"107.84",slT:"99.45",sgP:null,gsP:3,slP:15,tot:18},{n:"Lee Malstrom",y:2012,div:"P",pnw:true,club:"MBSEF",sg:22,gs:23,sl:null,sgT:"46.83",gsT:"107.13",slT:null,sgP:9,gsP:8,slP:null,tot:17},{n:"Lily Thomas",y:2012,div:"I",pnw:false,club:"PCSS",sg:45,gs:44,sl:15,sgT:"48.54",gsT:"111.62",slT:"99.37",sgP:null,gsP:null,slP:16,tot:16},{n:"Maya Przybylska",y:2012,div:"F",pnw:false,club:"TPT",sg:17,gs:30,sl:30,sgT:"46.37",gsT:"108.42",slT:"106.13",sgP:14,gsP:1,slP:1,tot:16},{n:"Aster Schillinger",y:2012,div:"I",pnw:false,club:"RM",sg:null,gs:16,sl:null,sgT:null,gsT:"106.13",slT:null,sgP:null,gsP:15,slP:null,tot:15},{n:"Phalen Mayeux",y:2012,div:"I",pnw:false,club:"PCSS",sg:55,gs:46,sl:16,sgT:"50.28",gsT:"112.11",slT:"99.45",sgP:null,gsP:null,slP:15,tot:15},{n:"Sage Bockhorst",y:2012,div:"F",pnw:false,club:"TPT",sg:20,gs:31,sl:27,sgT:"46.80",gsT:"108.68",slT:"104.35",sgP:11,gsP:null,slP:4,tot:15},{n:"Norah Comey",y:2012,div:"I",pnw:false,club:"SB",sg:26,gs:35,sl:21,sgT:"46.89",gsT:"109.55",slT:"100.47",sgP:5,gsP:null,slP:10,tot:15},{n:"Eva Croffut",y:2012,div:"A",pnw:false,club:"ASC",sg:30,gs:26,sl:23,sgT:"47.27",gsT:"107.63",slT:"101.24",sgP:1,gsP:5,slP:8,tot:14},{n:"Samantha Schroeder",y:2012,div:"A",pnw:false,club:"ASC",sg:49,gs:48,sl:18,sgT:"49.15",gsT:"113.45",slT:"99.53",sgP:null,gsP:null,slP:13,tot:13},{n:"Liv Craig",y:2012,div:"F",pnw:false,club:"TPT",sg:29,gs:20,sl:null,sgT:"47.25",gsT:"106.64",slT:null,sgP:2,gsP:11,slP:null,tot:13},{n:"Tekla Lien",y:2012,div:"P",pnw:true,club:"SARS",sg:19,gs:34,sl:null,sgT:"46.60",gsT:"109.44",slT:null,sgP:12,gsP:null,slP:null,tot:12},{n:"Inga Gaasch",y:2012,div:"N",pnw:false,club:"BSF",sg:48,gs:null,sl:20,sgT:"49.11",gsT:null,slT:"100.28",sgP:null,gsP:null,slP:11,tot:11},{n:"Sutton Webb",y:2013,div:"P",pnw:true,club:"SARS",sg:28,gs:24,sl:null,sgT:"47.15",gsT:"107.18",slT:null,sgP:3,gsP:7,slP:null,tot:10},{n:"Juliet Callaghan",y:2012,div:"P",pnw:true,club:"CMAC",sg:24,gs:29,sl:null,sgT:"46.84",gsT:"108.10",slT:null,sgP:7,gsP:2,slP:null,tot:9},{n:"Helena Jankowske",y:2013,div:"I",pnw:false,club:"PCSS",sg:54,gs:49,sl:24,sgT:"50.19",gsT:"113.51",slT:"101.58",sgP:null,gsP:null,slP:7,tot:7},{n:"Isabelle Qin",y:2013,div:"F",pnw:false,club:"TPT",sg:25,gs:null,sl:null,sgT:"46.85",gsT:null,slT:null,sgP:6,gsP:null,slP:null,tot:6},{n:"Francesca Lynch",y:2012,div:"I",pnw:false,club:"JHSC",sg:30,gs:40,sl:26,sgT:"47.27",gsT:"110.93",slT:"103.86",sgP:1,gsP:null,slP:5,tot:6},{n:"Veera Hanchett",y:2012,div:"P",pnw:true,club:"WPSC",sg:27,gs:36,sl:null,sgT:"47.02",gsT:"109.95",slT:null,sgP:4,gsP:null,slP:null,tot:4},{n:"Libby Welker",y:2012,div:"P",pnw:true,club:"SARS",sg:38,gs:null,sl:28,sgT:"47.77",gsT:null,slT:"104.70",sgP:null,gsP:null,slP:3,tot:3},{n:"Gianna Miller",y:2012,div:"F",pnw:false,club:"TPT",sg:36,gs:41,sl:29,sgT:"47.64",gsT:"111.11",slT:"105.11",sgP:null,gsP:null,slP:2,tot:2}];
+
+const WRC_PNW_M=["Grabos, Hudson", "Bonura, Nico", "Lovejoy, Sawyer", "Landwehr, Solen", "Wright, Gus", "Craveiro, Cade", "Irving, Boden", "Stewart, Charlie"];
+const WRC_PNW_CLUBS=['CSAT','MRT','SARS','MBSEF','CMAC','WPSC','TARP'];
 // ═══ ALL DATA ════════════════════════════════════════════════════════════════
 const U14=[{"n":"Bertell, Kaeli","c":"TARP","g":"W","y":2013,"r":"1","t":492,"gs":200,"sl":200,"sg":92,"runs":[[1,100],[1,100],[1,100],[1,100],[1,100],[2,80],[0,0],[1,100],[8,32],[10,26],[3,60]]},{"n":"Connolly, Katherine","c":"MBSEF","g":"W","y":2012,"r":"2","t":435,"gs":150,"sl":140,"sg":145,"runs":[[4,50],[4,50],[0,0],[2,80],[10,26],[1,100],[3,60],[68,0],[5,45],[11,24],[1,100]]},{"n":"Kaplan, Ocoee","c":"SARS","g":"W","y":2012,"r":"3","t":426,"gs":86,"sl":160,"sg":180,"runs":[[11,24],[10,26],[4,50],[75,0],[7,36],[4,50],[2,80],[2,80],[1,100],[2,80],[4,50]]},{"n":"Curtis, Lillian","c":"MBSEF","g":"W","y":2012,"r":"4","t":402,"gs":140,"sl":132,"sg":130},{"n":"Kuzel, Kamila","c":"SARS","g":"W","y":2012,"r":"5","t":400,"gs":140,"sl":120,"sg":140},{"n":"Hanchett, Veera","c":"TWP","g":"W","y":2012,"r":"6","t":287,"gs":85,"sl":140,"sg":62},{"n":"Lien, Tekla","c":"SARS","g":"W","y":2012,"r":"7","t":279,"gs":58,"sl":71,"sg":150},{"n":"Welker, Libby","c":"SARS","g":"W","y":2012,"r":"8","t":246,"gs":85,"sl":85,"sg":76},{"n":"Malstrom, Ila","c":"MBSEF","g":"W","y":2012,"r":"9","t":202,"gs":68,"sl":65,"sg":69},{"n":"Brueggemann, Alice","c":"MBSEF","g":"W","y":2012,"r":"10","t":199,"gs":109,"sl":90,"sg":0,"runs":[[0,0],[13,20],[5,45],[0,0],[2,80],[9,29],[8,32],[5,45],[null,0],[0,0],[0,0]]},{"n":"Altman, Naomi","c":"CSAT","g":"W","y":2012,"r":"11","t":195,"gs":65,"sl":90,"sg":40},{"n":"Webb, Sutton","c":"SARS","g":"W","y":2013,"r":"12","t":190,"gs":66,"sl":50,"sg":74,"runs":[[6,40],[10,26],[27,4],[8,32],[14,18],[13,20],[14,18],[21,10],[12,22],[5,45],[9,29]]},{"n":"Malstrom, Lee","c":"MBSEF","g":"W","y":2012,"r":"13","t":177,"gs":34,"sl":54,"sg":89},{"n":"Callaghan, Juliet","c":"CMAC","g":"W","y":2012,"r":"14","t":160,"gs":65,"sl":45,"sg":50},{"n":"Hoffman, Scarlet","c":"CSAT","g":"W","y":2013,"r":"Alt 1","t":148,"gs":90,"sl":36,"sg":22,"runs":[[29,2],[18,13],[0,0],[0,0],[4,50],[6,40],[7,36],[0,0],[16,15],[0,0],[24,7]]},{"n":"Baroni, Jenna","c":"SARS","g":"W","y":2013,"r":"Alt 2","t":124,"gs":56,"sl":28,"sg":40,"runs":[[32,0],[20,11],[13,20],[49,0],[5,45],[0,0],[24,7],[23,8],[15,16],[18,13],[11,24]]},{"n":"Barbieri-Minter, Makenna","c":"SARS","g":"W","y":2012,"r":"Alt 3","t":119,"gs":33,"sl":58,"sg":28},{"n":"Gidley, Elsa","c":"SARS","g":"W","y":2013,"r":"Alt 4","t":115,"gs":62,"sl":23,"sg":30,"runs":[[10,26],[20,11],[81,0],[18,13],[19,12],[7,36],[21,10],[39,0],[21,10],[13,20],[34,0]]},{"n":"Garren, Cailtyn","c":"MBSEF","g":"W","y":2013,"r":"Alt 5","t":109,"gs":36,"sl":38,"sg":35,"runs":[[13,20],[0,0],[28,3],[22,9],[17,14],[15,16],[12,22],[15,16],[13,20],[16,15],[21,10]]},{"n":"Doyle, Madailein","c":"CMAC","g":"W","y":2012,"r":"Alt 6","t":99,"gs":33,"sl":50,"sg":16},{"n":"Stewart, Anna","c":"SPAC","g":"W","y":2012,"r":"Alt 7","t":94,"gs":12,"sl":58,"sg":24,"runs":[[25,6],[39,0],[6,40],[0,0],[25,6],[40,0],[18,13],[14,18],[18,13],[20,11],[22,9]]},{"n":"Sullivan, Eiden","c":"TARP","g":"W","y":2013,"r":"Alt 8","t":77,"gs":38,"sl":38,"sg":1,"runs":[[15,16],[19,12],[14,18],[13,20],[12,22],[22,9],[30,1],[17,14],[32,0],[46,0],[30,1]]},{"n":"Tarnow, Maerin","c":"MBSEF","g":"W","y":2013,"r":"Alt 9","t":76,"gs":29,"sl":7,"sg":40,"runs":[[16,15],[17,14],[76,0],[0,0],[0,0],[0,0],[33,0],[24,7],[10,26],[0,0],[17,14]]},{"n":"Gaffney, Emery","c":"CMAC","g":"W","y":2013,"r":"Alt 10","t":70,"gs":20,"sl":11,"sg":39,"runs":[[23,8],[29,2],[37,0],[0,0],[0,0],[19,12],[20,11],[0,0],[28,3],[0,0],[7,36]]},{"n":"Virdeh, Tarlan","c":"SPAC","g":"W","y":2012,"r":"Alt 11","t":68,"gs":27,"sl":9,"sg":32,"runs":[[43,0],[50,0],[60,0],[0,0],[18,13],[17,14],[44,0],[22,9],[24,7],[19,12],[13,20]]},{"n":"Purchase, Florence","c":"CMAC","g":"W","y":2013,"r":"Alt 12","t":65,"gs":16,"sl":33,"sg":16,"runs":[[35,0],[46,0],[18,13],[26,5],[15,16],[42,0],[28,3],[13,20],[23,8],[23,8],[32,0]]},{"n":"Albright, Stella","c":"SARS","g":"W","y":2012,"r":"Alt 13","t":64,"gs":7,"sl":38,"sg":19},{"n":"Graham, Brooke","c":"CMAC","g":"W","y":2013,"r":"Alt 14","t":55,"gs":13,"sl":15,"sg":27,"runs":[[28,3],[49,0],[51,0],[0,0],[26,5],[23,8],[16,15],[35,0],[30,1],[17,14],[18,13]]},{"n":"Hopkins, Lena","c":"TWP","g":"W","y":2013,"r":"Alt 15","t":53,"gs":29,"sl":11,"sg":13,"runs":[[30,1],[14,18],[38,0],[24,7],[20,11],[24,7],[32,0],[27,4],[27,4],[24,7],[25,6]]},{"n":"Duff, Claire","c":"SARS","g":"W","y":2013,"r":"Alt 16","t":50,"gs":10,"sl":35,"sg":5,"runs":[[50,0],[33,0],[20,11],[11,24],[24,7],[28,3],[23,8],[34,0],[26,5],[31,0],[40,0]]},{"n":"White, Olivia","c":"LPRT","g":"W","y":2012,"r":"Alt 17","t":49,"gs":19,"sl":12,"sg":18},{"n":"Giordano, Rachel","c":"CSAT","g":"W","y":2012,"r":"Alt 18","t":47,"gs":8,"sl":39,"sg":0},{"n":"Shipman, Madison","c":"TARP","g":"W","y":2012,"r":"Alt 19","t":44,"gs":26,"sl":14,"sg":4},{"n":"Entrop, Sloane","c":"SPAC","g":"W","y":2013,"r":"Alt 20","t":37,"gs":16,"sl":21,"sg":0,"runs":[[27,4],[26,5],[25,6],[21,10],[29,2],[20,11],[37,0],[20,11],[36,0],[0,0],[44,0]]},{"n":"Fisher, Caia","c":"SPAC","g":"W","y":2012,"r":"Alt 22","t":34,"gs":0,"sl":34,"sg":0,"runs":[[42,0],[38,0],[29,2],[14,18],[0,0],[0,0],[27,4],[15,16],[57,0],[0,0],[48,0]]},{"n":"Prett, Tatum","c":"TARP","g":"W","y":2013,"r":"Alt 23","t":34,"gs":8,"sl":16,"sg":10},{"n":"Garren, Makaela","c":"MBSEF","g":"W","y":2013,"r":"TAlt 24","t":32,"gs":11,"sl":5,"sg":16,"runs":[[0,0],[28,3],[26,5],[38,0],[23,8],[29,2],[31,0],[33,0],[18,13],[28,3],[0,0]]},{"n":"Beyreuther, Hadley","c":"SARS","g":"W","y":2013,"r":"Alt 24","t":28,"gs":0,"sl":14,"sg":14,"runs":[[45,0],[55,0],[30,1],[19,12],[31,0],[34,0],[64,0],[29,2],[29,2],[25,6],[23,8]]},{"n":"Siebens, Aili","c":"MRST","g":"W","y":2013,"r":"Alt 26","t":25,"gs":8,"sl":17,"sg":0,"runs":[[57,0],[47,0],[43,0],[23,8],[27,4],[27,4],[22,9],[26,5],[60,0],[42,0],[51,0]]},{"n":"Ozegovic, Amina","c":"SPAC","g":"W","y":2013,"r":"Alt 28","t":21,"gs":0,"sl":10,"sg":11,"runs":[[38,0],[41,0],[24,7],[36,0],[36,0],[32,0],[29,2],[28,3],[0,0],[33,0],[20,11]]},{"n":"Rich, Kaitlyn","c":"CMAC","g":"W","y":2013,"r":"Alt 31","t":10,"gs":0,"sl":10,"sg":0,"runs":[[46,0],[45,0],[21,10],[32,0],[38,0],[48,0],[42,0],[37,0],[46,0],[43,0],[45,0]]},{"n":"Tennyson, Charlotte","c":"BART","g":"W","y":2013,"r":"Alt 33","t":6,"gs":0,"sl":6,"sg":0},{"n":"Rauber, Isabel","c":"MBSEF","g":"W","y":2013,"r":"Alt 35","t":4,"gs":1,"sl":0,"sg":3,"runs":[[41,0],[37,0],[44,0],[34,0],[30,1],[47,0],[44,0],[42,0],[50,0],[48,0],[28,3]]},{"n":"Pettersen, Kenzie","c":"SPAC","g":"W","y":2013,"r":"Alt 38","t":1,"gs":0,"sl":0,"sg":1,"runs":[[48,0],[52,0],[48,0],[47,0],[43,0],[36,0],[51,0],[43,0],[37,0],[30,1],[46,0]]},{"n":"Underwood, Emeline","c":"SPAC","g":"W","y":2013,"r":"","t":0,"gs":0,"sl":0,"sg":0,"runs":[[53,0],[56,0],[55,0],[39,0],[31,0],[44,0],[59,0],[85,0],[53,0],[44,0],[33,0]]},{"n":"Underwood, Nora","c":"SPAC","g":"W","y":2013,"r":"","t":0,"gs":0,"sl":0,"sg":0,"runs":[[58,0],[48,0],[52,0],[51,0],[46,0],[67,0],[66,0],[0,0],[65,0],[61,0],[63,0]]},{"n":"Weisert, Sophia","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"SALINAS, Amelia","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Bravenec, Elizabeth","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Weaver, Sloan","c":"SPAC","g":"W","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Grabos, Hudson","c":"CSAT","g":"M","y":2012,"r":"1","t":550,"gs":200,"sl":200,"sg":150,"runs":[[1,100],[1,100],[1,100],[0,0],[1,100],[2,80],[1,100],[1,100],[4,50],[1,100],[0,0]]},{"n":"Bonura, Nico","c":"MRT","g":"M","y":2013,"r":"2","t":470,"gs":180,"sl":160,"sg":130,"runs":[[11,24],[12,22],[14,18],[2,80],[2,80],[1,100],[5,45],[2,80],[0,0],[2,80],[4,50]]},{"n":"Craveiro, Cade","c":"MBSEF","g":"M","y":2012,"r":"3","t":362,"gs":80,"sl":82,"sg":200,"runs":[[0,0],[2,80],[0,0],[12,22],[0,0],[31,0],[0,0],[3,60],[1,100],[0,0],[1,100]]},{"n":"Landwehr, Solen","c":"SARS","g":"M","y":2012,"r":"4","t":340,"gs":120,"sl":180,"sg":40},{"n":"Lovejoy, Sawyer","c":"CSAT","g":"M","y":2012,"r":"5","t":322,"gs":90,"sl":120,"sg":112,"runs":[[5,45],[0,0],[3,60],[3,60],[9,29],[5,45],[4,50],[4,50],[8,32],[11,24],[2,80]]},{"n":"Wright, Gus","c":"MBSEF","g":"M","y":2012,"r":"6","t":275,"gs":100,"sl":35,"sg":140},{"n":"Dix, Wyatt","c":"SARS","g":"M","y":2013,"r":"7","t":268,"gs":100,"sl":72,"sg":96,"runs":[[6,40],[4,50],[6,40],[8,32],[4,50],[9,29],[11,24],[14,18],[7,36],[3,60],[10,26]]},{"n":"VanZutphen, Beckett","c":"SPAC","g":"M","y":2012,"r":"8","t":260,"gs":84,"sl":71,"sg":105,"runs":[[15,16],[0,0],[0,0],[10,26],[11,24],[3,60],[0,0],[5,45],[3,60],[0,0],[5,45]]},{"n":"Li, Ryan","c":"CMAC","g":"M","y":2012,"r":"T9","t":240,"gs":86,"sl":96,"sg":58,"runs":[[4,50],[10,26],[15,16],[7,36],[10,26],[7,36],[3,60],[7,36],[0,0],[10,26],[8,32]]},{"n":"Irving, Boden","c":"CSAT","g":"M","y":2012,"r":"T9","t":240,"gs":80,"sl":79,"sg":81,"runs":[[2,80],[0,0],[9,29],[4,50],[0,0],[0,0],[12,22],[56,0],[11,24],[5,45],[7,36]]},{"n":"Stewart, Charlie","c":"CMAC","g":"M","y":2012,"r":"11","t":188,"gs":46,"sl":61,"sg":81},{"n":"Kelly, Leo","c":"MRT","g":"M","y":2013,"r":"12","t":180,"gs":49,"sl":51,"sg":80,"runs":[[7,36],[18,13],[20,11],[19,12],[23,8],[18,13],[9,29],[12,22],[6,40],[9,29],[6,40]]},{"n":"Yoo, Soren","c":"MRT","g":"M","y":2012,"r":"Alt 1","t":175,"gs":85,"sl":62,"sg":28},{"n":"Ambauen, Brig","c":"SARS","g":"M","y":2013,"r":"Alt 2","t":166,"gs":68,"sl":69,"sg":29,"runs":[[8,32],[7,36],[11,24],[5,45],[26,5],[0,0],[16,15],[11,24],[16,15],[22,9],[17,14]]},{"n":"Rohrbach, Micah","c":"MRST","g":"M","y":2012,"r":"Alt 3","t":160,"gs":54,"sl":68,"sg":38},{"n":"Richards, Lund","c":"SARS","g":"M","y":2012,"r":"Alt 4","t":158,"gs":23,"sl":74,"sg":61},{"n":"Hone, Ethan","c":"TAS","g":"M","y":2013,"r":"Alt 5","t":130,"gs":61,"sl":23,"sg":46,"runs":[[0,0],[5,45],[24,7],[28,3],[15,16],[15,16],[36,0],[15,16],[10,26],[13,20],[18,13]]},{"n":"Jones, Tennyson","c":"MBSEF","g":"M","y":2013,"r":"Talt 6","t":120,"gs":26,"sl":82,"sg":12,"runs":[[29,2],[0,0],[4,50],[15,16],[16,15],[20,11],[8,32],[28,3],[20,11],[0,0],[30,1]]},{"n":"Hatfield, Luke","c":"MRST","g":"M","y":2013,"r":"Alt 8","t":114,"gs":25,"sl":60,"sg":29,"runs":[[21,10],[17,14],[13,20],[6,40],[20,11],[29,2],[0,0],[72,0],[23,8],[20,11],[14,18]]},{"n":"Lull, August","c":"MBSEF","g":"M","y":2013,"r":"Alt 9","t":97,"gs":33,"sl":18,"sg":46,"runs":[[12,22],[20,11],[23,8],[21,10],[24,7],[21,10],[29,2],[30,1],[22,9],[12,22],[11,24]]},{"n":"Craig, Logan","c":"TWP","g":"M","y":2013,"r":"Alt 11","t":88,"gs":52,"sl":0,"sg":36,"runs":[[15,16],[22,9],[73,0],[37,0],[8,32],[13,20],[0,0],[0,0],[13,20],[15,16],[21,10]]},{"n":"Bouffard, Auguste","c":"CMAC","g":"M","y":2013,"r":"Alt 12","t":87,"gs":30,"sl":40,"sg":17,"runs":[[28,3],[14,18],[18,13],[13,20],[19,12],[24,7],[13,20],[18,13],[26,5],[25,6],[20,11]]},{"n":"Ithomitis, Logan","c":"MSSRT","g":"M","y":2013,"r":"Alt 14","t":62,"gs":42,"sl":20,"sg":0,"runs":[[14,18],[13,20],[17,14],[31,0],[20,11],[12,22],[25,6],[0,0],[31,0],[45,0],[45,0]]},{"n":"Jarrett, Gage","c":"MRST","g":"M","y":2013,"r":"Talt 16","t":61,"gs":21,"sl":18,"sg":22,"runs":[[27,4],[0,0],[42,0],[32,0],[22,9],[19,12],[24,7],[20,11],[18,13],[30,1],[22,9]]},{"n":"Olson, Gavin","c":"SPAC","g":"M","y":2013,"r":"Alt 17","t":56,"gs":28,"sl":28,"sg":0,"runs":[[0,0],[16,15],[21,10],[17,14],[18,13],[28,3],[17,14],[23,8],[null,0],[null,0],[null,0]]},{"n":"Beukema, Nicholas","c":"MRST","g":"M","y":2013,"r":"TAlt 18","t":54,"gs":20,"sl":13,"sg":21,"runs":[[19,12],[23,8],[27,4],[29,2],[41,0],[44,0],[28,3],[22,9],[32,0],[17,14],[24,7]]},{"n":"Arnold, Xavier","c":"TAS","g":"M","y":2013,"r":"Alt 21","t":38,"gs":13,"sl":15,"sg":10,"runs":[[0,0],[25,6],[0,0],[35,0],[24,7],[0,0],[0,0],[16,15],[0,0],[21,10],[0,0]]},{"n":"Lane, Porter","c":"MBSEF","g":"M","y":2013,"r":"Alt 22","t":37,"gs":13,"sl":17,"sg":7,"runs":[[18,13],[0,0],[19,12],[0,0],[0,0],[48,0],[0,0],[26,5],[35,0],[24,7],[36,0]]},{"n":"McCallum, Ian","c":"SARS","g":"M","y":2013,"r":"Alt 23","t":33,"gs":26,"sl":7,"sg":0,"runs":[[57,0],[52,0],[43,0],[24,7],[45,0],[10,26],[0,0],[57,0],[36,0],[54,0],[55,0]]},{"n":"Schneider, Carter","c":"MSSRT","g":"M","y":2013,"r":"Alt 24","t":32,"gs":20,"sl":12,"sg":0,"runs":[[23,8],[19,12],[58,0],[0,0],[0,0],[34,0],[37,0],[19,12],[42,0],[41,0],[47,0]]},{"n":"Conta, Maceo","c":"CMAC","g":"M","y":2013,"r":"Alt 25","t":29,"gs":11,"sl":0,"sg":18,"runs":[[26,5],[27,4],[44,0],[52,0],[30,1],[25,6],[31,0],[40,0],[21,10],[27,4],[23,8]]},{"n":"Waldman, Culver","c":"MBSEF","g":"M","y":2013,"r":"Alt 27","t":26,"gs":0,"sl":22,"sg":4,"runs":[[44,0],[34,0],[59,0],[25,6],[32,0],[41,0],[15,16],[34,0],[37,0],[32,0],[27,4]]},{"n":"Gibbs, Timothy","c":"SPAC","g":"M","y":2012,"r":"Alt 39","t":5,"gs":0,"sl":0,"sg":5,"runs":[[56,0],[51,0],[39,0],[54,0],[0,0],[45,0],[0,0],[32,0],[0,0],[34,0],[26,5]]},{"n":"Guldi, Graham","c":"SPAC","g":"M","y":2013,"r":"TAlt 42","t":1,"gs":0,"sl":1,"sg":0,"runs":[[0,0],[37,0],[30,1],[39,0],[42,0],[39,0],[34,0],[31,0],[39,0],[35,0],[32,0]]},{"n":"Brindza, Tobin","c":"SPAC","g":"M","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0},{"n":"Hill, Sawyer","c":"SPAC","g":"M","y":2012,"r":"","t":0,"gs":0,"sl":0,"sg":0}];
- 
+
 const U16=[{"n":"Pelland, Harper","c":"CMAC","g":"W","y":2010,"r":"1","t":820,"sl":360,"gs":200,"sg":260,"races":[[1,100],[3,60],[3,60],[3,60],[2,80],[1,100],[2,80],[2,80],[1,100],[1,100]]},{"n":"Osborn, Canyon","c":"CMAC","g":"W","y":2010,"r":"2","t":680,"sl":100,"gs":300,"sg":280,"races":[[null,0],[1,100],[1,100],[1,100],[1,100],[2,80],[1,100],[1,100],[null,0],[null,0]]},{"n":"Hart, Brighton","c":"CMAC","g":"W","y":2010,"r":"3","t":495,"sl":180,"gs":220,"sg":95,"races":[[null,0],[null,0],[2,80],[2,80],[4,50],[5,45],[null,0],[3,60],[2,80],[1,100]]},{"n":"Kuzel, Teagan","c":"SARS","g":"W","y":2010,"r":"4","t":461,"sl":140,"gs":131,"sg":190,"races":[[null,0],[2,80],[4,50],[7,36],[2,80],[3,60],[4,50],[5,45],[null,0],[3,60]]},{"n":"Buyukcetin, Luna","c":"SPAC","g":"W","y":2011,"r":"5","t":292,"sl":45,"gs":117,"sg":130,"races":[[9,29],[15,16],[6,40],[5,45],[5,45],[6,40],[5,45],[8,32],[null,0],[null,0]]},{"n":"Lambert, Piper","c":"MRT","g":"W","y":2011,"r":"6","t":286,"sl":90,"gs":92,"sg":104,"races":[[null,0],[6,40],[11,24],[8,32],[7,36],[7,36],[8,32],[7,36],[null,0],[4,50]]},{"n":"Paul, Lexi","c":"MRT","g":"W","y":2010,"r":"7","t":280,"sl":118,"gs":60,"sg":102,"races":[[11,24],[14,18],[17,14],[11,24],[6,40],[10,26],[7,36],[12,22],[6,40],[7,36]]},{"n":"Ludlow, Julia","c":"CMAC","g":"W","y":2011,"r":"8","t":279,"sl":60,"gs":109,"sg":110,"races":[[null,0],[null,0],[5,45],[6,40],[null,0],[4,50],[3,60],[11,24],[3,60],[null,0]]},{"n":"Lindblade, Camille","c":"MRT","g":"W","y":2010,"r":"9","t":248,"sl":108,"gs":50,"sg":90,"races":[[7,36],[12,22],[21,10],[20,11],[9,29],[8,32],[9,29],[9,29],[4,50],[null,0]]},{"n":"Rydell, Ingrid","c":"SARS","g":"W","y":2010,"r":"10","t":237,"sl":76,"gs":89,"sg":72,"races":[[8,32],[11,24],[8,32],[12,22],[8,32],[14,18],[12,22],[6,40],[11,24],[9,29]]},{"n":"Oie, Freya","c":"SARS","g":"W","y":2010,"r":"11","t":230,"sl":98,"gs":68,"sg":64,"races":[[6,40],[16,15],[9,29],[9,29],[10,26],[11,24],[11,24],[17,14],[9,29],[null,0]]},{"n":"Lanza, Giuliana","c":"CMAC","g":"W","y":2011,"r":"12","t":219,"sl":85,"gs":86,"sg":48,"races":[[5,45],[20,11],[10,26],[10,26],[14,18],[15,16],[14,18],[4,50],[14,18],[12,22]]},{"n":"Harding, Anna","c":"MRT","g":"W","y":2011,"r":"13","t":192,"sl":82,"gs":56,"sg":54,"races":[[4,50],[13,20],[16,15],[18,13],[15,16],[13,20],[10,26],[10,26],[10,26],[8,32]]},{"n":"Hopkins, Ella","c":"TWP","g":"W","y":2010,"r":"14","t":191,"sl":88,"gs":58,"sg":45,"races":[[3,60],[9,29],[14,18],[16,15],[16,15],[16,15],[17,14],[13,20],[13,20],[null,0]]},{"n":"Koehler, Maya","c":"CMAC","g":"W","y":2011,"r":"15","t":181,"sl":58,"gs":68,"sg":55,"races":[[12,22],[18,13],[12,22],[14,18],[13,20],[17,14],[15,16],[8,32],[12,22],[12,22]]},{"n":"McLaughlin, Nora","c":"BART","g":"W","y":2010,"r":"16","t":177,"sl":95,"gs":36,"sg":46,"races":[[2,80],[10,26],[26,5],[25,6],[12,22],[19,12],[18,13],[23,8],[8,32],[null,0]]},{"n":"Jones, Josie","c":"CMAC","g":"W","y":2011,"r":"17","t":174,"sl":62,"gs":76,"sg":36,"races":[[14,18],[21,10],[7,36],[13,20],[20,11],[20,11],[21,10],[14,18],[7,36],[null,0]]},{"n":"McDonald, Sofie","c":"SARS","g":"W","y":2011,"r":"18","t":162,"sl":58,"gs":68,"sg":36,"races":[[16,15],[22,9],[13,20],[15,16],[17,14],[18,13],[16,15],[12,22],[16,15],[null,0]]},{"n":"Castillo, Pepi","c":"SPAC","g":"W","y":2010,"r":"19","t":157,"sl":64,"gs":27,"sg":66,"races":[[10,26],[17,14],[23,8],[21,10],[11,24],[12,22],[13,20],[22,9],[null,0],[11,24]]},{"n":"Gaffney, Greta","c":"CMAC","g":"W","y":2011,"r":"20","t":144,"sl":52,"gs":43,"sg":49,"races":[[18,13],[23,8],[15,16],[17,14],[21,10],[21,10],[20,11],[18,13],[17,14],[null,0]]},{"n":"Koehn, Josie","c":"MHSEF","g":"W","y":2011,"r":"21","t":130,"sl":28,"gs":52,"sg":50},{"n":"Roe, Tessa","c":"TAS","g":"W","y":2010,"r":"22","t":129,"sl":42,"gs":45,"sg":42},{"n":"White, Lydia","c":"LPRT","g":"W","y":2011,"r":"23","t":119,"sl":58,"gs":30,"sg":31},{"n":"Roe, Nora","c":"TAS","g":"W","y":2011,"r":"24","t":113,"sl":44,"gs":42,"sg":27},{"n":"Beukema, Kirsten","c":"MRST","g":"W","y":2011,"r":"25","t":100,"sl":56,"gs":17,"sg":27},{"n":"Lindblade, Helene","c":"MRT","g":"W","y":2011,"r":"26","t":81,"sl":40,"gs":27,"sg":14},{"n":"Smith, Lucy","c":"SPAC","g":"W","y":2011,"r":"27","t":63,"sl":26,"gs":24,"sg":13,"races":[[null,0],[21,10],[19,12],[19,12],[18,13],[null,0],[null,0],[null,0],[15,16],[null,0]]},{"n":"Phelps, Sophie","c":"TAS","g":"W","y":2010,"r":"28","t":60,"sl":22,"gs":15,"sg":23},{"n":"Bourne, Mila","c":"SARS","g":"W","y":2011,"r":"30","t":48,"sl":22,"gs":18,"sg":8},{"n":"Osborn, Ivy","c":"CMAC","g":"W","y":2011,"r":"32","t":44,"sl":22,"gs":14,"sg":8},{"n":"Swadener, Lydia","c":"MHSEF","g":"W","y":2011,"r":"33","t":42,"sl":18,"gs":13,"sg":11},{"n":"Butler, Hazel","c":"WPSC","g":"W","y":2010,"r":"34","t":41,"sl":12,"gs":15,"sg":14},{"n":"Moran, Emma","c":"SARS","g":"W","y":2011,"r":"39","t":21,"sl":9,"gs":6,"sg":6},{"n":"Loy, Juliet","c":"SPAC","g":"W","y":2010,"r":"44","t":12,"sl":12,"gs":0,"sg":0,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[24,7],[26,5]]},{"n":"Copson, Piper","c":"SPAC","g":"W","y":2010,"r":"T46","t":8,"sl":8,"gs":0,"sg":0,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[23,8],[null,0]]},{"n":"Jarrett, Cadel","c":"MRST","g":"M","y":2010,"r":"1","t":665,"sl":336,"gs":154,"sg":175,"races":[[1,100],[7,36],[5,45],[9,29],[2,80],[5,45],[4,50],[2,80],[1,100],[1,100]]},{"n":"Curtis, Finnley","c":"MBSEF","g":"M","y":2010,"r":"2","t":500,"sl":100,"gs":200,"sg":200,"races":[[null,0],[1,100],[1,100],[1,100],[null,0],[1,100],[1,100],[null,0],[null,0],[null,0]]},{"n":"Purchase, Rupert","c":"CMAC","g":"M","y":2010,"r":"3","t":456,"sl":215,"gs":127,"sg":114,"races":[[5,45],[6,40],[8,32],[5,45],[5,45],[9,29],[6,40],[4,50],[4,50],[2,80]]},{"n":"Kusske, Leland","c":"MSSRT","g":"M","y":2010,"r":"4","t":455,"sl":200,"gs":155,"sg":100,"races":[[2,80],[null,0],[3,60],[4,50],[null,0],[6,40],[3,60],[5,45],[3,60],[3,60]]},{"n":"Pavlovcic, Filip","c":"CMAC","g":"M","y":2011,"r":"5","t":428,"sl":200,"gs":124,"sg":104,"races":[[3,60],[4,50],[6,40],[11,24],[7,36],[7,36],[8,32],[3,60],[5,45],[5,45]]},{"n":"Ford, Sam","c":"MBSEF","g":"M","y":2010,"r":"6","t":385,"sl":45,"gs":160,"sg":180,"races":[[null,0],[5,45],[2,80],[2,80],[1,100],[2,80],[null,0],[null,0],[null,0],[null,0]]},{"n":"Ireland, Colin","c":"MRST","g":"M","y":2010,"r":"7","t":384,"sl":64,"gs":130,"sg":190,"races":[[8,32],[8,32],[4,50],[6,40],[4,50],[3,60],[2,80],[6,40],[null,0],[null,0]]},{"n":"Lechleitner, Riley","c":"LPRT","g":"M","y":2010,"r":"8","t":348,"sl":136,"gs":146,"sg":66,"races":[[7,36],[3,60],[10,26],[13,20],[13,20],[13,20],[10,26],[1,100],[6,40],[null,0]]},{"n":"Petett, Trae","c":"CMAC","g":"M","y":2010,"r":"9","t":240,"sl":180,"gs":60,"sg":0,"races":[[null,0],[2,80],[null,0],[3,60],[null,0],[null,0],[null,0],[null,0],[1,100],[null,0]]},{"n":"Siebens, Joren","c":"MRST","g":"M","y":2010,"r":"10","t":238,"sl":102,"gs":49,"sg":87,"races":[[6,40],[10,26],[18,13],[14,18],[8,32],[10,26],[9,29],[14,18],[7,36],[null,0]]},{"n":"Kruse, Ivan","c":"TAS","g":"M","y":2011,"r":"11","t":231,"sl":72,"gs":79,"sg":80,"races":[[4,50],[null,0],[9,29],[10,26],[3,60],[4,50],[5,45],[8,32],[3,60],[null,0]]},{"n":"Bouffard, Thierry","c":"CMAC","g":"M","y":2011,"r":"12","t":218,"sl":75,"gs":77,"sg":66,"races":[[9,29],[9,29],[7,36],[8,32],[6,40],[8,32],[7,36],[9,29],[11,24],[null,0]]},{"n":"Lechleitner, Mark","c":"LPRT","g":"M","y":2011,"r":"13","t":204,"sl":74,"gs":74,"sg":56,"races":[[10,26],[11,24],[13,20],[12,22],[9,29],[11,24],[11,24],[7,36],[10,26],[null,0]]},{"n":"Erbe, Gabriel","c":"MBSEF","g":"M","y":2010,"r":"14","t":185,"sl":66,"gs":70,"sg":49,"races":[[11,24],[12,22],[11,24],[7,36],[10,26],[12,22],[13,20],[10,26],[12,22],[null,0]]},{"n":"Walenta, Jacob","c":"MBSEF","g":"M","y":2010,"r":"15","t":179,"sl":68,"gs":63,"sg":48,"races":[[13,20],[14,18],[14,18],[4,50],[11,24],[14,18],[12,22],[12,22],[14,18],[null,0]]},{"n":"Nguyen, Tohma","c":"SPAC","g":"M","y":2010,"r":"37","t":30,"sl":7,"gs":12,"sg":11,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[27,4],[24,7],[19,12],[24,7],[null,0]]},{"n":"Stewart, Liam","c":"SPAC","g":"M","y":2010,"r":"38","t":29,"sl":3,"gs":6,"sg":20,"races":[[null,0],[null,0],[28,3],[null,0],[18,13],[28,3],[27,4],[28,3],[null,0],[28,3]]},{"n":"Petek, Brady","c":"SPAC","g":"M","y":2011,"r":"40","t":19,"sl":10,"gs":0,"sg":9,"races":[[null,0],[29,2],[null,0],[null,0],[22,9],[null,0],[null,0],[null,0],[30,1],[24,7]]},{"n":"Fisher, Griffin","c":"SPAC","g":"M","y":2010,"r":"","t":0,"sl":0,"gs":0,"sg":0,"races":[[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0],[null,0]]}];
- 
+
 const BW25_M=[{n:"Olson, Gavin",c:"SPAC",by:13,sq:1,sqSc:30.25,gs:1,sl:2},{n:"Guldi, Graham",c:"SPAC",by:13,sq:16,sqSc:27.0,gs:16,sl:21},{n:"Colombo, Dylan",c:"SPAC",by:13,sq:27,sqSc:25.5,gs:28,sl:null},{n:"Buyukcetin, Luca",c:"SPAC",by:14,sq:58,sqSc:21.75,gs:36,sl:7},{n:"Smith, Rafael",c:"SPAC",by:14,sq:76,sqSc:20.0,gs:56,sl:62},{n:"Stewart, Coen",c:"SPAC",by:14,sq:77,sqSc:20.0,gs:null,sl:40},{n:"Stephenson, Carter",c:"SPAC",by:14,sq:99,sqSc:16.5,gs:82,sl:91},{n:"Bouffard, Auguste",c:"CMAC",by:13,sq:33,sqSc:24.0,gs:2,sl:1},{n:"Dix, Wyatt",c:"SARS",by:13,sq:36,sqSc:23.75,gs:4,sl:20},{n:"Kelly, Leo",c:"MRT",by:13,sq:39,sqSc:23.5,gs:8,sl:null},{n:"Hone, Ethan",c:"TAS",by:13,sq:42,sqSc:23.5,gs:11,sl:17},{n:"Bonura, Nico",c:"MRT",by:13,sq:75,sqSc:20.0,gs:6,sl:3},{n:"Ambauen, Brig",c:"SARS",by:13,sq:54,sqSc:22.25,gs:10,sl:4},{n:"Hatfield, Luke",c:"MRST",by:13,sq:8,sqSc:28.0,gs:26,sl:22},{n:"Jones, Tennyson",c:"MBSEF",by:13,sq:7,sqSc:28.0,gs:12,sl:null},{n:"Schneider, Carter",c:"MSSRT",by:13,sq:47,sqSc:23.0,gs:5,sl:25},{n:"Ithomitis, Logan",c:"MSSRT",by:13,sq:49,sqSc:22.75,gs:22,sl:8},{n:"Jarrett, Gage",c:"MRST",by:13,sq:34,sqSc:24.0,gs:31,sl:18},{n:"Lull, August",c:"MBSEF",by:13,sq:60,sqSc:21.5,gs:15,sl:14},{n:"Conta, Maceo",c:"CMAC",by:13,sq:2,sqSc:29.5,gs:20,sl:12},{n:"McCallum, Ian",c:"SARS",by:13,sq:22,sqSc:25.75,gs:34,sl:28}];
 const BW25_W=[{n:"Bertell, Kaeli",c:"TARP",by:13,sq:1,sqSc:33.0,gs:1,sl:1},{n:"Ozegovic, Amina",c:"SPAC",by:13,sq:9,sqSc:28.25,gs:6,sl:5},{n:"Entrop, Sloane",c:"SPAC",by:13,sq:10,sqSc:27.875,gs:11,sl:14},{n:"Pettersen, Kenzie",c:"SPAC",by:13,sq:14,sqSc:27.25,gs:50,sl:25},{n:"Underwood, Emeline",c:"SPAC",by:13,sq:17,sqSc:26.875,gs:15,sl:24},{n:"Underwood, Nora",c:"SPAC",by:13,sq:49,sqSc:23.125,gs:47,sl:36},{n:"Chang, Harper",c:"SPAC",by:14,sq:33,sqSc:25.0,gs:24,sl:32},{n:"Brindza, Liesel",c:"SPAC",by:14,sq:70,sqSc:21.375,gs:86,sl:72},{n:"Stephenson, Addie",c:"SPAC",by:14,sq:73,sqSc:21.125,gs:83,sl:83},{n:"Johnson, Roslyn",c:"SPAC",by:14,sq:98,sqSc:16.5,gs:95,sl:85},{n:"Hoffman, Scarlet",c:"CSAT",by:13,sq:5,sqSc:30.75,gs:10,sl:8},{n:"Baroni, Jenna",c:"SARS",by:13,sq:8,sqSc:28.875,gs:4,sl:null},{n:"Webb, Sutton",c:"SARS",by:13,sq:44,sqSc:23.625,gs:2,sl:null},{n:"Gidley, Elsa",c:"SARS",by:13,sq:23,sqSc:25.75,gs:8,sl:13},{n:"Garren, Cailtyn",c:"MBSEF",by:13,sq:11,sqSc:27.75,gs:13,sl:10},{n:"Siebens, Aili",c:"MRST",by:13,sq:39,sqSc:24.375,gs:12,sl:4},{n:"Gaffney, Emery",c:"CMAC",by:13,sq:71,sqSc:21.375,gs:3,sl:3},{n:"Purchase, Florence",c:"CMAC",by:13,sq:7,sqSc:29.625,gs:25,sl:9},{n:"Graham, Brooke",c:"CMAC",by:13,sq:12,sqSc:27.625,gs:null,sl:20},{n:"Duff, Claire",c:"SARS",by:13,sq:28,sqSc:25.25,gs:null,sl:26},{n:"Tarnow, Maerin",c:"MBSEF",by:13,sq:19,sqSc:26.5,gs:null,sl:17},{n:"Hopkins, Lena",c:"WPSC",by:13,sq:2,sqSc:31.25,gs:9,sl:7},{n:"Rauber, Isabel",c:"MBSEF",by:13,sq:37,sqSc:24.5,gs:16,sl:26},{n:"Beyreuther, Hadley",c:"SARS",by:13,sq:77,sqSc:20.125,gs:27,sl:15},{n:"Tennyson, Charlotte",c:"BART",by:13,sq:36,sqSc:24.5,gs:14,sl:11},{n:"Sullivan, Eiden",c:"TARP",by:13,sq:35,sqSc:24.625,gs:32,sl:12},{n:"Brown, Lily",c:"LPRT",by:14,sq:53,sqSc:22.75,gs:7,sl:null}];
 const BW_MAP={"olson, gavin":{r:"Alt 17",t:56,tr:"drop"},"guldi, graham":{r:"TAlt 42",t:1,tr:"drop"},"colombo, dylan":{r:"TAlt 33",t:12,tr:"drop"},"bouffard, auguste":{r:"Alt 12",t:87,tr:"rise"},"dix, wyatt":{r:"7",t:268,tr:"rise"},"bonura, nico":{r:"2",t:470,tr:"rise"},"ambauen, brig":{r:"Alt 2",t:166,tr:"rise"},"kelly, leo":{r:"12",t:180,tr:"rise"},"jones, tennyson":{r:"Talt 6",t:120,tr:"rise"},"hatfield, luke":{r:"Alt 8",t:114,tr:"rise"},"schneider, carter":{r:"Alt 24",t:32,tr:"drop"},"ithomitis, logan":{r:"Alt 14",t:62,tr:"rise"},"jarrett, gage":{r:"Talt 16",t:61,tr:"rise"},"lull, august":{r:"Alt 9",t:97,tr:"rise"},"conta, maceo":{r:"Alt 25",t:29,tr:"drop"},"bertell, kaeli":{r:"1",t:492,tr:"rise"},"ozegovic, amina":{r:"Alt 28",t:21,tr:"drop"},"entrop, sloane":{r:"Alt 20",t:37,tr:"drop"},"pettersen, kenzie":{r:"Alt 38",t:1,tr:"drop"},"hoffman, scarlet":{r:"Alt 1",t:148,tr:"rise"},"baroni, jenna":{r:"Alt 2",t:124,tr:"rise"},"webb, sutton":{r:"12",t:190,tr:"rise"},"gidley, elsa":{r:"Alt 4",t:115,tr:"rise"},"garren, cailtyn":{r:"Alt 5",t:109,tr:"rise"},"siebens, aili":{r:"Alt 26",t:25,tr:"drop"},"gaffney, emery":{r:"Alt 10",t:70,tr:"drop"},"purchase, florence":{r:"Alt 12",t:65,tr:"neutral"},"graham, brooke":{r:"Alt 14",t:55,tr:"neutral"},"duff, claire":{r:"Alt 16",t:50,tr:"drop"},"tarnow, maerin":{r:"Alt 9",t:76,tr:"rise"},"rauber, isabel":{r:"Alt 35",t:4,tr:"drop"},"beyreuther, hadley":{r:"Talt 24",t:28,tr:"neutral"},"tennyson, charlotte":{r:"Alt 33",t:6,tr:"drop"},"sullivan, eiden":{r:"Alt 8",t:77,tr:"rise"},"hopkins, lena":{r:"Alt 15",t:53,tr:"drop"},"mccallum, ian":{r:"Alt 23",t:33,tr:"neutral"}};
- 
+
 // ══ REGIONALS DATA ══
 const RW=[{n:"Moe, Taryn",c:"JHSC",pnw:false,sg:1,gs:1,sl:4,sgT:"41.20",gsT:"1:27",slT:"1:19"},{n:"Wilson, Ivy",c:"TPT",pnw:false,sg:2,gs:2,sl:2,sgT:"41.53",gsT:"1:28",slT:"1:18"},{n:"Osborn, Canyon",c:"CMAC",pnw:true,sg:4,gs:3,sl:3,sgT:"43.01",gsT:"1:28",slT:"1:18"},{n:"Daly, Sydney",c:"PCSS",pnw:false,sg:5,gs:4,sl:1,sgT:"43.22",gsT:"1:28",slT:"1:17"},{n:"Ayers, Meila",c:"SBA",pnw:false,sg:3,gs:5,sl:null,sgT:"42.85",gsT:"1:29",slT:null},{n:"Lattanzi, Alessa",c:"RM",pnw:false,sg:10,gs:7,sl:9,sgT:"44.20",gsT:"1:31",slT:"1:22"},{n:"Smiley, Jasmine",c:"SVSEF",pnw:false,sg:11,gs:10,sl:11,sgT:"44.48",gsT:"1:31",slT:"1:22"},{n:"Lanzkowsky, Yael",c:"PCSS",pnw:false,sg:21,gs:8,sl:6,sgT:"45.34",gsT:"1:31",slT:"1:20"},{n:"Wenger, Peyton",c:"BSSEF",pnw:false,sg:12,gs:null,sl:null,sgT:"44.49",gsT:null,slT:null},{n:"Stein, Lilia",c:"PCSS",pnw:false,sg:16,gs:13,sl:8,sgT:"44.77",gsT:"1:32",slT:"1:21"},{n:"Kuzel, Teagan",c:"SARS",pnw:true,sg:7,gs:18,sl:15,sgT:"43.51",gsT:"1:33",slT:"1:23"},{n:"Pelland, Harper",c:"CMAC",pnw:true,sg:15,gs:12,sl:13,sgT:"44.69",gsT:"1:32",slT:"1:23"},{n:"Tyler, Lila",c:"PCSS",pnw:false,sg:20,gs:14,sl:7,sgT:"45.33",gsT:"1:32",slT:"1:20"},{n:"Hart, Brighton",c:"CMAC",pnw:true,sg:22,gs:9,sl:null,sgT:"45.36",gsT:"1:31",slT:null},{n:"DeGennaro, Neena",c:"SVSEF",pnw:false,sg:14,gs:6,sl:68,sgT:"44.63",gsT:"1:31",slT:"1:39"},{n:"Schlosser, Zuzana",c:"NSST",pnw:false,sg:24,gs:16,sl:10,sgT:"45.57",gsT:"1:32",slT:"1:22"},{n:"Cronin, Avery",c:"NSST",pnw:false,sg:26,gs:15,sl:22,sgT:"45.79",gsT:"1:32",slT:"1:25"},{n:"Cooper, Reilly",c:"RM",pnw:false,sg:27,gs:22,sl:12,sgT:"45.80",gsT:"1:33",slT:"1:23"},{n:"Ludlow, Julia",c:"CMAC",pnw:true,sg:25,gs:23,sl:24,sgT:"45.61",gsT:"1:33",slT:"1:25"},{n:"Buyukcetin, Luna",c:"SPAC",pnw:true,sg:19,gs:32,sl:null,sgT:"45.07",gsT:"1:35",slT:null},{n:"White, Ava",c:"LPRT",pnw:true,sg:18,gs:null,sl:38,sgT:"44.78",gsT:null,slT:"1:29"},{n:"Lambert, Piper",c:"MRT",pnw:true,sg:42,gs:28,sl:33,sgT:"47.62",gsT:"1:34",slT:"1:28"},{n:"Paul, Lexi",c:"MRT",pnw:true,sg:38,gs:null,sl:40,sgT:"47.10",gsT:null,slT:"1:30"},{n:"Lindblade, Camille",c:"MRT",pnw:true,sg:45,gs:43,sl:29,sgT:"47.84",gsT:"1:38",slT:"1:26"},{n:"Tanner, Bea",c:"CMAC",pnw:true,sg:51,gs:54,sl:28,sgT:"48.48",gsT:"1:40",slT:"1:26"},{n:"Elgee, Eloise",c:"SARS",pnw:true,sg:36,gs:null,sl:54,sgT:"47.07",gsT:null,slT:"1:33"},{n:"Mak, Olive",c:"CMAC",pnw:true,sg:63,gs:37,sl:35,sgT:"50.29",gsT:"1:37",slT:"1:28"},{n:"Brown, Kate",c:"SARS",pnw:true,sg:41,gs:55,sl:null,sgT:"47.55",gsT:"1:40",slT:null},{n:"Richter, Carly",c:"SARS",pnw:true,sg:62,gs:39,sl:55,sgT:"49.86",gsT:"1:37",slT:"1:33"},{n:"Castillo, Pepi",c:"SPAC",pnw:true,sg:40,gs:69,sl:56,sgT:"47.41",gsT:"1:43",slT:"1:34"},{n:"Morrill, Marin",c:"CMAC",pnw:true,sg:52,gs:63,sl:51,sgT:"48.50",gsT:"1:42",slT:"1:33"},{n:"Halcott, Lucy",c:"TAS",pnw:true,sg:57,gs:61,sl:48,sgT:"49.39",gsT:"1:41",slT:"1:31"},{n:"Brueggemann, Annalise",c:"MBSEF",pnw:true,sg:54,gs:57,sl:62,sgT:"48.87",gsT:"1:40",slT:"1:37"},{n:"Pederson, Ada",c:"SARS",pnw:true,sg:69,gs:51,sl:60,sgT:"50.96",gsT:"1:39",slT:"1:35"},{n:"Robertson, Louann",c:"MBSEF",pnw:true,sg:67,gs:56,sl:null,sgT:"50.74",gsT:"1:40",slT:null},{n:"Schanel, Sabrina",c:"MBSEF",pnw:true,sg:60,gs:null,sl:65,sgT:"49.57",gsT:null,slT:"1:37"}];
 const RM=[{n:"Gilmour, Cree",c:"RM",pnw:false,sg:1,gs:1,sl:3,sgT:"40.41",gsT:"1:21",slT:"1:16"},{n:"Ditullio, Dominic",c:"BSSEF",pnw:false,sg:3,gs:2,sl:2,sgT:"40.84",gsT:"1:22",slT:"1:16"},{n:"Brown, Nate",c:"RM",pnw:false,sg:5,gs:4,sl:1,sgT:"41.15",gsT:"1:24",slT:"1:15"},{n:"Cunningham, Carl",c:"TPT",pnw:false,sg:4,gs:6,sl:null,sgT:"41.14",gsT:"1:25",slT:null},{n:"Knight, Cedar",c:"SB",pnw:false,sg:8,gs:8,sl:4,sgT:"41.75",gsT:"1:25",slT:"1:17"},{n:"Petett, Trae",c:"CMAC",pnw:true,sg:11,gs:5,sl:null,sgT:"42.18",gsT:"1:24",slT:null},{n:"Bengtson, Colter",c:"SVSEF",pnw:false,sg:7,gs:13,sl:5,sgT:"41.65",gsT:"1:26",slT:"1:19"},{n:"Kinsman, Asher",c:"RM",pnw:false,sg:2,gs:16,sl:null,sgT:"40.78",gsT:"1:26",slT:null},{n:"Dain, Alexander",c:"SB",pnw:false,sg:15,gs:null,sl:6,sgT:"42.41",gsT:null,slT:"1:19"},{n:"Beebe, William",c:"PCSS",pnw:false,sg:16,gs:7,sl:10,sgT:"42.44",gsT:"1:25",slT:"1:20"},{n:"Johnson, Feren",c:"PCSS",pnw:false,sg:23,gs:3,sl:11,sgT:"43.07",gsT:"1:23",slT:"1:21"},{n:"Flood, Corbin",c:"SVSEF",pnw:false,sg:10,gs:17,sl:41,sgT:"42.12",gsT:"1:26",slT:"1:29"},{n:"Ireland, Colin",c:"MRST",pnw:true,sg:null,gs:null,sl:15,sgT:null,gsT:null,slT:"1:21"},{n:"Harder, Elijah",c:"BSSEF",pnw:false,sg:21,gs:14,sl:9,sgT:"43.00",gsT:"1:26",slT:"1:20"},{n:"Purchase, Rupert",c:"CMAC",pnw:true,sg:48,gs:null,sl:21,sgT:"44.38",gsT:null,slT:"1:22"},{n:"Jarrett, Cadel",c:"MRST",pnw:true,sg:26,gs:22,sl:null,sgT:"43.13",gsT:"1:26",slT:null},{n:"Lechleitner, Riley",c:"LPRT",pnw:true,sg:70,gs:29,sl:24,sgT:"47.18",gsT:"1:27",slT:"1:23"},{n:"Tarnow, Calder",c:"MBSEF",pnw:true,sg:53,gs:37,sl:null,sgT:"44.86",gsT:"1:29",slT:null},{n:"Rau, Andrew",c:"LPRT",pnw:true,sg:64,gs:43,sl:34,sgT:"45.37",gsT:"1:30",slT:"1:27"},{n:"Baskett, Garrett",c:"WPSC",pnw:true,sg:51,gs:45,sl:36,sgT:"44.68",gsT:"1:31",slT:"1:27"},{n:"Muller, Greyson",c:"SARS",pnw:true,sg:50,gs:null,sl:45,sgT:"44.61",gsT:null,slT:"1:31"},{n:"Pavlovcic, Filip",c:"CMAC",pnw:true,sg:60,gs:39,sl:null,sgT:"45.10",gsT:"1:29",slT:null},{n:"Balsimo, Micco",c:"SARS",pnw:true,sg:43,gs:53,sl:null,sgT:"44.19",gsT:"1:32",slT:null},{n:"Curtis, Finnley",c:"MBSEF",pnw:true,sg:null,gs:null,sl:47,sgT:null,gsT:null,slT:"1:31"},{n:"Bouffard, Clovis",c:"CMAC",pnw:true,sg:44,gs:49,sl:null,sgT:"44.29",gsT:"1:31",slT:null},{n:"Priest, Kellen",c:"CMAC",pnw:true,sg:71,gs:60,sl:39,sgT:"47.36",gsT:"1:33",slT:"1:29"},{n:"McCarry, Collin",c:"CMAC",pnw:true,sg:61,gs:61,sl:40,sgT:"45.15",gsT:"1:33",slT:"1:29"},{n:"Crespo, Xavier",c:"MRT",pnw:true,sg:53,gs:59,sl:null,sgT:"44.86",gsT:"1:33",slT:null},{n:"Berg, Blake",c:"MBSEF",pnw:true,sg:null,gs:null,sl:55,sgT:null,gsT:null,slT:"2:08"}];
@@ -594,10 +804,10 @@ function getList(){return getData().filter(a=>a.g===curGender&&(!curClub||a.c===
 function fldRank(a,mods){const mine=calcSc(a,mods).total;return getField().filter(x=>x!==a&&!x.incoming).filter(x=>calcSc(x,{}).total>mine).length+1;}
 function plBadge(p){if(p===null||p===undefined)return`<span class="dnfc">—</span>`;const cls=p===1?'plb1':p===2?'plb2':p===3?'plb3':p<=10?'plbt':'';return cls?`<span class="plb ${cls}">${p}</span>`:`<span style="font-size:12px;color:#888">${p}</span>`;}
 function tIcon(t){return t==='rise'?'<span class="au">▲</span>':t==='drop'?'<span class="ad">▼</span>':'<span class="as2">→</span>';}
- 
+
 // ══ STATE ══
 let ag='u14',curSeason=2026,curMode='athlete',curGender='W',curClub='',curIdx=-1,wiMods={},teamGender='combined',expandedClub=null,trajChart=null,teamChart=null,bwGender='M',regGender='W',regChart=null;
- 
+
 // ══ CONTROLS ══
 function setAG(v){
   ag=v;curClub='';curIdx=-1;wiMods={};expandedClub=null;
@@ -614,7 +824,7 @@ function setAG(v){
   ['ath-area','team-area'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('empty-state').style.display=isAG?'block':'none';
   if(isBW){document.getElementById('bw-area').style.display='block';populateBWClubs();renderBW();}
-  if(isReg){document.getElementById('reg-area').style.display='block';populateRegClubs();renderReg();}
+  if(isReg){document.getElementById('reg-area').style.display='block';setRegLevel('u16');}
   if(isAG){updateSnote();populateClubs();populateAthletes();if(curMode==='teams')renderTeams();}
 }
 function setSeason(y){
@@ -654,7 +864,7 @@ function renderEmpty(){document.getElementById('empty-state').style.display='blo
 function showTab(id){const tabs=['profile','scorecard','whatif','target','field','career'];document.querySelectorAll('.tabs .tb').forEach((b,i)=>b.className='tb'+(tabs[i]===id?' on':''));document.querySelectorAll('#ath-area .pnl').forEach(p=>p.className='pnl'+(p.id===`p-${id}`?' on':''));({profile:renderProfile,scorecard:renderScorecard,whatif:renderWI,target:renderTarget,field:renderField,career:renderCareer})[id]();}
 function goToAth(ri){curIdx=ri;wiMods={};setMode('athlete');document.getElementById('ath-ctrl').style.display='flex';document.getElementById('empty-state').style.display='none';document.getElementById('ath-area').style.display='block';document.getElementById('team-area').style.display='none';showTab('profile');}
 function jumpTeamPrev(){setSeason(2027);setMode('teams');}
- 
+
 // ══ PROFILE ══
 function renderProfile(){
   const c=cfg(),a=getData()[curIdx];
@@ -679,19 +889,19 @@ function renderProfile(){
   const bH=best.map((e,i)=>{const pc=i===0?'bp1':i===1?'bp2':i===2?'bp3':'bpo';return`<div class="brr"><div class="brp ${pc}">${String(e.place&&!isNaN(e.place)?ord(e.place):(e.place||'—')).replace(/[a-z]+/,'')}</div><div style="flex:1;font-size:11px;color:#888">${e.label}</div><b>${e.pts}pts</b></div>`;}).join('')||'<div style="font-size:12px;color:#888;padding:5px 0">No scoring results</div>';
   const mD=c.maxD;
   document.getElementById('p-profile').innerHTML=`
-<div class="hero"><div class="av" style="background:${bgC};color:${txC}">${ini(a.n)}</div>
+<div class="hero hero-anim name-flash"><div class="av" style="background:${bgC};color:${txC}">${ini(a.n)}</div>
 <div class="ai"><h1>${a.n}</h1><div class="ac">${a.c} · ${a.g==='W'?'Women':'Men'} · Born ${a.y} · <span class="agbg ${ag==='u14'?'agbu14':'agbu16'}">${c.label}</span></div>
 <div class="as">${sL}${rC}${ipC}<span style="font-size:12px;color:#888">#${myR} of ${fs}</span></div></div></div>
 <div class="pst">
-  <div class="ps"><div class="pl">Total pts</div><div class="pv" style="${sc.total>0?'color:#16a34a':''}">${sc.total}</div><div class="pp">${c.status==='inprogress'?'in progress':'2025–26'}</div></div>
-  <div class="ps"><div class="pl">Field rank</div><div class="pv">#${myR}</div><div class="pp">of ${fs}</div></div>
-  <div class="ps"><div class="pl">Best disc</div><div class="pv"><span class="dp dp${str.toLowerCase()}">${str}</span></div><div class="pp">${dMax} pts</div></div>
-  <div class="ps"><div class="pl">Completion</div><div class="pv" style="${cr>=80?'color:#16a34a':cr>=60?'color:#d97706':'color:#dc2626'}">${cr}%</div><div class="pp">${fin}/${fin+dnf}</div></div>
+  <div class="ps stat-anim-0"><div class="pl">Total pts</div><div class="pv" style="${sc.total>0?'color:#16a34a':''}">${sc.total}</div><div class="pp">${c.status==='inprogress'?'in progress':'2025–26'}</div></div>
+  <div class="ps stat-anim-1"><div class="pl">Field rank</div><div class="pv">#${myR}</div><div class="pp">of ${fs}</div></div>
+  <div class="ps stat-anim-2"><div class="pl">Best disc</div><div class="pv"><span class="dp dp${str.toLowerCase()}">${str}</span></div><div class="pp">${dMax} pts</div></div>
+  <div class="ps stat-anim-3"><div class="pl">Completion</div><div class="pv" style="${cr>=80?'color:#16a34a':cr>=60?'color:#d97706':'color:#dc2626'}">${cr}%</div><div class="pp">${fin}/${fin+dnf}</div></div>
 </div>
 <div class="db3">
-  <div class="dc gc"><div class="dt" style="color:#1d4ed8">GS</div><div class="ds" style="color:#1e40af">${sc.gs}</div><div class="dbw"><div class="db" style="width:${Math.round((sc.gs/mD)*100)}%;background:#60a5fa"></div></div><div class="dm">Top ${prc(gsF,sc.gs)}% · max ${mD}</div></div>
-  <div class="dc sc"><div class="dt" style="color:#5b21b6">SL</div><div class="ds" style="color:#4c1d95">${sc.sl}</div><div class="dbw"><div class="db" style="width:${Math.round((sc.sl/mD)*100)}%;background:#a78bfa"></div></div><div class="dm">Top ${prc(slF,sc.sl)}%</div></div>
-  <div class="dc sgc"><div class="dt" style="color:#15803d">SG</div><div class="ds" style="color:#14532d">${sc.sg}</div><div class="dbw"><div class="db" style="width:${Math.round((sc.sg/mD)*100)}%;background:#4ade80"></div></div><div class="dm">Top ${prc(sgF,sc.sg)}%</div></div>
+  <div class="dc gc disc-anim-0"><div class="dt" style="color:#1d4ed8">GS</div><div class="ds" style="color:#1e40af">${sc.gs}</div><div class="dbw"><div class="db" style="width:${Math.round((sc.gs/mD)*100)}%;background:#60a5fa"></div></div><div class="dm">Top ${prc(gsF,sc.gs)}% · max ${mD}</div></div>
+  <div class="dc sc disc-anim-1"><div class="dt" style="color:#5b21b6">SL</div><div class="ds" style="color:#4c1d95">${sc.sl}</div><div class="dbw"><div class="db" style="width:${Math.round((sc.sl/mD)*100)}%;background:#a78bfa"></div></div><div class="dm">Top ${prc(slF,sc.sl)}%</div></div>
+  <div class="dc sgc disc-anim-2"><div class="dt" style="color:#15803d">SG</div><div class="ds" style="color:#14532d">${sc.sg}</div><div class="dbw"><div class="db" style="width:${Math.round((sc.sg/mD)*100)}%;background:#4ade80"></div></div><div class="dm">Top ${prc(sgF,sc.sg)}%</div></div>
 </div>
 <div class="pg2">
   <div class="pc"><div class="sl" style="margin-top:0">Best results</div>${bH}</div>
@@ -721,7 +931,7 @@ function renderIncProf(a){
 <p style="font-size:11px;color:#888;margin-bottom:11px;font-style:italic">Note: U16 uses cumulative scoring — these U14 scores are a qualitative indicator only.</p>
 <div class="pc"><div class="sl" style="margin-top:0">Best U14 results</div>${bH}</div>`;
 }
- 
+
 // ══ SCORECARD ══
 function renderScorecard(){
   const c=cfg(),a=getData()[curIdx],sc=calcSc(a,{});
@@ -732,7 +942,7 @@ function renderScorecard(){
   document.getElementById('p-scorecard').innerHTML=`<div class="mg mg-3 mb-10"><div class="m"><div class="l">GS qual</div><div class="v">${sc.gs}</div></div><div class="m"><div class="l">SL qual</div><div class="v">${sc.sl}</div></div><div class="m"><div class="l">SG qual</div><div class="v">${sc.sg}</div></div></div><p class="sub">${c.scoring==='best2'?'Green = counts (best 2 per discipline).':'Green = all scored races count.'}</p><div class="rg">${cards}</div>`;
 }
 function makeU14SC(a){const c=CFG.u14,disc=c.raceDisciplines,runs=a.runs||[],cnt=[];['GS','SL','SG'].forEach(d=>{const idx=c.discIdx[d];const pts=idx.map(i=>({i,p:runs[i]&&runs[i][1]||0})).sort((a,b)=>b.p-a.p);pts.slice(0,2).forEach(x=>{if(x.p>0)cnt.push(x.i);});});return'<div class="rg">'+runs.map((r,i)=>{const d=disc[i],pts=r&&r[1]||0,pl=r&&r[0],iC=cnt.includes(i);const isDNF=pl===null||pl===0||pl==='DNF'||pl==='DSQ';const ps=isDNF?(pl||'—'):`${pl}${pl===1?'st':pl===2?'nd':pl===3?'rd':'th'}`;return`<div class="rc${iC?' cnt':''}"><div class="rh"><span class="dp dp${d.toLowerCase()}">${d}</span><span class="rpts">${pts}<span style="font-size:10px;font-weight:400"> pts</span></span></div><div class="rs">${c.raceLabels[i]}</div><div class="rs">${ps}</div><div class="pbw"><div class="pb2${iC?' cnt':''}" style="width:${pts>0?Math.round((pts/100)*100):0}%"></div></div>${iC?'<div class="cbadge">counting</div>':''}</div>`;}).join('')+'</div>';}
- 
+
 // ══ WHAT-IF ══
 function renderWI(){
   const c=cfg(),a=getData()[curIdx];
@@ -751,7 +961,7 @@ function updWI(){
   const arrow=diff>0?`<span class="au">▲ ${diff} better</span>`:diff<0?`<span class="ad">▼ ${Math.abs(diff)} worse</span>`:`<span class="as2">no change</span>`;
   document.getElementById('wi-res').innerHTML=`<div style="background:#f5f5f5;border-radius:10px;padding:10px;margin-top:9px"><div class="rrow"><span class="rl">GS</span><span class="rv">${orig.gs} → <b>${mod.gs}</b></span></div><div class="rrow"><span class="rl">SL</span><span class="rv">${orig.sl} → <b>${mod.sl}</b></span></div><div class="rrow"><span class="rl">SG</span><span class="rv">${orig.sg} → <b>${mod.sg}</b></span></div><div class="rrow"><span class="rl">Total</span><span class="rv" style="font-size:17px">${mod.total} pts</span></div><div class="rrow"><span class="rl">Rank</span><div style="display:flex;align-items:center;gap:6px"><span class="rv">#${or} → <b>#${mr}</b></span>${arrow}</div></div></div>`;
 }
- 
+
 // ══ TARGET ══
 function renderTarget(){
   const c=cfg(),a=getData()[curIdx];
@@ -767,7 +977,7 @@ function renderTarget(){
   const ipN=c.status==='inprogress'?'<div class="inprog">Season in progress — additional races remain.</div>':'';
   document.getElementById('p-target').innerHTML=`<h2>Points target</h2><p class="sub">Drag to pick a rank, see the points gap.</p>${ipN}<div class="tr2"><label>Target rank</label><input type="range" id="tsl" min="1" max="${max}" step="1" value="${tgt}" oninput="renderTarget()"><span class="tv">#${tgt}</span></div><div class="tr2"><label>Score at rank</label><span class="tv" style="color:#2563eb">${tgtSc} pts</span></div><div class="tr2"><label>Gap</label><span class="tv" style="color:${needed>0?'#dc2626':'#16a34a'}">${needed>0?'+'+needed+' needed':'There ✓'}</span></div><div class="sl">Discipline breakdown</div>${bar('GS',sc.gs,gsN,'gs')}${bar('SL',sc.sl,slN,'sl')}${bar('SG',sc.sg,sgN,'sg')}${note}`;
 }
- 
+
 // ══ FIELD VIEW — all athletes all clubs ranked by points ══
 function renderField(){
   const c=cfg(),a=getData()[curIdx];
@@ -803,7 +1013,7 @@ ${incNote}
 <div class="fscroll">${rows}</div>`;
   setTimeout(()=>{const h=document.querySelector('.hlr');if(h)h.scrollIntoView({behavior:'smooth',block:'center'});},80);
 }
- 
+
 // ══ CAREER ARC ══
 function renderCareer(){
   const c=cfg(),a=getData()[curIdx],sc=calcSc(a,{});
@@ -825,7 +1035,7 @@ function renderCareer(){
   const aR=isRet?agPeers.map(p=>{const ri=c.data.indexOf(p);return`<div class="ttr"><span class="trb trb-o">Aging out</span><span style="flex:1;cursor:pointer;color:#2563eb" onclick="goToAth(${ri})">${p.n}</span><span style="color:#888">${calcSc(p,{}).total} pts</span></div>`;}).join(''):'';
   document.getElementById('p-career').innerHTML=`<h2>${agL} Career Arc</h2><p class="sub">Two-year ${agL} eligibility window.</p><table class="ctbl"><thead><tr><th>Season</th><th>Status</th><th class="r">GS</th><th class="r">SL</th><th class="r">SG</th><th class="r">Total</th><th>Rank</th></tr></thead><tbody>${rowsH}</tbody></table><div class="${isRet?'banr':'ban ban-b'}"><div style="font-size:13px;font-weight:600;margin-bottom:2px">${isRet?'Returning 2026–27':agL+' Career Complete'}</div><div style="font-size:12px;color:#555">${isRet?`Final ${agL} year.`:`Moves to ${agL==='U14'?'U16':'U18'}.`}</div></div>${peers.length>0?`<div class="sl" style="margin-top:0">Club teammates — cohort ${a.y}</div>${pR}`:''}${isRet&&agPeers.length>0?`<div class="sl">Club ${agL} teammates aging out</div>${aR}`:''}`;
 }
- 
+
 // ══ TEAMS ══
 function buildTeamStats(gf){
   const c=cfg(),isPrev=(ag==='u16'||ag==='u14')&&curSeason===2027;
@@ -888,7 +1098,7 @@ function renderTeams(){
 }
 function showTTeamTab(club,tab){['ttr-','ttt-'].forEach((p,i)=>{const el=document.getElementById(p+club);if(el)el.style.display=i===(tab==='roster'?0:1)?'block':'none';});const det=document.getElementById(`td-${club}`);if(det)det.querySelectorAll('.ttb').forEach((b,i)=>b.className='ttb'+(i===(tab==='roster'?0:1)?' on':''));}
 function toggleTeam(club){expandedClub=expandedClub===club?null:club;renderTeams();}
- 
+
 // ══ BUDDY WERNER ══
 function bwData(){return bwGender==='M'?BW25_M:BW25_W;}
 function bwComp(a){return Math.round((a.sqSc/35)*60)+(PP[a.gs]||0)+(PP[a.sl]||0);}
@@ -923,15 +1133,26 @@ function renderBWWt(){
   const cards=show.slice(0,16).map((a,i)=>{const comp=bwComp(a),out=outlook(a),iS=a.c==='SPAC';const star=i===0&&!cf?'<span class="star-b">★ Top incoming</span>':iS?'<span class="star-b" style="background:#dbeafe;color:#1e40af">SPAC</span>':'';let special='';if(a.n==='Buyukcetin, Luca')special='<div style="font-size:11px;color:#92400e;margin-top:3px;padding:4px 7px;background:#fffbeb;border-radius:4px">⚡ Sibling of Luna Buyukcetin (SPAC U16 Women #5). Elite SL at U12 is rare.</div>';if(a.n==='Olsson, Pep')special='<div style="font-size:11px;color:#166534;margin-top:3px;padding:4px 7px;background:#dcfce7;border-radius:4px">♦ 2nd in BW SL as first-year U12. CSAT SL depth could be exceptional in 2026-27.</div>';return`<div class="wcard ${i<3&&!cf?'feat':''} ${iS?'spac-w':''}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><div><div class="wcnm">${ord(i+1)} ${a.n}${star}</div><div class="wcmt"><span>${a.c}</span><span class="${a.by===14?'by14p':'by13p'}">Born ${a.by} → U14 2026-27</span></div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700">${comp}</div><div style="font-size:10px;color:#888">composite</div></div></div><div class="wcs"><div class="wcs-s"><div class="wssl">SQ</div><div class="wssv">${plBadge(a.sq)}</div></div><div class="wcs-s"><div class="wssl">GS</div><div class="wssv">${plBadge(a.gs)}</div></div><div class="wcs-s"><div class="wssl">SL</div><div class="wssv">${plBadge(a.sl)}</div></div></div><div style="color:${out.col};font-weight:600;font-size:12px;margin-bottom:2px">${out.l}</div><div style="font-size:12px;color:#888">${out.desc}</div>${special}</div>`;}).join('');
   document.getElementById('bw-wt').innerHTML=`<h2>Incoming U14 Watch — Born 2014</h2><p class="sub">Athletes entering U14 in 2026-27, ranked by BW 2025 composite score.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${cards}</div>`;
 }
- 
+
 // ══ REGIONALS ══
+let regLevel='u16';
+function setRegLevel(level){
+  regLevel=level;
+  document.querySelectorAll('#reg-level-seg button').forEach((b,i)=>b.className=(['u16','u14'][i]===level?'on-r':''));
+  document.getElementById('reg-u16-area').style.display=level==='u16'?'block':'none';
+  document.getElementById('reg-u14-area').style.display=level==='u14'?'block':'none';
+  document.getElementById('reg-u16-ctrl').style.display=level==='u16'?'flex':'none';
+  document.getElementById('reg-u14-ctrl').style.display=level==='u14'?'flex':'none';
+  if(level==='u16'){populateRegClubs();renderReg();}
+  else{renderWRC();}
+}
 function regData(){return regGender==='W'?RW:RM;}
 function avgReg(a){const r=[a.sg,a.gs,a.sl].filter(v=>v!=null);return r.length?r.reduce((s,v)=>s+v,0)/r.length:999;}
 function setRegG(g){regGender=g;document.querySelectorAll('#reg-gseg button').forEach((b,i)=>b.className=['W','M'][i]===g?'on':'');populateRegClubs();renderReg();}
 function populateRegClubs(){const s=document.getElementById('reg-cf');const cl=[...new Set(regData().filter(a=>a.pnw).map(a=>a.c))].sort();s.innerHTML='<option value="">All clubs</option>'+cl.map(c=>`<option value="${c}">${c}</option>`).join('');}
 function renderReg(){const tabs=['reg-rs','reg-cl','reg-sp','reg-cx'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'reg-rs';({['reg-rs']:renderRegRs,['reg-cl']:renderRegCl,['reg-sp']:renderRegSp,['reg-cx']:renderRegCx})[id]();}
 function showRegTab(id){const ids=['reg-rs','reg-cl','reg-sp','reg-cx'];document.querySelectorAll('#reg-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#reg-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));({['reg-rs']:renderRegRs,['reg-cl']:renderRegCl,['reg-sp']:renderRegSp,['reg-cx']:renderRegCx})[id]();}
- 
+
 function renderRegRs(){
   let d=[...regData()];const vf=document.getElementById('reg-vf').value,cf=document.getElementById('reg-cf').value;
   if(cf)d=d.filter(a=>a.c===cf);if(vf==='pnw')d=d.filter(a=>a.pnw);
@@ -954,7 +1175,7 @@ function renderRegRs(){
 <div class="tscroll"><table class="rtbl"><thead><tr><th>#</th><th>Athlete</th><th>Club</th>${hasSG?'<th class="r">SG</th>':''}<th class="r">GS</th><th class="r">SL</th><th class="r">Avg rank</th></tr></thead><tbody>${rows}</tbody></table></div>
 <p style="font-size:11px;color:#888;margin-top:6px">Avg rank = mean finish across completed events. Sorted by avg rank.</p>`;
 }
- 
+
 function renderRegCl(){
   const d=regData().filter(a=>a.pnw),clubMap={};
   d.forEach(a=>{if(!clubMap[a.c])clubMap[a.c]={c:a.c,aths:[],sg:null,gs:null,sl:null};clubMap[a.c].aths.push(a);['sg','gs','sl'].forEach(ev=>{const r=a[ev];if(r!=null){const cur=clubMap[a.c][ev];if(cur===null||r<cur)clubMap[a.c][ev]=r;}});});
@@ -970,7 +1191,7 @@ function renderRegCl(){
   }).join('');
   document.getElementById('reg-cl').innerHTML=`<h2>PNW Club Rankings — ${regGender==='W'?'Women':'Men'}</h2><p class="sub">Each club's best placement per event, averaged. Lower = better. Non-scoring event — no official team points.</p><div class="ban ban-b"><div class="bt">How to read this</div><div class="bd">Western Regionals draws talent from across the Western US. Rankings show each PNW club's best individual result per event, averaged, as a measure of competitive depth vs. the full field.</div></div><div style="border:1px solid #e5e5e5;border-radius:10px;overflow:hidden">${rows}</div>`;
 }
- 
+
 function renderRegSp(){
   const spacW=RW.filter(a=>a.c==='SPAC'),spacM=RM.filter(a=>a.c==='SPAC');
   function card(a){
@@ -985,7 +1206,7 @@ function renderRegSp(){
   const mCards=spacM.length>0?`<div class="sl">Men</div>${spacM.map(card).join('')}`:'';
   document.getElementById('reg-sp').innerHTML=`<h2>SPAC Athletes at Western Regionals</h2><p class="sub">Palisades Tahoe · March 13–15, 2026 · Competing against the full Western US field</p><div class="ban ban-a"><div class="bt">Context</div><div class="bd">Western Regionals draws Rocky Mountain, PNW, California, and Alaska programs. Placement in the top half of this field is highly competitive. PNW athletes often face their first exposure to a wider national-level field here.</div></div>${wCards}${mCards}`;
 }
- 
+
 function renderRegCx(){
   const d=regData(),pnw=d.filter(a=>a.pnw);
   function evStat(ev){const all=d.filter(a=>a[ev]!=null).sort((a,b)=>a[ev]-b[ev]);const top10PNW=all.slice(0,10).filter(a=>a.pnw).length;const pnwBest=pnw.reduce((b,a)=>a[ev]&&a[ev]<(b||999)?a[ev]:b,null);return{top10PNW,pnwBest};}
@@ -1001,9 +1222,155 @@ function renderRegCx(){
 <div style="position:relative;height:180px;margin-top:8px"><canvas id="reg-chart"></canvas></div>`;
   setTimeout(()=>{const ctx=document.getElementById('reg-chart');if(!ctx)return;if(regChart){regChart.destroy();regChart=null;}const labels=['Super-G','GS','Slalom'];const pnwBests=[sg.pnwBest||0,gs.pnwBest||0,sl.pnwBest||0];const fSz=d.length;regChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Best PNW',data:pnwBests,backgroundColor:['#93c5fd','#86efac','#c4b5fd'],borderRadius:4},{label:'Field size',data:[fSz,fSz,fSz],backgroundColor:'rgba(0,0,0,.06)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,max:fSz+5,ticks:{font:{size:11}}},y:{ticks:{font:{size:12}}}}}});},50);
 }
- 
+
+
+// ══ WRC ══
+let wrcGender='W';
+function setWRCG(g){wrcGender=g;document.querySelectorAll('#wrc-gseg button').forEach((b,i)=>b.className=['W','M'][i]===g?'on':'');renderWRC();}
+function wrcData(){return wrcGender==='W'?WRC_W:WRC_M;}
+function populateWRCDivs(){const s=document.getElementById('wrc-div');const divs=[...new Set(wrcData().map(a=>a.div))].sort();s.innerHTML='<option value="">All divisions</option>'+divs.map(d=>`<option value="${d}">${d}</option>`).join('');}
+function showWRCTab(id){const ids=['wrc-rs','wrc-pnw','wrc-spac','wrc-div'];document.querySelectorAll('#reg-u14-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#reg-u14-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));({['wrc-rs']:renderWRCRs,['wrc-pnw']:renderWRCPnw,['wrc-div']:renderWRCDiv,['wrc-spac']:renderWRCSPAC})[id]();}
+function renderWRC(){const tabs=['wrc-rs','wrc-pnw','wrc-div','wrc-spac'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'wrc-rs';({['wrc-rs']:renderWRCRs,['wrc-pnw']:renderWRCPnw,['wrc-div']:renderWRCDiv,['wrc-spac']:renderWRCSPAC})[id]();}
+function avgWRC(a){const r=[a.sg,a.gs,a.sl].filter(v=>v!=null);return r.length?r.reduce((s,v)=>s+v,0)/r.length:999;}
+const DIV_NAMES={A:'Alaska',F:'Far West',I:'Intermountain',N:'Northern',P:'Pacific NW',X:'Other',R:'Rocky Mtn',E:'Eastern'};
+
+function renderWRCRs(){
+  let d=[...wrcData()];
+  const vf=document.getElementById('wrc-vf').value,df=document.getElementById('wrc-div').value;
+  if(df)d=d.filter(a=>a.div===df);
+  if(vf==='pnw')d=d.filter(a=>a.pnw);
+  if(vf==='top20')d=d.slice(0,20);
+  const pnwOnly=vf==='pnw';
+  const rows=d.map((a,i)=>{
+    const isPNW=a.pnw,isSPAC=a.club==='SPAC';
+    const rowCls=isSPAC?'wrc-row-spac':isPNW?'wrc-row-pnw':'';
+    const pnwTag=isPNW&&!pnwOnly?`<span class="pnw-pill">PNW</span>`:'';
+    const spacTag=isSPAC?`<span class="spac-pill">SPAC</span>`:'';
+    const divBadge=`<span class="div-badge div-${a.div}">${a.div}</span>`;
+    return`<tr class="${rowCls}">
+      <td><b style="color:var(--text3);font-family:'DM Mono',monospace">${i+1}</b></td>
+      <td>${a.n}${pnwTag}${spacTag}</td>
+      <td>${divBadge} <span style="font-size:11px;color:var(--text2)">${a.club}</span></td>
+      <td class="r">${a.sg!=null?`<b>${a.sg}</b><br><span class="tc2">${a.sgT||''}</span>`:'<span class="dnfc">—</span>'}</td>
+      <td class="r">${a.gs!=null?`<b>${a.gs}</b><br><span class="tc2">${a.gsT||''}</span>`:'<span class="dnfc">—</span>'}</td>
+      <td class="r">${a.sl!=null?`<b>${a.sl}</b><br><span class="tc2">${a.slT||''}</span>`:'<span class="dnfc">—</span>'}</td>
+      <td class="r" style="font-family:'DM Mono',monospace"><b>${a.tot||'—'}</b></td>
+    </tr>`;
+  }).join('');
+  const tot=wrcData().length,pnwCt=wrcData().filter(a=>a.pnw).length;
+  document.getElementById('wrc-rs').innerHTML=`
+<div class="mg mg-4" style="margin-bottom:12px">
+  <div class="m"><div class="l">Field</div><div class="v">${tot}</div></div>
+  <div class="m"><div class="l">PNW athletes</div><div class="v" style="color:var(--blue)">${pnwCt}</div></div>
+  <div class="m"><div class="l">Divisions</div><div class="v">${[...new Set(wrcData().map(a=>a.div))].length}</div></div>
+  <div class="m"><div class="l">All 3 events</div><div class="v">${wrcData().filter(a=>a.sg&&a.gs&&a.sl).length}</div></div>
+</div>
+<div class="pnw-leg">
+  <span>Legend:</span>
+  <div class="lg-i"><div class="lg-d" style="background:#eff6ff;border:1px solid #c5d4f8"></div><span>SPAC</span></div>
+  <div class="lg-i"><div class="lg-d" style="background:#fffbeb;border:1px solid #fde68a"></div><span>PNW (P div)</span></div>
+  <div class="lg-i"><div class="lg-d" style="background:#fff;border:1px solid var(--border)"></div><span>Other division</span></div>
+</div>
+<div class="tscroll"><table class="rtbl">
+  <thead><tr><th>#</th><th>Athlete</th><th>Div / Club</th><th class="r">SG</th><th class="r">GS</th><th class="r">SL</th><th class="r">Pts</th></tr></thead>
+  <tbody>${rows}</tbody>
+</table></div>
+<p style="font-size:11px;color:var(--text2);margin-top:8px">Ranked by total WC points. Scores are top 2 of 3 events. P division = Pacific NW qualifiers.</p>`;
+}
+
+function renderWRCPnw(){
+  const d=wrcData().filter(a=>a.pnw);
+  const fSz=wrcData().length;
+  function card(a){
+    const evs=[{l:'Super-G',k:'sg',tK:'sgT',pK:'sgP'},{l:'GS',k:'gs',tK:'gsT',pK:'gsP'},{l:'Slalom',k:'sl',tK:'slT',pK:'slP'}];
+    const done=evs.filter(e=>a[e.k]!=null);
+    const eCards=evs.map(e=>`<div class="wrc-ev ${a.pnw?'pnw-ev':''}"><div class="wrc-evl">${e.l}</div>${a[e.k]!=null?`<div class="wrc-evr">${a[e.k]}<span style="font-size:11px;font-weight:400;color:var(--text2)">/${fSz}</span></div><div class="wrc-evt">${a[e.tK]||''}</div>`:'<div class="wrc-evr" style="color:var(--text3)">DNS</div>'}</div>`).join('');
+    const u14Match=wrcGender==='M'?WRC_PNW_M.includes(`${a.n.split(' ').slice(-1)[0]}, ${a.n.split(' ').slice(0,-1).join(' ')}`):true;
+    return`<div class="wrc-card pnw">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:.02em;text-transform:uppercase">${a.n} <span class="div-badge div-P">P</span></div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">${a.club} · Born ${a.y} · ${done.length} of 3 events</div>
+        </div>
+        <div style="text-align:right"><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--blue)">${a.tot}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'Barlow Condensed',sans-serif;font-weight:700">WC pts</div></div>
+      </div>
+      <div class="wrc-event-row">${eCards}</div>
+    </div>`;
+  }
+  document.getElementById('wrc-pnw').innerHTML=`
+<h2>PNW Division Athletes — ${wrcGender==='W'?'Women':'Men'}</h2>
+<p class="sub">Pacific NW (P division) qualifiers at the U14 Western Regional Championship. These athletes qualified through the PNW circuit to represent the region.</p>
+<div class="ban ban-b"><div class="bt">About the P Division</div><div class="bd">The P (Pacific NW) division sends its top U14 athletes to the Western Regionals to compete against divisions from Alaska (A), Far West (F), Intermountain (I), Northern (N) and others. The division code determines the WC points earned based on place within division.</div></div>
+${d.map(card).join('')}`;
+}
+
+function renderWRCDiv(){
+  const d=wrcData();
+  const divs=[...new Set(d.map(a=>a.div))].sort();
+  const rows=divs.map(div=>{
+    const aths=d.filter(a=>a.div===div);
+    const best_sg=aths.filter(a=>a.sg).sort((a,b)=>a.sg-b.sg)[0];
+    const best_gs=aths.filter(a=>a.gs).sort((a,b)=>a.gs-b.gs)[0];
+    const best_sl=aths.filter(a=>a.sl).sort((a,b)=>a.sl-b.sl)[0];
+    const topPts=aths.reduce((s,a)=>s+(a.tot||0),0);
+    return`<div class="cr-row ${div==='P'?'cr-row spac-cr':''}">
+      <div class="crk">${aths.length}</div>
+      <div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;margin-right:8px" class="div-badge div-${div}">${div}</div>
+      <div style="flex:1"><div class="crnm">${DIV_NAMES[div]||div}</div><div class="crsb">${aths.length} athletes</div></div>
+      <div class="crevc"><div class="crev">${best_sg?best_sg.sg:'—'}</div><div class="crel">Best SG</div></div>
+      <div class="crevc"><div class="crev">${best_gs?best_gs.gs:'—'}</div><div class="crel">Best GS</div></div>
+      <div class="crevc"><div class="crev">${best_sl?best_sl.sl:'—'}</div><div class="crel">Best SL</div></div>
+      <div class="crpc"><div class="crpv">${topPts}</div><div class="crpl">Total pts</div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('wrc-div').innerHTML=`<h2>Division Breakdown — ${wrcGender==='W'?'Women':'Men'}</h2>
+<p class="sub">Each division's best placements and total WC points earned.</p>
+<div style="border:1px solid var(--border)">${rows}</div>`;
+}
+
+function renderWRCSPAC(){
+  // SPAC athletes at WRC — cross ref with U14 data
+  const pnwAths=wrcData().filter(a=>a.pnw);
+  // Find which ones are in U14 data (already know them from PNW clubs)
+  const u14Data=U14.filter(a=>a.g===wrcGender);
+  
+  // Build cards for each PNW athlete, noting their U14 standing
+  const fSz=wrcData().length;
+  const cards=pnwAths.map(a=>{
+    // Try to find in U14 by last/first name match
+    const parts=a.n.split(' ');
+    const lastName=parts[parts.length-1];
+    const firstName=parts.slice(0,-1).join(' ');
+    const u14Fmt=`${lastName}, ${firstName}`;
+    const u14Match=u14Data.find(x=>x.n===u14Fmt||x.n.toLowerCase()===u14Fmt.toLowerCase());
+    const u14Info=u14Match?`<div style="margin-top:8px;padding:8px;background:var(--surface2);border-left:2px solid var(--blue);font-size:12px"><b style="color:var(--blue)">PNW U14 Standing:</b> ${u14Match.r||'—'} · ${u14Match.t} pts · ${u14Match.c}</div>`:'';
+    const evs=[{l:'SG',k:'sg',tK:'sgT'},{l:'GS',k:'gs',tK:'gsT'},{l:'SL',k:'sl',tK:'slT'}];
+    const eCards=evs.map(e=>`<div class="acev"><div class="acevl">${e.l}</div>${a[e.k]?`<div class="acevr">${a[e.k]}<span style="font-size:11px;font-weight:400;color:var(--text2)">/${fSz}</span></div><div class="acevt">${a[e.tK]||''}</div>`:'<div class="acevr" style="color:var(--text3)">DNS</div>'}</div>`).join('');
+    const standout=a.tot>=50?'<span class="wrc-badge">★ Standout</span>':a.tot>=20?'<span class="wrc-badge">Competed</span>':'<span class="wrc-badge">Qualified</span>';
+    return`<div class="wrc-card pnw"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+      <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;text-transform:uppercase">${a.n}${standout}</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:2px">${a.club} · Born ${a.y} · PNW Division</div></div>
+      <div style="text-align:right"><div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;color:#b45309">${a.tot}</div><div style="font-size:10px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.06em">WC pts</div></div>
+    </div><div class="acev-row">${eCards}</div>${u14Info}</div>`;
+  }).join('');
+
+  const totalPts=pnwAths.reduce((s,a)=>s+(a.tot||0),0);
+  const pnwRank=pnwAths.filter(a=>a.sg||a.gs||a.sl).length;
+  document.getElementById('wrc-spac').innerHTML=`
+<h2>PNW Athletes at WRC — ${wrcGender==='W'?'Women':'Men'}</h2>
+<p class="sub">Pacific NW qualifiers who earned their spot through the PNW U14 season and competed against the full Western US field.</p>
+<div class="mg mg-3" style="margin-bottom:12px">
+  <div class="m"><div class="l">PNW athletes</div><div class="v">${pnwAths.length}</div></div>
+  <div class="m"><div class="l">Total WC pts</div><div class="v" style="color:#b45309">${totalPts}</div></div>
+  <div class="m"><div class="l">Field size</div><div class="v">${fSz}</div></div>
+</div>
+<div class="ban ban-a"><div class="bt">Qualifying to WRC</div><div class="bd">Only the top 14 women and top 12 men from the PNW U14 season earned a spot at the Western Regional Championship. These athletes competed against the best U14 skiers from 8 western divisions.</div></div>
+${cards||'<div class="empty">No PNW athletes in this gender</div>'}`;
+}
+
 // ══ INIT ══
 updateSnote();populateClubs();populateAthletes();
 </script>
+</div>
 </body>
 </html>
