@@ -558,11 +558,13 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
       <button class="tb" onclick="showWRCTab('wrc-pnw')">PNW Standouts</button>
       <button class="tb" onclick="showWRCTab('wrc-spac')">SPAC Athletes</button>
       <button class="tb" onclick="showWRCTab('wrc-div')">By Division</button>
+<button class="tb" onclick="showWRCTab('wrc-up')">→ Moving to U16</button>
     </div>
     <div class="pnl on" id="wrc-rs"></div>
     <div class="pnl" id="wrc-pnw"></div>
     <div class="pnl" id="wrc-spac"></div>
     <div class="pnl" id="wrc-div"></div>
+<div class="pnl" id="wrc-up"></div>
   </div>
 </div>
 
@@ -1229,8 +1231,8 @@ let wrcGender='W';
 function setWRCG(g){wrcGender=g;document.querySelectorAll('#wrc-gseg button').forEach((b,i)=>b.className=['W','M'][i]===g?'on':'');renderWRC();}
 function wrcData(){return wrcGender==='W'?WRC_W:WRC_M;}
 function populateWRCDivs(){const s=document.getElementById('wrc-div');const divs=[...new Set(wrcData().map(a=>a.div))].sort();s.innerHTML='<option value="">All divisions</option>'+divs.map(d=>`<option value="${d}">${d}</option>`).join('');}
-function showWRCTab(id){const ids=['wrc-rs','wrc-pnw','wrc-spac','wrc-div'];document.querySelectorAll('#reg-u14-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#reg-u14-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));({['wrc-rs']:renderWRCRs,['wrc-pnw']:renderWRCPnw,['wrc-div']:renderWRCDiv,['wrc-spac']:renderWRCSPAC})[id]();}
-function renderWRC(){const tabs=['wrc-rs','wrc-pnw','wrc-div','wrc-spac'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'wrc-rs';({['wrc-rs']:renderWRCRs,['wrc-pnw']:renderWRCPnw,['wrc-div']:renderWRCDiv,['wrc-spac']:renderWRCSPAC})[id]();}
+function showWRCTab(id){const ids=['wrc-rs','wrc-pnw','wrc-spac','wrc-div','wrc-up'];document.querySelectorAll('#reg-u14-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#reg-u14-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));({['wrc-rs']:renderWRCRs,['wrc-pnw']:renderWRCPnw,['wrc-div']:renderWRCDiv,['wrc-spac']:renderWRCSPAC,['wrc-up']:renderWRCMovingUp})[id]();}
+function renderWRC(){const tabs=['wrc-rs','wrc-pnw','wrc-spac','wrc-div','wrc-up'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'wrc-rs';({['wrc-rs']:renderWRCRs,['wrc-pnw']:renderWRCPnw,['wrc-div']:renderWRCDiv,['wrc-spac']:renderWRCSPAC,['wrc-up']:renderWRCMovingUp})[id]();}
 function avgWRC(a){const r=[a.sg,a.gs,a.sl].filter(v=>v!=null);return r.length?r.reduce((s,v)=>s+v,0)/r.length:999;}
 const DIV_NAMES={A:'Alaska',F:'Far West',I:'Intermountain',N:'Northern',P:'Pacific NW',X:'Other',R:'Rocky Mtn',E:'Eastern'};
 
@@ -1368,7 +1370,98 @@ function renderWRCSPAC(){
 ${cards||'<div class="empty">No PNW athletes in this gender</div>'}`;
 }
 
-// ══ INIT ══
+
+// ══ WRC: MOVING TO U16 ══
+function renderWRCMovingUp(){
+  // Only born-2012 athletes move to U16 next season
+  const wData=wrcGender==='W'?WRC_W:WRC_M;
+  const movingUp=wData.filter(a=>a.pnw&&a.y===2012).sort((a,b)=>avgWRC(a)-avgWRC(b));
+  const totalField=wData.length;
+
+  // Current U16 field for comparison
+  const u16Field=U16.filter(x=>x.g===wrcGender);
+  const u16GS=u16Field.map(x=>x.gs).filter(v=>v>0).sort((a,b)=>b-a);
+  const u16SL=u16Field.map(x=>x.sl).filter(v=>v>0).sort((a,b)=>b-a);
+  const u16SG=u16Field.map(x=>x.sg).filter(v=>v>0).sort((a,b)=>b-a);
+
+  // WRC discipline results for returning U14s let us estimate U16 entry competitiveness
+  // WRC field size gives us percentile; project to U16 depth
+  // Simple approach: top-10 at WRC (out of ~60) = strong U16 entry; top-20 = solid; etc.
+  function u16Projection(wrcFinish, fieldSize){
+    if(!wrcFinish) return null;
+    const pct=wrcFinish/fieldSize;
+    if(pct<=0.10)return{label:'Top-tier entry',color:'var(--green)',detail:'Top 10% nationally — immediate U16 impact likely'};
+    if(pct<=0.20)return{label:'Strong entry',color:'#2e7d52',detail:'Top 20% nationally — should score U16 points year one'};
+    if(pct<=0.35)return{label:'Solid entry',color:'var(--blue)',detail:'Top 35% nationally — competitive first-year U16'};
+    if(pct<=0.55)return{label:'Developing entry',color:'var(--amber)',detail:'Midfield nationally — growth expected through U16'};
+    return{label:'Building entry',color:'var(--text3)',detail:'Room to grow — second U16 year often shows big improvement'};
+  }
+
+  // Also find their U14 data
+  const u14Lookup={};
+  function calcU14Sc2(a){const c=CFG.u14;const ev=a.runs||[];const r=ev.map(e=>e&&e[1]||0);const sc=idx=>{const pts=idx.map(i=>r[i]||0);return pts.sort((a,b)=>b-a).slice(0,2).reduce((s,v)=>s+v,0);};const gs=sc(c.discIdx.GS),sl=sc(c.discIdx.SL),sg=sc(c.discIdx.SG);return{gs,sl,sg,total:gs+sl+sg};}
+  U14.forEach(a=>{
+    const sc=calcU14Sc2(a);
+    const field=U14.filter(x=>x.g===a.g).map(x=>({...x,tot:calcU14Sc2(x).total})).sort((x,y)=>y.tot-x.tot);
+    const rank=field.findIndex(x=>x.n===a.n)+1;
+    u14Lookup[a.n.toLowerCase().split(',')[0].trim()]={rank,total:sc.total,gs:sc.gs,sl:sc.sl,sg:sc.sg,r:a.r,name:a.n};
+  });
+
+  const cards=movingUp.map(a=>{
+    const lastName=a.n.split(',')[0].toLowerCase().trim();
+    const u14=Object.entries(u14Lookup).find(([k])=>k===lastName);
+    const u14d=u14?u14[1]:null;
+    const sgProj=u16Projection(a.sg,totalField);
+    const gsProj=u16Projection(a.gs,totalField);
+    const slProj=u16Projection(a.sl,totalField);
+    const isSPAC=a.spac;
+
+    const bestDisc=[
+      a.sg!=null?{d:'SG',fin:a.sg,proj:sgProj}:null,
+      a.gs!=null?{d:'GS',fin:a.gs,proj:gsProj}:null,
+      a.sl!=null?{d:'SL',fin:a.sl,proj:slProj}:null,
+    ].filter(Boolean).sort((x,y)=>x.fin-y.fin);
+
+    const overallProj=bestDisc.length?u16Projection(bestDisc[0].fin,totalField):null;
+
+    const discRows=bestDisc.map(({d,fin,proj})=>`
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border2)">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;width:26px;color:var(--text2)">${d}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:42px">#${fin}<span style="font-size:10px;color:var(--text3)">/${totalField}</span></span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:${proj?proj.color:'var(--text3)'};text-transform:uppercase;letter-spacing:.04em;flex:1">${proj?proj.label:'—'}</span>
+        <span style="font-size:11px;color:var(--text2)">${proj?proj.detail:''}</span>
+      </div>`).join('');
+
+    const u14Summary=u14d?`<div style="font-size:11px;color:var(--text2);margin-top:4px">U14 2025–26: <b>#${u14d.rank}</b> in PNW · ${u14d.total} pts · ${u14d.r||'developmental'}</div>`:'';
+
+    return`<div style="background:${isSPAC?'var(--blue-dim)':'var(--surface)'};border:1px solid var(--border);border-left:3px solid ${overallProj?overallProj.color:'var(--border)'};padding:14px;margin-bottom:10px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.02em;text-transform:uppercase">${a.n}${isSPAC?'<span class="wrc-badge" style="margin-left:6px">SPAC</span>':''}</div>
+          <div style="font-size:12px;color:var(--text2)">Born ${a.y} · Entering U16 in 2026–27 · WRC avg: <b>${avgWRC(a)<999?avgWRC(a).toFixed(1):'—'}</b>/${totalField}</div>
+          ${u14Summary}
+        </div>
+        ${overallProj?`<div style="text-align:right;flex-shrink:0;margin-left:12px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:${overallProj.color};text-transform:uppercase;letter-spacing:.04em">${overallProj.label}</div><div style="font-size:10px;color:var(--text3)">U16 outlook</div></div>`:''}
+      </div>
+      <div style="margin-top:6px">${discRows||'<div style="font-size:12px;color:var(--text3)">DNS — no WRC results</div>'}</div>
+    </div>`;
+  }).join('');
+
+  const topTier=movingUp.filter(a=>avgWRC(a)<totalField*0.20).length;
+
+  document.getElementById('wrc-up').innerHTML=`
+<h2>Moving to U16 — ${wrcGender==='W'?'Women':'Men'}</h2>
+<p class="sub">Born-2012 PNW athletes who competed at WRC and enter U16 in 2026–27. WRC finishes used to project U16 entry competitiveness.</p>
+<div class="mg mg-3" style="margin-bottom:14px">
+  <div class="m"><div class="l">Entering U16</div><div class="v">${movingUp.length}</div></div>
+  <div class="m"><div class="l">Top-tier entry</div><div class="v" style="color:var(--green)">${topTier}</div></div>
+  <div class="m"><div class="l">Field size at WRC</div><div class="v">${totalField}</div></div>
+</div>
+<div class="ban ban-g"><div class="bt">How projections work</div><div class="bd">WRC draws athletes from 6 divisions across the Western US — a larger, more competitive field than PNW-only U16 races. A top-10 finish at WRC out of ${totalField} athletes is a strong signal of U16 readiness. Projections are based on WRC percentile finish, not a prediction of final U16 standing.</div></div>
+${cards||'<div class="empty">No born-2012 PNW athletes in this gender at WRC.</div>'}`;
+}
+
+
 updateSnote();populateClubs();populateAthletes();
 </script>
 </div>
