@@ -32,7 +32,7 @@
 body{font-family:'Barlow',system-ui,sans-serif;font-size:14px;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:40px}
 
 /* ── HEADER ── */
-.app-header{background:#0d1733;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;margin-bottom:20px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(41,121,255,.15)}
+.app-header{background:#0d1733;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;margin-bottom:16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(41,121,255,.15)}
 .app-logo{display:flex;align-items:center;gap:12px}
 .app-logo-icon{width:32px;height:32px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:15px;clip-path:polygon(0 0,100% 0,100% 75%,88% 100%,0 100%)}
 .app-logo-text{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:.04em;text-transform:uppercase}
@@ -345,6 +345,18 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
 .wrc-ev.pnw-ev .wrc-evl{color:var(--blue)}
 .wrc-evr{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800}
 .wrc-evt{font-size:11px;color:var(--text2);margin-top:1px;font-family:'DM Mono',monospace}
+
+/* ── SEARCH HEADER ── */
+/* Search styles now inline *
+.sr-section{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:8px 14px 4px;background:var(--surface2);border-bottom:1px solid var(--border2)}
+.sr-row{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;border-bottom:1px solid var(--border2);transition:background .08s}
+.sr-row:hover{background:var(--surface2)}
+.sr-row:last-child{border:none}
+.sr-av{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;flex-shrink:0;clip-path:polygon(0 0,100% 0,100% 80%,80% 100%,0 100%)}
+.sr-name{font-size:13px;font-weight:600;flex:1}
+.sr-meta{font-size:11px;color:var(--text2)}
+.sr-badge{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:2px 7px;text-transform:uppercase;letter-spacing:.04em}
+.sr-no{padding:16px 14px;font-size:13px;color:var(--text3);text-align:center}
 </style>
 </head>
 <body>
@@ -356,9 +368,18 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
       <div class="app-logo-sub">Pacific Northwest · 2025–26 Season</div>
     </div>
   </div>
-  <span class="app-badge">SPAC · U14 · U16</span>
+  <span class="app-badge" style="display:none">SPAC · U14 · U16</span>
 </header>
+
 <div class="wrap">
+<!-- SEARCH -->
+<div id="search-bar" style="position:relative;margin-bottom:12px">
+  <input id="search-input" type="text" placeholder="⌕  Search athlete or club..."
+    autocomplete="off"
+    style="width:100%;padding:10px 16px;font-family:'Barlow',sans-serif;font-size:14px;font-weight:500;background:#ffffff;border:2px solid var(--blue);color:#0d1117;outline:none;letter-spacing:.01em;box-shadow:0 2px 8px rgba(33,85,212,.15)">
+  <button id="search-clear" onclick="clearSearch()" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);padding:4px 8px;font-weight:700">✕</button>
+  <div id="search-results" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--surface);border:2px solid var(--blue);border-top:none;max-height:420px;overflow-y:auto;z-index:500;box-shadow:0 8px 24px rgba(0,0,0,.15)"></div>
+</div>
 <!-- MASTER CONTROL -->
 <div class="ctrl">
   <span style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.05em">View</span>
@@ -367,6 +388,7 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
     <button onclick="setAG('u16')">U16</button>
     <button onclick="setAG('bw')">🏆 Buddy Werner</button>
     <button onclick="setAG('reg')">🏔 Regionals</button>
+    <button onclick="setAG('predict')">📈 Predictor</button>
   </div>
   <div id="season-ctrl" style="display:flex;align-items:center;gap:8px">
     <div class="seg" id="sseg">
@@ -379,6 +401,7 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
 </div>
 
 <!-- MODE ROW (U14 / U16) -->
+
 <div id="mode-row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
   <div class="seg" id="mode-seg">
     <button class="on" onclick="setMode('athlete')">Athletes</button>
@@ -396,15 +419,24 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
 
 <!-- BW MODE ROW -->
 <div id="bw-mode-row" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px">
+  <div class="seg" id="bw-year-seg">
+    <button class="on-a" onclick="setBWYear(2025)">2025 — Lookout Pass</button>
+    <button onclick="setBWYear(2026)">2026 — Mt. Bachelor</button>
+  </div>
   <div class="seg" id="bw-gseg">
     <button class="on" onclick="setBWG('M')">Men</button>
     <button onclick="setBWG('W')">Women</button>
   </div>
+  <div class="seg" id="bw-class-seg" style="display:none">
+    <button class="on-a" onclick="setBWClass('all')">All</button>
+    <button onclick="setBWClass('2nd')">2nd Yr (2014 → U14)</button>
+    <button onclick="setBWClass('1st')">1st Yr (2015 compare)</button>
+  </div>
   <select id="bw-csel" onchange="renderBW()"></select>
   <select id="bw-cosel" onchange="renderBW()">
     <option value="">All athletes</option>
-    <option value="13">Born 2013 → U14 now</option>
-    <option value="14">Born 2014 → U14 2026-27</option>
+    <option value="13">Born 2013</option>
+    <option value="14">Born 2014</option>
   </select>
 </div>
 
@@ -499,7 +531,7 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
     <div class="bw-i">🏔</div>
     <div>
       <div class="bw-t">PNW Buddy Werner Championships</div>
-      <div class="bw-s">Lookout Pass · March 28–30, 2025 · Ultimate U12 season finale</div>
+      <div class="bw-s" id="bw-hdr-sub">Lookout Pass · March 28–30, 2025 · Ultimate U12 season finale</div>
       <div class="bw-bg"><span class="bw-b">Giant Slalom</span><span class="bw-b">Slalom</span><span class="bw-b">Skills Quest</span><span class="bw-b">Born 2013 & 2014</span></div>
     </div>
   </div>
@@ -569,6 +601,33 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
 </div>
 
 <!-- WRC content is now inside reg-u14-area above -->
+<!-- PREDICTOR AREA -->
+<div id="predict-area" style="display:none">
+  <div class="reg-hdr" style="background:linear-gradient(135deg,#f0f9f4,#dcfce7);border-color:#86efac;border-left-color:var(--green)">
+    <div class="reg-i" style="background:#bbf7d0;border-color:#86efac;font-size:22px">📈</div>
+    <div>
+      <div class="reg-t" style="color:var(--green)">2026–27 Season Predictor</div>
+      <div class="reg-s" style="color:#16a34a">Projected top 25 based on current results, WRC performance & historical progression</div>
+      <div class="reg-bg">
+        <span class="reg-b" style="background:#bbf7d0;color:#14532d;border-color:#86efac">U14 Projection</span>
+        <span class="reg-b" style="background:#bbf7d0;color:#14532d;border-color:#86efac">U16 Projection</span>
+        <span class="reg-b" style="background:#bbf7d0;color:#14532d;border-color:#86efac">Returning + Incoming</span>
+      </div>
+    </div>
+  </div>
+  <div id="predict-mode-row" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <div class="seg" id="predict-ag-seg">
+      <button class="on" onclick="setPredictAG('u14')">U14 2026–27</button>
+      <button onclick="setPredictAG('u16')">U16 2026–27</button>
+    </div>
+    <div class="seg" id="predict-gseg">
+      <button class="on" onclick="setPredictG('W')">Women</button>
+      <button onclick="setPredictG('M')">Men</button>
+    </div>
+  </div>
+  <div id="predict-content"></div>
+</div>
+
 <div id="empty-state" class="empty">Select a club and athlete above to explore their profile.</div>
 
 <script>
@@ -750,6 +809,108 @@ const U16=[{"n":"Pelland, Harper","c":"CMAC","g":"W","y":2010,"r":"1","t":820,"s
 
 const BW25_M=[{n:"Olson, Gavin",c:"SPAC",by:13,sq:1,sqSc:30.25,gs:1,sl:2},{n:"Guldi, Graham",c:"SPAC",by:13,sq:16,sqSc:27.0,gs:16,sl:21},{n:"Colombo, Dylan",c:"SPAC",by:13,sq:27,sqSc:25.5,gs:28,sl:null},{n:"Buyukcetin, Luca",c:"SPAC",by:14,sq:58,sqSc:21.75,gs:36,sl:7},{n:"Smith, Rafael",c:"SPAC",by:14,sq:76,sqSc:20.0,gs:56,sl:62},{n:"Stewart, Coen",c:"SPAC",by:14,sq:77,sqSc:20.0,gs:null,sl:40},{n:"Stephenson, Carter",c:"SPAC",by:14,sq:99,sqSc:16.5,gs:82,sl:91},{n:"Bouffard, Auguste",c:"CMAC",by:13,sq:33,sqSc:24.0,gs:2,sl:1},{n:"Dix, Wyatt",c:"SARS",by:13,sq:36,sqSc:23.75,gs:4,sl:20},{n:"Kelly, Leo",c:"MRT",by:13,sq:39,sqSc:23.5,gs:8,sl:null},{n:"Hone, Ethan",c:"TAS",by:13,sq:42,sqSc:23.5,gs:11,sl:17},{n:"Bonura, Nico",c:"MRT",by:13,sq:75,sqSc:20.0,gs:6,sl:3},{n:"Ambauen, Brig",c:"SARS",by:13,sq:54,sqSc:22.25,gs:10,sl:4},{n:"Hatfield, Luke",c:"MRST",by:13,sq:8,sqSc:28.0,gs:26,sl:22},{n:"Jones, Tennyson",c:"MBSEF",by:13,sq:7,sqSc:28.0,gs:12,sl:null},{n:"Schneider, Carter",c:"MSSRT",by:13,sq:47,sqSc:23.0,gs:5,sl:25},{n:"Ithomitis, Logan",c:"MSSRT",by:13,sq:49,sqSc:22.75,gs:22,sl:8},{n:"Jarrett, Gage",c:"MRST",by:13,sq:34,sqSc:24.0,gs:31,sl:18},{n:"Lull, August",c:"MBSEF",by:13,sq:60,sqSc:21.5,gs:15,sl:14},{n:"Conta, Maceo",c:"CMAC",by:13,sq:2,sqSc:29.5,gs:20,sl:12},{n:"McCallum, Ian",c:"SARS",by:13,sq:22,sqSc:25.75,gs:34,sl:28}];
 const BW25_W=[{n:"Bertell, Kaeli",c:"TARP",by:13,sq:1,sqSc:33.0,gs:1,sl:1},{n:"Ozegovic, Amina",c:"SPAC",by:13,sq:9,sqSc:28.25,gs:6,sl:5},{n:"Entrop, Sloane",c:"SPAC",by:13,sq:10,sqSc:27.875,gs:11,sl:14},{n:"Pettersen, Kenzie",c:"SPAC",by:13,sq:14,sqSc:27.25,gs:50,sl:25},{n:"Underwood, Emeline",c:"SPAC",by:13,sq:17,sqSc:26.875,gs:15,sl:24},{n:"Underwood, Nora",c:"SPAC",by:13,sq:49,sqSc:23.125,gs:47,sl:36},{n:"Chang, Harper",c:"SPAC",by:14,sq:33,sqSc:25.0,gs:24,sl:32},{n:"Brindza, Liesel",c:"SPAC",by:14,sq:70,sqSc:21.375,gs:86,sl:72},{n:"Stephenson, Addie",c:"SPAC",by:14,sq:73,sqSc:21.125,gs:83,sl:83},{n:"Johnson, Roslyn",c:"SPAC",by:14,sq:98,sqSc:16.5,gs:95,sl:85},{n:"Hoffman, Scarlet",c:"CSAT",by:13,sq:5,sqSc:30.75,gs:10,sl:8},{n:"Baroni, Jenna",c:"SARS",by:13,sq:8,sqSc:28.875,gs:4,sl:null},{n:"Webb, Sutton",c:"SARS",by:13,sq:44,sqSc:23.625,gs:2,sl:null},{n:"Gidley, Elsa",c:"SARS",by:13,sq:23,sqSc:25.75,gs:8,sl:13},{n:"Garren, Cailtyn",c:"MBSEF",by:13,sq:11,sqSc:27.75,gs:13,sl:10},{n:"Siebens, Aili",c:"MRST",by:13,sq:39,sqSc:24.375,gs:12,sl:4},{n:"Gaffney, Emery",c:"CMAC",by:13,sq:71,sqSc:21.375,gs:3,sl:3},{n:"Purchase, Florence",c:"CMAC",by:13,sq:7,sqSc:29.625,gs:25,sl:9},{n:"Graham, Brooke",c:"CMAC",by:13,sq:12,sqSc:27.625,gs:null,sl:20},{n:"Duff, Claire",c:"SARS",by:13,sq:28,sqSc:25.25,gs:null,sl:26},{n:"Tarnow, Maerin",c:"MBSEF",by:13,sq:19,sqSc:26.5,gs:null,sl:17},{n:"Hopkins, Lena",c:"WPSC",by:13,sq:2,sqSc:31.25,gs:9,sl:7},{n:"Rauber, Isabel",c:"MBSEF",by:13,sq:37,sqSc:24.5,gs:16,sl:26},{n:"Beyreuther, Hadley",c:"SARS",by:13,sq:77,sqSc:20.125,gs:27,sl:15},{n:"Tennyson, Charlotte",c:"BART",by:13,sq:36,sqSc:24.5,gs:14,sl:11},{n:"Sullivan, Eiden",c:"TARP",by:13,sq:35,sqSc:24.625,gs:32,sl:12},{n:"Brown, Lily",c:"LPRT",by:14,sq:53,sqSc:22.75,gs:7,sl:null}];
+
+// ══ BW 2026 DATA (Mount Bachelor · March 28-30, 2026) — COMING SOON ══
+const BW26_M=[];  // To be populated after the event
+const BW26_W=[
+  {n:"Olsson, Pep",c:"CSAT",by:2014,gsOv:1,gs:1,gsT:"1:23.33",sl:null,slT:""},
+  {n:"Brown, Lily",c:"LPRT",by:2014,gsOv:2,gs:2,gsT:"1:24.50",sl:null,slT:""},
+  {n:"Samuelson, Catherine",c:"LPRT",by:2014,gsOv:3,gs:3,gsT:"1:25.59",sl:null,slT:""},
+  {n:"Dix, Aubrey",c:"SARS",by:2014,gsOv:4,gs:4,gsT:"1:25.75",sl:null,slT:""},
+  {n:"Simon, Sierra",c:"SPAC",by:2015,gsOv:5,gs:1,gsT:"1:27.86",sl:null,slT:""},
+  {n:"Chang, Harper",c:"SPAC",by:2014,gsOv:6,gs:5,gsT:"1:28.39",sl:null,slT:""},
+  {n:"Barshis, Penelope",c:"CMAC",by:2015,gsOv:7,gs:2,gsT:"1:28.45",sl:null,slT:""},
+  {n:"Spitz, Chloe",c:"CMAC",by:2014,gsOv:8,gs:6,gsT:"1:29.18",sl:null,slT:""},
+  {n:"McCarry, Quinn",c:"CMAC",by:2014,gsOv:9,gs:7,gsT:"1:29.25",sl:null,slT:""},
+  {n:"Wang, Catherine",c:"CMAC",by:2014,gsOv:10,gs:8,gsT:"1:29.89",sl:null,slT:""},
+  {n:"Fong, Penelope",c:"MHSEF",by:2014,gsOv:11,gs:9,gsT:"1:30.09",sl:null,slT:""},
+  {n:"Tamfer, Charlotte",c:"CSAT",by:2015,gsOv:12,gs:3,gsT:"1:30.99",sl:null,slT:""},
+  {n:"Severn, Rhetta",c:"WPSC",by:2014,gsOv:13,gs:10,gsT:"1:31.10",sl:null,slT:""},
+  {n:"Zhou, Evelyn",c:"CMAC",by:2015,gsOv:14,gs:4,gsT:"1:32.42",sl:null,slT:""},
+  {n:"Conley, Addison",c:"LPRT",by:2015,gsOv:15,gs:5,gsT:"1:32.64",sl:null,slT:""},
+  {n:"Maier, Lena",c:"MRST",by:2014,gsOv:15,gs:11,gsT:"1:32.64",sl:null,slT:""},
+  {n:"Durrell, Esther",c:"MBSEF",by:2014,gsOv:17,gs:12,gsT:"1:32.77",sl:null,slT:""},
+  {n:"Offenbecher, Ava",c:"CMAC",by:2015,gsOv:18,gs:6,gsT:"1:32.97",sl:null,slT:""},
+  {n:"Kunkler, Georgia",c:"CSAT",by:2014,gsOv:19,gs:13,gsT:"1:33.10",sl:null,slT:""},
+  {n:"Craveiro, Stella",c:"MBSEF",by:2014,gsOv:20,gs:14,gsT:"1:33.13",sl:null,slT:""},
+  {n:"Hughes, Helena",c:"SARS",by:2014,gsOv:21,gs:15,gsT:"1:33.21",sl:null,slT:""},
+  {n:"Xia, Evelyn",c:"CMAC",by:2015,gsOv:22,gs:7,gsT:"1:33.54",sl:null,slT:""},
+  {n:"Mitchell, Margot",c:"SARS",by:2014,gsOv:23,gs:16,gsT:"1:33.78",sl:null,slT:""},
+  {n:"Scherr, Sissy Ever",c:"SARS",by:2015,gsOv:24,gs:8,gsT:"1:33.95",sl:null,slT:""},
+  {n:"Zhang, Genevra",c:"TAS",by:2014,gsOv:25,gs:17,gsT:"1:34.40",sl:null,slT:""},
+  {n:"Ozegovic, Leila",c:"SPAC",by:2015,gsOv:26,gs:9,gsT:"1:34.63",sl:null,slT:""},
+  {n:"Dobson - Cudahy, Madeleine",c:"CSAT",by:2014,gsOv:27,gs:18,gsT:"1:34.95",sl:null,slT:""},
+  {n:"Kunimoto, Paulina",c:"TAS",by:2014,gsOv:28,gs:19,gsT:"1:35.39",sl:null,slT:""},
+  {n:"Hunter, Emilia",c:"MBSEF",by:2014,gsOv:29,gs:20,gsT:"1:35.53",sl:null,slT:""},
+  {n:"Elling, Svea",c:"WPSC",by:2014,gsOv:30,gs:21,gsT:"1:35.98",sl:null,slT:""},
+  {n:"Prentice, Alessandra",c:"MHSEF",by:2015,gsOv:31,gs:10,gsT:"1:36.76",sl:null,slT:""},
+  {n:"Graeper, May",c:"CSAT",by:2014,gsOv:32,gs:22,gsT:"1:36.92",sl:null,slT:""},
+  {n:"Weber, Ella",c:"SPARC",by:2014,gsOv:33,gs:23,gsT:"1:38.19",sl:null,slT:""},
+  {n:"Schneider, Nora",c:"MSSRT",by:2015,gsOv:34,gs:11,gsT:"1:38.45",sl:null,slT:""},
+  {n:"Duhen, Sophie",c:"MHSEF",by:2015,gsOv:35,gs:12,gsT:"1:38.81",sl:null,slT:""},
+  {n:"Scott, Josie",c:"MBSEF",by:2014,gsOv:36,gs:24,gsT:"1:39.49",sl:null,slT:""},
+  {n:"Brindza, Liesel",c:"SPAC",by:2014,gsOv:37,gs:25,gsT:"1:39.86",sl:null,slT:""},
+  {n:"Ingraham, Ashley",c:"MRST",by:2015,gsOv:37,gs:13,gsT:"1:39.86",sl:null,slT:""},
+  {n:"Norbe, Stevie",c:"WPSC",by:2015,gsOv:39,gs:14,gsT:"1:39.97",sl:null,slT:""},
+  {n:"Leonard, Annabelle",c:"SARS",by:2014,gsOv:40,gs:26,gsT:"1:40.10",sl:null,slT:""},
+  {n:"McFarland, Madeline",c:"SARS",by:2014,gsOv:41,gs:27,gsT:"1:40.13",sl:null,slT:""},
+  {n:"Saylor, Sloane",c:"MRT",by:2015,gsOv:42,gs:15,gsT:"1:40.38",sl:null,slT:""},
+  {n:"Leahy, Amelia",c:"SPARC",by:2014,gsOv:43,gs:28,gsT:"1:40.47",sl:null,slT:""},
+  {n:"Dolan, Maryn",c:"MHSEF",by:2014,gsOv:44,gs:29,gsT:"1:40.62",sl:null,slT:""},
+  {n:"Bordelon, Zoe",c:"MBSEF",by:2014,gsOv:45,gs:30,gsT:"1:40.75",sl:null,slT:""},
+  {n:"Taylor, Jane",c:"SARS",by:2015,gsOv:46,gs:16,gsT:"1:40.85",sl:null,slT:""},
+  {n:"Byrd, Hayden",c:"MBSEF",by:2015,gsOv:47,gs:17,gsT:"1:41.04",sl:null,slT:""},
+  {n:"Mitchell, Sophia",c:"WPSC",by:2015,gsOv:48,gs:18,gsT:"1:41.79",sl:null,slT:""},
+  {n:"Tate, Memphis",c:"SARS",by:2015,gsOv:49,gs:19,gsT:"1:41.82",sl:null,slT:""},
+  {n:"Pallot, Chloe",c:"CMAC",by:2014,gsOv:50,gs:31,gsT:"1:41.90",sl:null,slT:""},
+  {n:"Shoemaker, Emerson",c:"SARS",by:2014,gsOv:51,gs:32,gsT:"1:42.25",sl:null,slT:""},
+  {n:"Connolly, Rachel",c:"MBSEF",by:2014,gsOv:52,gs:33,gsT:"1:42.54",sl:null,slT:""},
+  {n:"Barron, Ayla",c:"SPAC",by:2014,gsOv:53,gs:34,gsT:"1:42.55",sl:null,slT:""},
+  {n:"Si, Wynne",c:"SPARC",by:2015,gsOv:54,gs:20,gsT:"1:43.04",sl:null,slT:""},
+  {n:"Harker, Sage",c:"BART",by:2015,gsOv:55,gs:21,gsT:"1:44.55",sl:null,slT:""},
+  {n:"Gruber, Genevieve",c:"MHSEF",by:2015,gsOv:56,gs:22,gsT:"1:45.29",sl:null,slT:""},
+  {n:"Ibarra, Alice",c:"MAC",by:2014,gsOv:57,gs:35,gsT:"1:45.45",sl:null,slT:""},
+  {n:"Kudriavtseff, Paige",c:"CMAC",by:2015,gsOv:58,gs:23,gsT:"1:46.10",sl:null,slT:""},
+  {n:"Smeby, Olive",c:"CSAT",by:2014,gsOv:59,gs:36,gsT:"1:46.50",sl:null,slT:""},
+  {n:"Thompson, Colbie",c:"SPARC",by:2014,gsOv:60,gs:37,gsT:"1:46.52",sl:null,slT:""},
+  {n:"Chartrey, Isla",c:"SARS",by:2015,gsOv:61,gs:24,gsT:"1:46.65",sl:null,slT:""},
+  {n:"Berg, Aspen",c:"SARS",by:2014,gsOv:62,gs:38,gsT:"1:46.89",sl:null,slT:""},
+  {n:"Miller, Esme",c:"MBSEF",by:2014,gsOv:63,gs:39,gsT:"1:47.68",sl:null,slT:""},
+  {n:"Herriott, Evie",c:"MBSEF",by:2015,gsOv:64,gs:25,gsT:"1:47.77",sl:null,slT:""},
+  {n:"Merritt, Ellen",c:"SPAC",by:2015,gsOv:65,gs:26,gsT:"1:47.88",sl:null,slT:""},
+  {n:"Vavrosky, Roslyn",c:"LPRT",by:2015,gsOv:66,gs:27,gsT:"1:48.00",sl:null,slT:""},
+  {n:"McCallum, Molly",c:"SARS",by:2014,gsOv:67,gs:40,gsT:"1:48.98",sl:null,slT:""},
+  {n:"Masingale, Harper",c:"MSSRT",by:2014,gsOv:68,gs:41,gsT:"1:50.00",sl:null,slT:""},
+  {n:"Gage, Lucy",c:"MBSEF",by:2014,gsOv:69,gs:42,gsT:"1:50.62",sl:null,slT:""},
+  {n:"Hurl, Marti",c:"MBSEF",by:2014,gsOv:70,gs:43,gsT:"1:50.84",sl:null,slT:""},
+  {n:"Hellem, Mackenzie",c:"WPSC",by:2015,gsOv:71,gs:28,gsT:"1:51.86",sl:null,slT:""},
+  {n:"Bettesworth, Ila",c:"SARS",by:2015,gsOv:72,gs:29,gsT:"1:51.87",sl:null,slT:""},
+  {n:"Lagreid, Caroline",c:"SARS",by:2014,gsOv:73,gs:44,gsT:"1:51.92",sl:null,slT:""},
+  {n:"Conti, Frances",c:"CSAT",by:2015,gsOv:74,gs:30,gsT:"1:52.16",sl:null,slT:""},
+  {n:"Duncan, Helle",c:"BART",by:2015,gsOv:75,gs:31,gsT:"1:52.52",sl:null,slT:""},
+  {n:"Berg, Lily",c:"MBSEF",by:2014,gsOv:76,gs:45,gsT:"1:52.53",sl:null,slT:""},
+  {n:"Inklab, Natania",c:"WPSC",by:2015,gsOv:77,gs:32,gsT:"1:52.75",sl:null,slT:""},
+  {n:"Buciarski, Maya",c:"HART",by:2014,gsOv:78,gs:46,gsT:"1:52.99",sl:null,slT:""},
+  {n:"Obermire, Madison",c:"HART",by:2014,gsOv:79,gs:47,gsT:"1:53.14",sl:null,slT:""},
+  {n:"Johnson, Roslyn",c:"SPAC",by:2014,gsOv:80,gs:48,gsT:"1:53.38",sl:null,slT:""},
+  {n:"Montgomery, Lillian",c:"INDY",by:2015,gsOv:81,gs:33,gsT:"1:53.48",sl:null,slT:""},
+  {n:"Rosen, Sloane",c:"TAS",by:2014,gsOv:82,gs:49,gsT:"1:53.73",sl:null,slT:""},
+  {n:"Kaplanyan, Diana",c:"SPARC",by:2014,gsOv:83,gs:50,gsT:"1:53.98",sl:null,slT:""},
+  {n:"Benc, Ellie",c:"SARS",by:2015,gsOv:84,gs:34,gsT:"1:54.03",sl:null,slT:""},
+  {n:"Likens, Araya",c:"HART",by:2014,gsOv:85,gs:51,gsT:"1:54.07",sl:null,slT:""},
+  {n:"Robbins, Sydney",c:"TAS",by:2014,gsOv:86,gs:52,gsT:"1:54.71",sl:null,slT:""},
+  {n:"Uchikawa, Evelyn",c:"MBSEF",by:2015,gsOv:87,gs:35,gsT:"1:54.86",sl:null,slT:""},
+  {n:"Schoening, Wesley",c:"SPAC",by:2015,gsOv:88,gs:36,gsT:"1:56.27",sl:null,slT:""},
+  {n:"Chheng-Mikula, Hawthorne",c:"TAS",by:2015,gsOv:89,gs:37,gsT:"1:58.39",sl:null,slT:""},
+  {n:"Slone, Claire",c:"SARS",by:2014,gsOv:90,gs:53,gsT:"1:58.84",sl:null,slT:""},
+  {n:"Ellers, Larkin",c:"MBSEF",by:2015,gsOv:91,gs:38,gsT:"1:59.31",sl:null,slT:""},
+  {n:"Cummins, Eva",c:"SARS",by:2014,gsOv:92,gs:54,gsT:"1:59.69",sl:null,slT:""},
+  {n:"Delpit, Lila",c:"MBSEF",by:2015,gsOv:93,gs:39,gsT:"2:01.35",sl:null,slT:""},
+  {n:"Collins, Claire",c:"MBSEF",by:2015,gsOv:94,gs:40,gsT:"2:03.78",sl:null,slT:""},
+  {n:"Kelly, Ann",c:"TAS",by:2014,gsOv:94,gs:55,gsT:"2:03.78",sl:null,slT:""},
+  {n:"Lieb, Helena",c:"MSSRT",by:2015,gsOv:96,gs:41,gsT:"2:05.84",sl:null,slT:""},
+  {n:"Traynor, Juliet",c:"MBSEF",by:2015,gsOv:97,gs:42,gsT:"2:20.91",sl:null,slT:""}
+];
 const BW_MAP={"olson, gavin":{r:"Alt 17",t:56,tr:"drop"},"guldi, graham":{r:"TAlt 42",t:1,tr:"drop"},"colombo, dylan":{r:"TAlt 33",t:12,tr:"drop"},"bouffard, auguste":{r:"Alt 12",t:87,tr:"rise"},"dix, wyatt":{r:"7",t:268,tr:"rise"},"bonura, nico":{r:"2",t:470,tr:"rise"},"ambauen, brig":{r:"Alt 2",t:166,tr:"rise"},"kelly, leo":{r:"12",t:180,tr:"rise"},"jones, tennyson":{r:"Talt 6",t:120,tr:"rise"},"hatfield, luke":{r:"Alt 8",t:114,tr:"rise"},"schneider, carter":{r:"Alt 24",t:32,tr:"drop"},"ithomitis, logan":{r:"Alt 14",t:62,tr:"rise"},"jarrett, gage":{r:"Talt 16",t:61,tr:"rise"},"lull, august":{r:"Alt 9",t:97,tr:"rise"},"conta, maceo":{r:"Alt 25",t:29,tr:"drop"},"bertell, kaeli":{r:"1",t:492,tr:"rise"},"ozegovic, amina":{r:"Alt 28",t:21,tr:"drop"},"entrop, sloane":{r:"Alt 20",t:37,tr:"drop"},"pettersen, kenzie":{r:"Alt 38",t:1,tr:"drop"},"hoffman, scarlet":{r:"Alt 1",t:148,tr:"rise"},"baroni, jenna":{r:"Alt 2",t:124,tr:"rise"},"webb, sutton":{r:"12",t:190,tr:"rise"},"gidley, elsa":{r:"Alt 4",t:115,tr:"rise"},"garren, cailtyn":{r:"Alt 5",t:109,tr:"rise"},"siebens, aili":{r:"Alt 26",t:25,tr:"drop"},"gaffney, emery":{r:"Alt 10",t:70,tr:"drop"},"purchase, florence":{r:"Alt 12",t:65,tr:"neutral"},"graham, brooke":{r:"Alt 14",t:55,tr:"neutral"},"duff, claire":{r:"Alt 16",t:50,tr:"drop"},"tarnow, maerin":{r:"Alt 9",t:76,tr:"rise"},"rauber, isabel":{r:"Alt 35",t:4,tr:"drop"},"beyreuther, hadley":{r:"Talt 24",t:28,tr:"neutral"},"tennyson, charlotte":{r:"Alt 33",t:6,tr:"drop"},"sullivan, eiden":{r:"Alt 8",t:77,tr:"rise"},"hopkins, lena":{r:"Alt 15",t:53,tr:"drop"},"mccallum, ian":{r:"Alt 23",t:33,tr:"neutral"}};
 
 // ══ REGIONALS DATA ══
@@ -758,6 +919,7 @@ const RM=[{n:"Gilmour, Cree",c:"RM",pnw:false,sg:1,gs:1,sl:3,sgT:"40.41",gsT:"1:
 const PNW_CLUBS=['CMAC','SARS','MRST','MRT','SPAC','MBSEF','TARP','TWP','LPRT','MSSRT','TAS','MHSEF','SPARC','BART','WPSC','CSAT'];
 </script>
 <script>
+
 // ══ CONFIG ══
 const CFG={
   u14:{label:'U14',returnBY:2013,ageBY:2012,qualCutW:14,qualCutM:12,
@@ -808,25 +970,97 @@ function plBadge(p){if(p===null||p===undefined)return`<span class="dnfc">—</sp
 function tIcon(t){return t==='rise'?'<span class="au">▲</span>':t==='drop'?'<span class="ad">▼</span>':'<span class="as2">→</span>';}
 
 // ══ STATE ══
-let ag='u14',curSeason=2026,curMode='athlete',curGender='W',curClub='',curIdx=-1,wiMods={},teamGender='combined',expandedClub=null,trajChart=null,teamChart=null,bwGender='M',regGender='W',regChart=null;
+let ag='u14',curSeason=2026,curMode='athlete',curGender='W',curClub='',curIdx=-1,wiMods={},teamGender='combined',expandedClub=null,trajChart=null,teamChart=null,bwGender='M',bwYear=2025,regGender='W',regChart=null;
 
 // ══ CONTROLS ══
+// ══ SEARCH ══
+let _srResults=[];
+function onSearch(q){
+  const clear=document.getElementById('search-clear');
+  const box=document.getElementById('search-results');
+  clear.style.display=q.length>0?'block':'none';
+  if(!q.trim()){box.style.display='none';_srResults=[];return;}
+  const ql=q.toLowerCase().trim();
+  _srResults=[];
+  U14.forEach(a=>{
+    if(a.n.toLowerCase().includes(ql)||a.c.toLowerCase().includes(ql))
+      _srResults.push({type:'u14',name:a.n,club:a.c,gender:a.g,rank:a.r||'',pts:a.t,idx:U14.indexOf(a),label:'U14'});
+  });
+  U16.forEach(a=>{
+    if(a.n.toLowerCase().includes(ql)||a.c.toLowerCase().includes(ql))
+      _srResults.push({type:'u16',name:a.n,club:a.c,gender:a.g,rank:a.r||'',pts:a.t,idx:U16.indexOf(a),label:'U16'});
+  });
+  [...WRC_W,...WRC_M].forEach(a=>{
+    if(a.n.toLowerCase().includes(ql))
+      _srResults.push({type:'wrc',name:a.n,club:a.div||'',gender:a.g,rank:'',pts:null,idx:-1,label:'WRC'});
+  });
+  BW26_W.forEach(a=>{
+    if(a.n.toLowerCase().includes(ql)||a.c.toLowerCase().includes(ql))
+      _srResults.push({type:'bw26',name:a.n,club:a.c,gender:'W',rank:'',pts:null,idx:-1,label:'BW 2026'});
+  });
+  renderSearchResults();
+}
+function srJump(i){
+  const r=_srResults[i];if(!r)return;
+  clearSearch();
+  if(r.type==='wrc'){setAG('reg');setTimeout(()=>setRegLevel('u14'),60);return;}
+  if(r.type==='bw26'){setAG('bw');setTimeout(()=>{setBWYear(2026);setBWG('W');},60);return;}
+  setAG(r.type);
+  setGender(r.gender);
+  setTimeout(()=>{
+    curIdx=r.idx;wiMods={};
+    document.getElementById('empty-state').style.display='none';
+    document.getElementById('ath-area').style.display='block';
+    showTab('profile');
+  },80);
+}
+function renderSearchResults(){
+  const box=document.getElementById('search-results');
+  const results=_srResults;
+  if(!results.length){box.innerHTML='<div class="sr-no">No athletes or clubs match your search</div>';box.style.display='block';return;}
+  const groups={u14:[],u16:[],wrc:[],bw26:[]};
+  results.forEach((r,i)=>{r._i=i;if(groups[r.type])groups[r.type].push(r);});
+  function mkSection(label,items){
+    if(!items.length)return'';
+    let s=`<div class="sr-section">${label} — ${items.length} result${items.length!==1?'s':''}</div>`;
+    s+=items.slice(0,8).map(r=>{
+      const [bg,tx]=avc(r.name);
+      const rankBadge=r.rank?`<span class="sr-badge" style="background:${r.rank.includes('Alt')?'var(--amber-dim)':'var(--green-dim)'};color:${r.rank.includes('Alt')?'var(--amber)':'var(--green)'}">${r.rank}</span>`:'';
+      const labelBadge=`<span class="sr-badge" style="background:var(--blue-dim);color:var(--blue)">${r.label}</span>`;
+      const pts=r.pts!=null?`<span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">${r.pts}pts</span>`:'';
+      return`<div class="sr-row" onclick="srJump(${r._i})">
+        <div class="sr-av" style="background:${bg};color:${tx}">${ini(r.name)}</div>
+        <div style="flex:1"><div class="sr-name">${r.name}</div><div class="sr-meta">${r.club||''} · ${r.gender==='W'?'Women':'Men'}</div></div>
+        <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">${pts}${rankBadge}${labelBadge}</div>
+      </div>`;
+    }).join('');
+    if(items.length>8)s+=`<div style="padding:6px 14px;font-size:11px;color:var(--text3);font-style:italic">+${items.length-8} more — keep typing</div>`;
+    return s;
+  }
+  box.innerHTML=mkSection('U14',groups.u14)+mkSection('U16',groups.u16)+mkSection('WRC',groups.wrc)+mkSection('BW 2026',groups.bw26);
+  box.style.display='block';
+}
+function showSearch(){if(document.getElementById('search-input').value.trim())document.getElementById('search-results').style.display='block';}
+function clearSearch(){document.getElementById('search-input').value='';document.getElementById('search-results').style.display='none';document.getElementById('search-clear').style.display='none';_srResults=[];}
+document.addEventListener('click',e=>{const b=document.getElementById('search-bar');if(b&&!b.contains(e.target))document.getElementById('search-results').style.display='none';});
+
 function setAG(v){
   ag=v;curClub='';curIdx=-1;wiMods={};expandedClub=null;
   document.querySelectorAll('#ag-seg button').forEach(b=>b.className='');
-  const i=['u14','u16','bw','reg'].indexOf(v);
-  const cls=v==='bw'?'on-a':v==='reg'?'on-r':'on';
+  const i=['u14','u16','bw','reg','predict'].indexOf(v);
+  const cls=v==='bw'?'on-a':v==='reg'?'on-r':v==='predict'?'on-g':'on';
   document.querySelectorAll('#ag-seg button')[i].className=cls;
-  const isBW=v==='bw',isReg=v==='reg',isAG=!isBW&&!isReg;
+  const isBW=v==='bw',isReg=v==='reg',isPredict=v==='predict',isAG=!isBW&&!isReg&&!isPredict;
   document.getElementById('season-ctrl').style.display=isAG?'flex':'none';
   document.getElementById('mode-row').style.display=isAG?'flex':'none';
   document.getElementById('bw-mode-row').style.display=isBW?'flex':'none';
   document.getElementById('reg-mode-row').style.display=isReg?'flex':'none';
-  ['bw-area','reg-area'].forEach(id=>document.getElementById(id).style.display='none');
+  ['bw-area','reg-area','predict-area'].forEach(id=>document.getElementById(id).style.display='none');
   ['ath-area','team-area'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('empty-state').style.display=isAG?'block':'none';
   if(isBW){document.getElementById('bw-area').style.display='block';populateBWClubs();renderBW();}
   if(isReg){document.getElementById('reg-area').style.display='block';setRegLevel('u16');}
+  if(isPredict){document.getElementById('predict-area').style.display='block';renderPredictor();}
   if(isAG){updateSnote();populateClubs();populateAthletes();if(curMode==='teams')renderTeams();}
 }
 function setSeason(y){
@@ -1102,18 +1336,224 @@ function showTTeamTab(club,tab){['ttr-','ttt-'].forEach((p,i)=>{const el=documen
 function toggleTeam(club){expandedClub=expandedClub===club?null:club;renderTeams();}
 
 // ══ BUDDY WERNER ══
-function bwData(){return bwGender==='M'?BW25_M:BW25_W;}
+function bwData(){if(bwYear===2026)return bwGender==='M'?BW26_M:BW26_W;return bwGender==='M'?BW25_M:BW25_W;}
 function bwComp(a){return Math.round((a.sqSc/35)*60)+(PP[a.gs]||0)+(PP[a.sl]||0);}
+let bwClass='all';
+function setBWClass(c){bwClass=c;document.querySelectorAll('#bw-class-seg button').forEach((b,i)=>b.className=['all','2nd','1st'][i]===c?'on-a':'');renderBW();}
+function setBWYear(y){bwYear=y;bwClass='all';document.querySelectorAll('#bw-year-seg button').forEach((b,i)=>b.className=[2025,2026][i]===y?'on-a':'');document.querySelectorAll('#bw-class-seg button').forEach((b,i)=>b.className=i===0?'on-a':'');document.getElementById('bw-class-seg').style.display=y===2026?'flex':'none';const sub=document.getElementById('bw-hdr-sub');if(sub)sub.textContent=y===2025?'Lookout Pass · March 28–30, 2025 · Ultimate U12 season finale':'Mount Bachelor, OR · March 27–29, 2026 · Women GS complete · SL Saturday';populateBWClubs();renderBW();}
 function setBWG(g){bwGender=g;document.querySelectorAll('#bw-gseg button').forEach((b,i)=>b.className=['M','W'][i]===g?'on':'');populateBWClubs();renderBW();}
 function populateBWClubs(){const s=document.getElementById('bw-csel');const cl=[...new Set(bwData().map(a=>a.c))].sort();s.innerHTML='<option value="">All clubs</option>'+cl.map(c=>`<option value="${c}">${c}</option>`).join('');}
-function renderBW(){const tabs=['bw-ov','bw-rs','bw-pp','bw-wt'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'bw-ov';({['bw-ov']:renderBWOv,['bw-rs']:renderBWRs,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
-function showBWTab(id){const ids=['bw-ov','bw-rs','bw-pp','bw-wt'];document.querySelectorAll('#bw-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#bw-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));({['bw-ov']:renderBWOv,['bw-rs']:renderBWRs,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
+function renderBW(){
+  const d=bwData();
+  if(bwYear===2026&&!d.length){
+    const tabs=['bw-ov','bw-rs','bw-pp','bw-wt'];
+    tabs.forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='';});
+    const active=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'bw-ov';
+    const el=document.getElementById(active);
+    const msg=bwGender==='M'?'Men — Results Coming Saturday':'Results coming soon';
+    if(el)el.innerHTML='<div style="padding:32px 0;text-align:center"><div style="font-size:32px;margin-bottom:12px;opacity:.4">⛷</div><div style="font-family:Barlow Condensed,sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;color:var(--amber);margin-bottom:6px">BW 2026 — '+msg+'</div><div style="font-size:14px;color:var(--text2);margin-bottom:4px">Mount Bachelor, Oregon · March 27–29, 2026</div><div style="font-size:12px;color:var(--text3)">Women GS (Fri) loaded · SL results added after Saturday.</div></div>';
+    return;
+  }
+  const tabs=['bw-ov','bw-rs','bw-pp','bw-wt'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'bw-ov';
+  if(bwYear===2026){({['bw-ov']:renderBW26Ov,['bw-rs']:renderBW26Rs,['bw-pp']:renderBW26Pp,['bw-wt']:renderBW26Wt})[id]();}
+  else{({['bw-ov']:renderBWOv,['bw-rs']:renderBWRs,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
+}
+function showBWTab(id){const ids=['bw-ov','bw-rs','bw-pp','bw-wt'];document.querySelectorAll('#bw-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#bw-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));if(bwYear===2026&&bwData().length)({['bw-ov']:renderBW26Ov,['bw-rs']:renderBW26Rs,['bw-pp']:renderBW26Pp,['bw-wt']:renderBW26Wt})[id]();else({['bw-ov']:renderBWOv,['bw-rs']:renderBWRs,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
+
+// ── BW 2026 renderers ──
+function bw26Comp(a){const PP2=[0,100,80,60,50,45,40,36,32,28,25,22,20,18,16,14,12,10,9,8,7,6,5,4,3,2,1];const gs=(PP2[a.gs]||0),sl=a.sl?(PP2[a.sl]||0):0;return gs+sl;}
+function renderBW26Ov(){
+  let d=bwData();
+  if(bwClass==='2nd')d=d.filter(a=>a.by===2014);
+  else if(bwClass==='1st')d=d.filter(a=>a.by===2015);
+  const spac=d.filter(a=>a.c==='SPAC').sort((a,b)=>a.gsOv-b.gsOv);
+  const hasGS=d.some(a=>a.gs!=null),hasSL=d.some(a=>a.sl!=null);
+  const inProgress=!hasSL;
+  const spacRows=spac.map(a=>{
+    const byTag=a.by===2014?'<span class="by14p">→ U14 2026-27</span>':'<span class="by13p" style="background:var(--purple-dim);color:var(--purple)">2nd yr U12</span>';
+    return`<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border2)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:${a.gsOv<=10?'var(--green)':'var(--text2)'};width:32px;text-align:center">#${a.gsOv}</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">${a.n} ${byTag}</div>
+      <div style="font-size:11px;color:var(--text2)">GS (by yr): #${a.gs} · Time: ${a.gsT}</div></div>
+      ${a.sl?`<div style="font-size:12px;color:var(--text2)">SL #${a.sl}</div>`:'<div style="font-size:10px;color:var(--text3)">SL TBD</div>'}
+    </div>`;
+  }).join('');
+  const top5Ov=d.slice(0,5).map(a=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border2)">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:${a.gsOv<=3?'var(--amber)':'var(--text2)'};width:30px">#${a.gsOv}</div>
+    <div style="flex:1"><div style="font-size:13px;font-weight:600">${a.n}</div><div style="font-size:11px;color:var(--text2)">${a.c} · Born ${a.by} · ${a.gsT}</div></div>
+  </div>`).join('');
+  // Build class-specific header label
+  const classLabel=bwClass==='2nd'?'2nd Year U12 (Born 2014 - entering U14 2026-27)':bwClass==='1st'?'1st Year U12 (Born 2015 - within-year comparison)':'All U12 Women';
+  const classNote=bwClass==='2nd'?`<div class="ban ban-b"><div class="bt">→ These athletes enter U14 in 2026-27</div><div class="bd">Their BW GS result is the best pre-season signal for their U14 debut. Top performers here are the ones to watch next year.</div></div>`:bwClass==='1st'?`<div class="ban" style="background:var(--purple-dim);border:1px solid rgba(91,33,182,.2);border-left:3px solid var(--purple)"><div class="bt" style="color:var(--purple)">1st Year U12 - within-year comparison only</div><div class="bd">Born-2015 athletes ranked against each other only. They enter U12 again next year, then U14 in 2027-28.</div></div>`:'';
+  const metricCount=bwClass==='2nd'?d.filter(a=>a.by===2014).length:bwClass==='1st'?d.filter(a=>a.by===2015).length:d.length;
+
+  document.getElementById('bw-ov').innerHTML=`
+    ${inProgress?'<div class="inprog">🔴 In Progress — Women GS complete · SL races Saturday · Men results coming</div>':''}
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">${classLabel}</div>
+    ${classNote}
+    <div class="mg mg-4" style="margin-bottom:12px">
+      <div class="m"><div class="l">Athletes</div><div class="v">${metricCount}</div></div>
+      <div class="m"><div class="l">Born 2014</div><div class="v" style="color:var(--blue)">${d.filter(a=>a.by===2014).length}</div></div>
+      <div class="m"><div class="l">Born 2015</div><div class="v" style="color:var(--purple)">${d.filter(a=>a.by===2015).length}</div></div>
+      <div class="m"><div class="l">SPAC</div><div class="v">${spac.length}</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+      <div><div class="sl" style="margin-top:0">SPAC at BW 2026</div>${spacRows||'<div class="empty">No SPAC results</div>'}</div>
+      <div><div class="sl" style="margin-top:0">Overall GS Top 5</div>${top5Ov}
+        <div class="ban ban-g" style="margin-top:12px"><div class="bt">🌟 Sierra Simon (SPAC) — Overall #5</div><div class="bd">Born-2015 first-year U12 placing 5th overall and 1st in her birth year. Elite performance for a first-year racer.</div></div>
+        <div class="ban ban-b" style="margin-top:8px"><div class="bt">Harper Chang (SPAC) — Overall #6</div><div class="bd">5th in her birth-year (2014) class. Strong GS result heading into her final U12 year.</div></div>
+      </div>
+    </div>`;
+}
+function renderBW26Rs(){
+  const d=bwData();
+  const cf=document.getElementById('bw-csel').value;
+  // Apply class filter first, then club
+  let data=[...d];
+  if(bwClass==='2nd')data=data.filter(a=>a.by===2014);
+  else if(bwClass==='1st')data=data.filter(a=>a.by===2015);
+  if(cf)data=data.filter(a=>a.c===cf);
+  // For 1st year, sort by by-year place; otherwise overall
+  if(bwClass==='1st')data.sort((a,b)=>a.gs-b.gs);
+  else data.sort((a,b)=>a.gsOv-b.gsOv);
+  const showByYr=bwClass!=='1st';
+  const rows=data.map((a,i)=>{
+    const iS=a.c==='SPAC';
+    const dispRank=bwClass==='1st'?a.gs:a.gsOv;
+    const byTag=a.by===2014?`<span class="by14p">2014 → U14</span>`:`<span class="by13p" style="background:var(--purple-dim);color:var(--purple)">2015 · 1st yr</span>`;
+    const u14note=a.by===2015?`<span style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:1px 5px;background:var(--green-dim);color:var(--green);margin-left:4px">→ U14 in 2027-28</span>`:'';
+    return`<tr class="${iS?'sr':''}">
+      <td><b style="font-family:'DM Mono',monospace;color:${dispRank<=3?'var(--amber)':'var(--text2)'}">${dispRank}</b></td>
+      <td>${a.n}${iS?'<span class="spac-pill">SPAC</span>':''}${u14note}</td>
+      <td style="font-size:11px">${a.c}</td>
+      <td>${byTag}</td>
+      <td class="r" style="font-family:'DM Mono',monospace;font-size:12px">${a.gsT}</td>
+      ${showByYr?`<td class="r"><b>${a.gs}</b><span style="font-size:10px;color:var(--text3)"> /yr</span></td>`:''}
+      <td class="r">${a.sl!=null?a.sl:'<span style="color:var(--text3)">TBD</span>'}</td>
+    </tr>`;
+  }).join('');
+  const classHeader=bwClass==='1st'?'Rank in yr':'Overall';
+  document.getElementById('bw-rs').innerHTML=`
+    <div class="inprog" style="margin-bottom:10px">GS Women complete · SL Saturday · Men TBD</div>
+    <div class="tscroll"><table class="rtbl"><thead><tr>
+      <th>${classHeader}</th><th>Athlete</th><th>Club</th><th>Born</th><th class="r">GS Time</th>${showByYr?'<th class="r">By-Yr</th>':''}<th class="r">SL</th>
+    </tr></thead><tbody>${rows}</tbody></table></div>
+    ${showByYr?`<div style="font-size:11px;color:var(--text3);margin-top:8px;padding:8px 10px;background:var(--surface2);border-left:3px solid var(--border)"><b>Overall</b> = finish in the combined field (both birth years together). <b>By-Yr</b> = rank within same birth year only — since 2014-born athletes have a natural age advantage over 2015-born, By-Yr shows how each athlete did against their own class.</div>`:''}
+    `;
+}
+
+function renderBW26Pp(){
+  // Class Pipeline: born-2014 athletes moving to U14 in 2026-27
+  const d=bwData().filter(a=>a.by===2014).sort((a,b)=>a.gs-b.gs);
+  const total14=bwData().filter(a=>a.by===2014).length;
+  function outlook(a){
+    const c=bw26Comp(a);
+    if(c>=120)return{l:'High-upside entry',col:'var(--green)',desc:'Elite result for a 2nd-year U12 — immediate U14 impact expected.'};
+    if(c>=80)return{l:'Strong entry',col:'var(--blue)',desc:'Should score U14 points from year one.'};
+    if(c>=50)return{l:'Solid entry',col:'var(--amber)',desc:'Developmental U14 season with room to grow.'};
+    return{l:'Developmental',col:'var(--text3)',desc:'First U14 season will be a learning year.'};
+  }
+  const rows=d.map((a,i)=>{
+    const iS=a.c==='SPAC';
+    const ot=outlook(a);
+    const comp=bw26Comp(a);
+    return`<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border2);background:${iS?'var(--blue-dim)':'var(--surface)'}">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:${i<3?'var(--amber)':'var(--text3)'};width:30px;text-align:center">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.02em">${a.n}${iS?'<span class="wrc-badge" style="margin-left:6px">SPAC</span>':''}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:1px">${a.c} · GS overall #${a.gsOv} of ${bwData().length} · By-year #${a.gs} of ${total14} · ${a.gsT}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:${ot.col};text-transform:uppercase;letter-spacing:.04em">${ot.l}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:1px">comp. ${comp}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('bw-pp').innerHTML=`
+<h2>Class Pipeline — Born 2014 → U14 2026-27</h2>
+<p class="sub">These ${d.length} athletes enter U14 next season. GS by-year rank is the primary signal — no Skills Quest at BW 2026, so composite is GS + SL points only.</p>
+<div class="ban ban-a"><div class="bt">⚠️ GS only — SL results coming Saturday</div><div class="bd">Projections will sharpen once SL results are added. Athletes who specialize in SL may rank differently in the final composite.</div></div>
+<div class="mg mg-3" style="margin-bottom:12px">
+  <div class="m"><div class="l">Entering U14</div><div class="v">${d.length}</div></div>
+  <div class="m"><div class="l">SPAC</div><div class="v" style="color:var(--blue)">${d.filter(a=>a.c==='SPAC').length}</div></div>
+  <div class="m"><div class="l">Top-10 by year</div><div class="v" style="color:var(--green)">${d.filter(a=>a.gs<=10).length}</div></div>
+</div>
+<div style="border:1px solid var(--border);background:var(--surface)">${rows}</div>`;
+}
+
+function renderBW26Wt(){
+  // Incoming Watch: born-2015 first-year U12 — future U14 class of 2027-28
+  const d=bwData().filter(a=>a.by===2015).sort((a,b)=>a.gs-b.gs);
+  const total15=bwData().filter(a=>a.by===2015).length;
+  const rows=d.map((a,i)=>{
+    const iS=a.c==='SPAC';
+    const star=i<5;
+    return`<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border2);background:${iS?'var(--blue-dim)':star?'rgba(180,83,9,.03)':'var(--surface)'}">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:${i<3?'var(--amber)':'var(--text3)'};width:30px;text-align:center">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.02em">${a.n}${iS?'<span class="wrc-badge" style="margin-left:6px">SPAC</span>':''}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:1px">${a.c} · Overall #${a.gsOv} of ${bwData().length} · By-year #${a.gs} of ${total15} · ${a.gsT}</div>
+      </div>
+      ${star?`<span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;padding:2px 7px;background:var(--amber-dim);color:var(--amber);text-transform:uppercase;letter-spacing:.06em">⭐ Watch</span>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('bw-wt').innerHTML=`
+<h2>Incoming Watch — Born 2015 (Future U14 · 2027-28)</h2>
+<p class="sub">First-year U12 athletes ranked within their birth year. They race U12 again next year before entering U14 in 2027-28 — but strong 1st-year performers are worth tracking now.</p>
+<div class="ban" style="background:var(--purple-dim);border:1px solid rgba(91,33,182,.2);border-left:3px solid var(--purple)">
+  <div class="bt" style="color:var(--purple)">1st Year U12 — two seasons away from U14</div>
+  <div class="bd">These athletes have another full U12 year before aging into U14. The top performers here in year one are historically strong indicators of future U14 competitiveness.</div>
+</div>
+<div class="mg mg-3" style="margin-bottom:12px">
+  <div class="m"><div class="l">1st yr U12</div><div class="v">${d.length}</div></div>
+  <div class="m"><div class="l">SPAC</div><div class="v" style="color:var(--blue)">${d.filter(a=>a.c==='SPAC').length}</div></div>
+  <div class="m"><div class="l">Top-5 by year</div><div class="v" style="color:var(--amber)">${d.filter(a=>a.gs<=5).length}</div></div>
+</div>
+${d.length?`<div style="border:1px solid var(--border);background:var(--surface)">${rows}</div>`:'<div class="empty">No born-2015 data available</div>'}`;
+}
 function renderBWOv(){
   const d=bwData(),spac=d.filter(a=>a.c==='SPAC').sort((a,b)=>bwComp(b)-bwComp(a));
-  const spacRows=spac.map(a=>{const comp=bwComp(a),tag=a.by===13?'<span class="by13p">→ U14 now</span>':'<span class="by14p">→ U14 2026-27</span>';const u14=BW_MAP[a.n.toLowerCase()];const u14L=a.by===13&&u14?`<div style="font-size:11px;color:#888;margin-top:1px">U14: <b>${u14.r||'—'}</b> · ${u14.t} pts ${tIcon(u14.tr)}</div>`:`<div style="font-size:11px;color:#d97706;margin-top:1px">Entering U14 in 2026-27</div>`;return`<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid #f0f0f0"><div style="width:28px;text-align:center">${plBadge(a.sq)}</div><div style="flex:1"><div style="font-size:13px">${a.n} ${tag}</div>${u14L}</div><div style="text-align:right;font-size:12px;color:#888">GS${plBadge(a.gs)} SL${plBadge(a.sl)}<br><span style="font-size:11px">comp.${comp}</span></div></div>`;}).join('');
-  const stories=bwGender==='M'?`<div class="ban ban-g"><div class="bt">Breakout: Bonura, Nico (MRT) · SQ 75th → GS 6th, SL 3rd → U14 #2 (470pts)</div><div class="bd">Low SQ masked elite race speed — classic pipeline case.</div></div><div class="ban ban-b"><div class="bt">SPAC: Olson, Gavin · BW Overall #1 → U14 Alt 17 (56pts)</div><div class="bd">Dominant BW performance; competitive U14 transition in a deeper field.</div></div><div class="ban" style="background:#fffbeb;border-color:#fcd34d"><div class="bt">⚡ Watch: Buyukcetin, Luca (SPAC/14) · SL 7th at U12!</div><div class="bd">Elite SL as a first-year U12. Sibling of Luna Buyukcetin (SPAC U16 Women #5).</div></div>`:`<div class="ban ban-g"><div class="bt">Dominant: Bertell, Kaeli (TARP) · GS 1st + SL 1st + SQ 1st → U14 #1 (492pts)</div><div class="bd">Swept all BW events, then the most dominant U14 season on record.</div></div><div class="ban ban-b"><div class="bt">Rise: Webb, Sutton (SARS) · BW GS 2nd → U14 #12 (190pts)</div><div class="bd">Climbed into direct qualification range in her first U14 season.</div></div><div class="ban" style="background:#fffbeb;border-color:#fcd34d"><div class="bt">⚡ Watch: Olsson, Pep (CSAT/14) · BW SL 2nd + SQ 6th</div><div class="bd">One of the strongest incoming 2014-born women — CSAT already has Goldstein and Kunkler in the same cohort.</div></div>`;
-  document.getElementById('bw-ov').innerHTML=`<div class="mg mg-4" style="margin-bottom:12px"><div class="m"><div class="l">Athletes</div><div class="v">${d.length}</div></div><div class="m"><div class="l">Born 2013 →U14</div><div class="v" style="color:#16a34a">${d.filter(a=>a.by===13).length}</div></div><div class="m"><div class="l">Born 2014 incoming</div><div class="v" style="color:#d97706">${d.filter(a=>a.by===14).length}</div></div><div class="m"><div class="l">SPAC athletes</div><div class="v">${spac.length}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:13px"><div><div class="sl" style="margin-top:0">SPAC at BW 2025</div>${spacRows||'<div class="empty">No SPAC data</div>'}</div><div><div class="sl" style="margin-top:0">Key storylines</div>${stories}</div></div>`;
+  const spacRows=spac.map(a=>{
+    const comp=bwComp(a);
+    const tag=a.by===13?'<span class="by13p">→ U14 2026-27</span>':'<span class="by14p" style="background:var(--amber-dim);color:var(--amber)">→ U14 2026-27</span>';
+    const u14=BW_MAP[a.n.toLowerCase()];
+    const u14L=a.by===13&&u14
+      ?`<div style="font-size:11px;color:var(--text2);margin-top:2px">U14 2025-26: <b>${u14.r||'—'}</b> · ${u14.t!=null?u14.t:0}pts ${tIcon(u14.tr)}</div>`
+      :`<div style="font-size:11px;color:var(--amber);margin-top:2px">Entering U14 in 2026-27</div>`;
+    return`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border2)">
+      <div style="width:30px;text-align:center;flex-shrink:0">${plBadge(a.sq)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.02em">${a.n} ${tag}</div>
+        ${u14L}
+      </div>
+      <div style="text-align:right;flex-shrink:0;font-size:11px;color:var(--text2);line-height:1.6">
+        <div>GS <b>${a.gs||'—'}</b> · SL <b>${a.sl||'—'}</b></div>
+        <div style="color:var(--text3)">comp ${comp}</div>
+      </div>
+    </div>`;
+  }).join('');
+  const stories=bwGender==='M'
+    ?`<div class="ban ban-g"><div class="bt">Breakout: Bonura, Nico (MRT) · SQ 75th → GS 6th, SL 3rd → U14 #2 (470pts)</div><div class="bd">Low SQ masked elite race speed — classic pipeline case.</div></div><div class="ban ban-b"><div class="bt">SPAC: Olson, Gavin · BW Overall #1 → U14 Alt 17 (56pts)</div><div class="bd">Dominant BW performance; competitive U14 transition in a deeper field.</div></div><div class="ban ban-a"><div class="bt">⚡ Watch: Buyukcetin, Luca (SPAC/14) · SL 7th at U12!</div><div class="bd">Elite SL as a first-year U12. Sibling of Luna Buyukcetin (SPAC U16 Women #5).</div></div>`
+    :`<div class="ban ban-g"><div class="bt">Dominant: Bertell, Kaeli (TARP) · GS 1st + SL 1st + SQ 1st → U14 #1 (492pts)</div><div class="bd">Swept all BW events, then the most dominant U14 season on record.</div></div><div class="ban ban-b"><div class="bt">Rise: Webb, Sutton (SARS) · BW GS 2nd → U14 #12 (190pts)</div><div class="bd">Climbed into direct qualification range in her first U14 season.</div></div><div class="ban ban-a"><div class="bt">⚡ Watch: Ozegovic, Amina (SPAC/13) · SQ 9th, GS 6th, SL 5th</div><div class="bd">Strong U12 signal — entering her 2nd U14 year with latent talent to unlock.</div></div>`;
+  document.getElementById('bw-ov').innerHTML=`
+<div class="mg mg-4" style="margin-bottom:14px">
+  <div class="m"><div class="l">Athletes</div><div class="v">${d.length}</div></div>
+  <div class="m"><div class="l">Born 2013 → U14</div><div class="v" style="color:var(--green)">${d.filter(a=>a.by===13).length}</div></div>
+  <div class="m"><div class="l">Born 2014 incoming</div><div class="v" style="color:var(--amber)">${d.filter(a=>a.by===14).length}</div></div>
+  <div class="m"><div class="l">SPAC</div><div class="v" style="color:var(--blue)">${spac.length}</div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  <div>
+    <div class="sl" style="margin-top:0">SPAC at BW 2025</div>
+    ${spacRows||'<div class="empty">No SPAC data</div>'}
+  </div>
+  <div>
+    <div class="sl" style="margin-top:0">Key Storylines</div>
+    ${stories}
+  </div>
+</div>`;
 }
+
 function renderBWRs(){
   const co=document.getElementById('bw-cosel').value,cf=document.getElementById('bw-csel').value;
   let data=[...bwData()];if(co)data=data.filter(a=>a.by===+co);if(cf)data=data.filter(a=>a.c===cf);
@@ -1125,14 +1565,41 @@ function renderBWPp(){
   const withU14=d.map(a=>({...a,u14:BW_MAP[a.n.toLowerCase()]||null,comp:bwComp(a)}));
   const sorted=[...withU14.filter(a=>a.u14&&a.u14.t>0).sort((a,b)=>b.u14.t-a.u14.t),...withU14.filter(a=>!a.u14||a.u14.t===0)];
   const pairs=withU14.filter(a=>a.u14&&a.u14.t>0);
-  const rows=sorted.map((a,i)=>{const u=a.u14,iS=a.c==='SPAC';const u14Cell=u&&u.t>0?`<div class="pp-vl">${u.r||'—'} <span style="font-size:11px;color:#888">(${u.t}pts)</span></div><div class="pp-lb">U14 2025-26 ${tIcon(u.tr)}</div>`:`<div class="pp-vl" style="color:#888">No U14 data</div>`;return`<div class="pp-row ${iS?'spp':''}"><div class="pp-rk">${i+1}</div><div class="pp-nm" style="font-weight:${iS?600:400}">${a.n}<br><span style="font-size:11px;color:#888">${a.c}</span></div><div class="pp-bw"><div class="pp-vl">SQ ${a.sq} · GS ${a.gs||'—'} · SL ${a.sl||'—'}</div><div class="pp-lb">BW comp: ${a.comp}</div></div><div class="pp-u14">${u14Cell}</div></div>`;}).join('');
-  document.getElementById('bw-pp').innerHTML=`<h2>Class of 2013 → U14 Pipeline</h2><p class="sub">How BW 2025 translated to U14 2025-26 performance.</p><div class="mg mg-4" style="margin-bottom:11px"><div class="m"><div class="l">Born 2013</div><div class="v">${d.length}</div></div><div class="m"><div class="l">In U14 data</div><div class="v">${pairs.length}</div></div><div class="m"><div class="l">Rose ▲</div><div class="v" style="color:#16a34a">${pairs.filter(a=>a.u14.tr==='rise').length}</div></div><div class="m"><div class="l">Dropped ▼</div><div class="v" style="color:#dc2626">${pairs.filter(a=>a.u14.tr==='drop').length}</div></div></div><div class="ban ban-a"><div class="bt">Key insight</div><div class="bd">GS/SL race place predicts U14 success better than Skills Quest rank. Top-10 BW racers (Bertell, Bonura, Dix, Webb, Kelly) mostly became top-15 in U14.</div></div><div style="border:1px solid #e5e5e5;border-radius:10px;overflow:hidden"><div class="pp-row" style="background:#f5f5f5;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.04em"><div>#</div><div>Athlete</div><div>BW 2025</div><div>U14 outcome</div></div>${rows}</div>`;
+  const rows=sorted.map((a,i)=>{
+    const u=a.u14,iS=a.c==='SPAC';
+    const u14Cell=u&&u.t>0
+      ?`<div class="pp-vl">${u.r||'—'} <span style="font-size:11px;color:var(--text3)">(${u.t!=null?u.t:0}pts)</span></div><div class="pp-lb">U14 2025-26 ${tIcon(u.tr)}</div>`
+      :`<div class="pp-vl" style="color:var(--text3)">No U14 data</div>`;
+    return`<div class="pp-row ${iS?'spp':''}">
+      <div class="pp-rk">${i+1}</div>
+      <div class="pp-nm" style="font-weight:${iS?600:400}">${a.n}<br><span style="font-size:11px;color:var(--text3)">${a.c}</span></div>
+      <div class="pp-bw"><div class="pp-vl">SQ ${a.sq!=null?a.sq:'—'} · GS ${a.gs!=null?a.gs:'—'} · SL ${a.sl!=null?a.sl:'—'}</div><div class="pp-lb">comp: ${a.comp!=null?a.comp:0}</div></div>
+      <div class="pp-u14">${u14Cell}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('bw-pp').innerHTML=`
+<h2>Class of 2013 — U14 Pipeline</h2>
+<p class="sub">How BW 2025 performance translated to U14 2025-26 results.</p>
+<div class="mg mg-4" style="margin-bottom:12px">
+  <div class="m"><div class="l">Born 2013</div><div class="v">${d.length}</div></div>
+  <div class="m"><div class="l">In U14 data</div><div class="v">${pairs.length}</div></div>
+  <div class="m"><div class="l">Rose ▲</div><div class="v" style="color:var(--green)">${pairs.filter(a=>a.u14&&a.u14.tr==='rise').length}</div></div>
+  <div class="m"><div class="l">Dropped ▼</div><div class="v" style="color:var(--red)">${pairs.filter(a=>a.u14&&a.u14.tr==='drop').length}</div></div>
+</div>
+<div class="ban ban-a"><div class="bt">Key insight</div><div class="bd">GS/SL race place predicts U14 success better than Skills Quest rank. Top-10 BW racers mostly became top-15 in U14.</div></div>
+<div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+  <div class="pp-row" style="background:var(--surface2);font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">
+    <div>Rk</div><div>Athlete</div><div>BW 2025</div><div>U14 Result</div>
+  </div>
+  ${rows}
+</div>`;
 }
+
 function renderBWWt(){
   const d=[...bwData().filter(a=>a.by===14)].sort((a,b)=>bwComp(b)-bwComp(a));
   const cf=document.getElementById('bw-csel').value,show=cf?d.filter(a=>a.c===cf):d;
   function outlook(a){const c=bwComp(a);if(c>=120)return{l:'High-upside entry',col:'#16a34a',desc:'Elite U12 across events — immediate U14 impact expected.'};if(c>=80)return{l:'Strong entry',col:'#2563eb',desc:'Should score U14 points from year one.'};if(c>=50)return{l:'Solid entry',col:'#d97706',desc:'Developmental U14 season with room to grow.'};return{l:'Developmental',col:'#888',desc:'Growth phase — can improve significantly in U14.'};}
-  const cards=show.slice(0,16).map((a,i)=>{const comp=bwComp(a),out=outlook(a),iS=a.c==='SPAC';const star=i===0&&!cf?'<span class="star-b">★ Top incoming</span>':iS?'<span class="star-b" style="background:#dbeafe;color:#1e40af">SPAC</span>':'';let special='';if(a.n==='Buyukcetin, Luca')special='<div style="font-size:11px;color:#92400e;margin-top:3px;padding:4px 7px;background:#fffbeb;border-radius:4px">⚡ Sibling of Luna Buyukcetin (SPAC U16 Women #5). Elite SL at U12 is rare.</div>';if(a.n==='Olsson, Pep')special='<div style="font-size:11px;color:#166534;margin-top:3px;padding:4px 7px;background:#dcfce7;border-radius:4px">♦ 2nd in BW SL as first-year U12. CSAT SL depth could be exceptional in 2026-27.</div>';return`<div class="wcard ${i<3&&!cf?'feat':''} ${iS?'spac-w':''}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><div><div class="wcnm">${ord(i+1)} ${a.n}${star}</div><div class="wcmt"><span>${a.c}</span><span class="${a.by===14?'by14p':'by13p'}">Born ${a.by} → U14 2026-27</span></div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700">${comp}</div><div style="font-size:10px;color:#888">composite</div></div></div><div class="wcs"><div class="wcs-s"><div class="wssl">SQ</div><div class="wssv">${plBadge(a.sq)}</div></div><div class="wcs-s"><div class="wssl">GS</div><div class="wssv">${plBadge(a.gs)}</div></div><div class="wcs-s"><div class="wssl">SL</div><div class="wssv">${plBadge(a.sl)}</div></div></div><div style="color:${out.col};font-weight:600;font-size:12px;margin-bottom:2px">${out.l}</div><div style="font-size:12px;color:#888">${out.desc}</div>${special}</div>`;}).join('');
+  const cards=show.slice(0,16).map((a,i)=>{const comp=bwComp(a),out=outlook(a),iS=a.c==='SPAC';const star=i===0&&!cf?'<span class="star-b">★ Top incoming</span>':iS?'<span class="star-b" style="background:#dbeafe;color:#1e40af">SPAC</span>':'';let special='';if(a.n==='Buyukcetin, Luca')special='<div style="font-size:11px;color:#92400e;margin-top:3px;padding:4px 7px;background:#fffbeb;border-radius:4px">⚡ Sibling of Luna Buyukcetin (SPAC U16 Women #5). Elite SL at U12 is rare.</div>';if(a.n==='Olsson, Pep')special='<div style="font-size:11px;color:#166534;margin-top:3px;padding:4px 7px;background:#dcfce7;border-radius:4px">♦ 2nd in BW SL as first-year U12. CSAT SL depth could be exceptional in 2026-27.</div>';return`<div class="wcard ${i<3&&!cf?'feat':''} ${iS?'spac-w':''}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><div><div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--text3);flex-shrink:0">${i+1}</div><div class="wcnm">${a.n}${star}</div></div><div class="wcmt"><span>${a.c}</span><span class="${a.by===14?'by14p':'by13p'}">Born 20${a.by} → U14 2026-27</span></div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700">${comp}</div><div style="font-size:10px;color:#888">composite</div></div></div><div class="wcs"><div class="wcs-s"><div class="wssl">SQ</div><div class="wssv">${plBadge(a.sq)}</div></div><div class="wcs-s"><div class="wssl">GS</div><div class="wssv">${plBadge(a.gs)}</div></div><div class="wcs-s"><div class="wssl">SL</div><div class="wssv">${plBadge(a.sl)}</div></div></div><div style="color:${out.col};font-weight:600;font-size:12px;margin-bottom:2px">${out.l}</div><div style="font-size:12px;color:#888">${out.desc}</div>${special}</div>`;}).join('');
   document.getElementById('bw-wt').innerHTML=`<h2>Incoming U14 Watch — Born 2014</h2><p class="sub">Athletes entering U14 in 2026-27, ranked by BW 2025 composite score.</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${cards}</div>`;
 }
 
@@ -1214,7 +1681,7 @@ function renderRegCx(){
   function evStat(ev){const all=d.filter(a=>a[ev]!=null).sort((a,b)=>a[ev]-b[ev]);const top10PNW=all.slice(0,10).filter(a=>a.pnw).length;const pnwBest=pnw.reduce((b,a)=>a[ev]&&a[ev]<(b||999)?a[ev]:b,null);return{top10PNW,pnwBest};}
   const sg=evStat('sg'),gs=evStat('gs'),sl=evStat('sl');
   const topPNW=[...pnw].sort((a,b)=>avgReg(a)-avgReg(b)).slice(0,6);
-  const topRows=topPNW.map((a,i)=>{const iS=a.c==='SPAC';return`<div class="frow${iS?' hlr':''}"><span class="frank" style="width:22px">${i+1}</span><span class="fname${iS?' you':''}" style="font-size:13px">${a.n} <span style="font-size:11px;color:#888">${a.c}</span>${iS?'<span class="spac-pill">SPAC</span>':''}</span><span style="font-size:12px;color:#888">SG ${a.sg||'—'} · GS ${a.gs||'—'} · SL ${a.sl||'—'}</span><span class="fpts" style="font-size:13px;font-weight:600;color:${avgReg(a)<20?'#16a34a':'#888'}">${avgReg(a)<99?avgReg(a).toFixed(1):'—'}</span></div>`;}).join('');
+  const topRows=topPNW.map((a,i)=>{const iS=a.c==='SPAC';return`<div class="frow${iS?' hlr':''}"><span class="frank" style="width:22px">${i+1}</span><span class="fname${iS?' you':''}" style="font-size:13px">${a.n} <span style="font-size:11px;color:var(--text3)">${a.c}</span>${iS?'<span class="spac-pill">SPAC</span>':''}</span><span style="font-size:12px;color:#888">SG ${a.sg||'—'} · GS ${a.gs||'—'} · SL ${a.sl||'—'}</span><span class="fpts" style="font-size:13px;font-weight:600;color:${avgReg(a)<20?'#16a34a':'#888'}">${avgReg(a)<99?avgReg(a).toFixed(1):'—'}</span></div>`;}).join('');
   document.getElementById('reg-cx').innerHTML=`<h2>PNW vs. Western US Field — ${regGender==='W'?'Women':'Men'}</h2><p class="sub">How PNW athletes performed against the full Western US competitive field.</p>
 <div class="mg mg-3" style="margin-bottom:12px"><div class="m"><div class="l">PNW in top-10 SG</div><div class="v" style="${sg.top10PNW>0?'color:#16a34a':''}">${sg.top10PNW}<span style="font-size:12px;color:#888">/10</span></div></div><div class="m"><div class="l">PNW in top-10 GS</div><div class="v" style="${gs.top10PNW>0?'color:#16a34a':''}">${gs.top10PNW}<span style="font-size:12px;color:#888">/10</span></div></div><div class="m"><div class="l">PNW in top-10 SL</div><div class="v" style="${sl.top10PNW>0?'color:#16a34a':''}">${sl.top10PNW}<span style="font-size:12px;color:#888">/10</span></div></div></div>
 <div class="ban ban-b"><div class="bt">Understanding the field</div><div class="bd">This event draws Rocky Mountain (RM, BSSEF, SVSEF, PCSS), Pacific Northwest, Pacific (SBA, ASC, SB), and Alaska programs. Rocky Mountain programs typically dominate. Top-25 finishes by PNW athletes represent strong regional showings.</div></div>
@@ -1462,7 +1929,280 @@ ${cards||'<div class="empty">No born-2012 PNW athletes in this gender at WRC.</d
 }
 
 
+
+// ══ SEARCH ══
+let searchOpen=false;
+// ══ PREDICTOR ══
+let predictAG='u14', predictG='W';
+
+function setPredictAG(v){predictAG=v;document.querySelectorAll('#predict-ag-seg button').forEach((b,i)=>b.className=['u14','u16'][i]===v?'on':'');renderPredictor();}
+function setPredictG(g){predictG=g;document.querySelectorAll('#predict-gseg button').forEach((b,i)=>b.className=['W','M'][i]===g?'on':'');renderPredictor();}
+
+function renderPredictor(){
+  if(predictAG==='u14') renderPredictU14();
+  else renderPredictU16();
+}
+
+function renderPredictU14(){
+  const g=predictG;
+  const qualCut=g==='W'?14:12;
+  const bw26Src=g==='W'?BW26_W:BW26_M;
+  const bw25Src=g==='W'?BW25_W:BW25_M;
+  const bw26FieldSize=g==='W'?55:50; // approx born-2014 field sizes at BW 2026
+
+  // ── Returning athletes (born 2013, 2nd year) ──
+  const bw25SrcR=g==='W'?BW25_W:BW25_M;
+  // Build a BW25 lookup for born-13 athletes (their U12 year)
+  const bw25Map={};
+  bw25SrcR.filter(a=>a.by===13).forEach(a=>{
+    const lastName=a.n.split(',')[0].toLowerCase();
+    const comp=Math.round((a.sqSc/35)*60)+(PP[a.gs]||0)+(PP[a.sl]||0);
+    // BW floor for yr2: based on BW rank signal
+    // Top GS/SL rank drives a minimum projected score they should reach in yr2
+    const bestBWRank=Math.min(a.gs||99,a.sl||99);
+    const bwFloor=bestBWRank<=5?90:bestBWRank<=10?60:bestBWRank<=15?38:bestBWRank<=25?20:10;
+    bw25Map[lastName]={comp,bwFloor,gs:a.gs,sl:a.sl};
+  });
+
+  const returning=U14.filter(a=>a.y===2013&&a.g===g).map(a=>{
+    const c=CFG.u14;
+    const ev=(a.runs||[]).map(e=>e&&e[1]||0);
+    const scDisc=idx=>idx.map(i=>ev[i]||0).sort((a,b)=>b-a).slice(0,2).reduce((s,v)=>s+v,0);
+    const gs=scDisc(c.discIdx.GS),sl=scDisc(c.discIdx.SL),sg=scDisc(c.discIdx.SG);
+    const total=gs+sl+sg;
+    // Trajectory: compare first half vs second half of season
+    const half=Math.floor(ev.length/2);
+    const firstHalf=ev.slice(0,half).reduce((s,v)=>s+v,0);
+    const secondHalf=ev.slice(half).reduce((s,v)=>s+v,0);
+    const traj=firstHalf>0?secondHalf/firstHalf:1;
+    // Base bump: 12-25% depending on trajectory (improving athletes get more)
+    const bump=Math.min(1.12+Math.max(0,traj-1)*0.1,1.25);
+    // WRC bonus: competed nationally in top field
+    const wrcSrc=g==='W'?WRC_W:WRC_M;
+    const wrcMatch=wrcSrc.find(w=>w.n.split(',')[0].toLowerCase()===a.n.split(',')[0].toLowerCase());
+    const wrcBoost=wrcMatch?Math.max(1,(25-avgWRC(wrcMatch))/25*0.15+1):1;
+    // BW history factor: athletes with strong U12 BW results but modest yr1 U14
+    // scores have latent talent — summer camps, size, experience close the gap in yr2
+    const lastName=a.n.split(',')[0].toLowerCase();
+    const bwHist=bw25Map[lastName];
+    let bwHistBoost=1;
+    let bwFloorPts=0;
+    if(bwHist){
+      // Underperformance ratio: how much below BW expectation did they score?
+      const expectedFromBW=bwHist.bwFloor*1.4; // what a strong BW performer typically scores yr1
+      const underperf=total<expectedFromBW?Math.max(0,(expectedFromBW-total)/expectedFromBW):0;
+      // Boost for latent talent: up to +30% extra on top of base bump
+      bwHistBoost=1+underperf*0.35;
+      // Floor: even if they scored 0, their BW signal says they should reach at least bwFloor
+      bwFloorPts=bwHist.bwFloor;
+    }
+    const combined=bump*wrcBoost*bwHistBoost;
+    const gsP=Math.min(Math.round(Math.max(gs*combined, bwFloorPts*0.38)),200);
+    const slP=Math.min(Math.round(Math.max(sl*combined, bwFloorPts*0.38)),200);
+    const sgP=Math.min(Math.round(Math.max(sg*combined, bwFloorPts*0.24)),200);
+    const projTotal=gsP+slP+sgP;
+    const wrcNote=wrcMatch?`WRC avg #${avgWRC(wrcMatch).toFixed(1)}`:'';
+    const bwNote=bwHist&&bwHistBoost>1.1?`BW25 gs:${bwHist.gs||'—'} sl:${bwHist.sl||'—'}`:'';
+    const label=bwNote?`Returning · ${bwNote}`:`Returning (Yr 2)`;
+    return{...a,gs,sl,sg,total,gsP,slP,sgP,projTotal,wrcNote,wrcAvg:wrcMatch?avgWRC(wrcMatch):null,bwNote,type:'returning',label};
+  });
+
+  // ── Incoming athletes (born 2014, 1st year) ──
+  // Prefer BW 2026 data (fresher), fall back to BW 2025
+  // Calibration from BW 2025 → U14 2025-26 actual results:
+  // Rank 1-2: ~200-490pts | Rank 3-5: ~70-125pts | Rank 6-10: ~50-150pts
+  // Rank 11-20: ~25-100pts | Rank 21+: ~5-40pts
+  // Key insight: top-3 by year is elite signal; beyond rank 15 drops sharply
+  function projFromBWRank(byRank, fieldSize, hasSL){
+    const pct=byRank/fieldSize;
+    // Base projection from percentile
+    let base;
+    if(pct<=0.05)base=280;       // top 5% — elite entry
+    else if(pct<=0.12)base=160;  // top 12% — strong
+    else if(pct<=0.22)base=100;  // top 22% — solid
+    else if(pct<=0.40)base=55;   // top 40% — developing
+    else if(pct<=0.60)base=28;   // top 60% — foundational
+    else base=12;                 // bottom 40%
+    // No SL yet: apply 0.7 discount (GS-only is partial signal)
+    if(!hasSL)base=Math.round(base*0.75);
+    return base;
+  }
+
+  // Merge BW25 and BW26 incoming, preferring BW26
+  const bw26Names=new Set(bw26Src.filter(a=>a.by===2014).map(a=>a.n.toLowerCase()));
+  const incoming=[];
+  
+  // BW 2026 athletes (born 2014) - current data
+  bw26Src.filter(a=>a.by===2014).forEach(a=>{
+    const hasSL=a.sl!=null;
+    const projTotal=projFromBWRank(a.gs, bw26FieldSize, hasSL);
+    const gsP=Math.round(projTotal*0.38);
+    const slP=Math.round(projTotal*0.38);
+    const sgP=Math.round(projTotal*0.24);
+    incoming.push({n:a.n,c:a.c,g,y:2014,gs:0,sl:0,sg:0,total:0,gsP,slP,sgP,projTotal,
+      bwRank:a.gs,bwOv:a.gsOv,bwT:a.gsT,hasSL,
+      type:'incoming',label:`Incoming · BW26 GS #${a.gs}/${bw26FieldSize}`});
+  });
+
+  // BW 2025 athletes (born 2014) NOT in BW26 data
+  bw25Src.filter(a=>a.by===14&&!bw26Names.has(a.n.toLowerCase())).forEach(a=>{
+    const comp=Math.round((a.sqSc/35)*60)+(PP[a.gs]||0)+(PP[a.sl]||0);
+    // Discount BW25 data since it's now 1yr old
+    const projTotal=Math.round(Math.min(comp*1.4,250));
+    const gsP=Math.round(projTotal*0.38);
+    const slP=Math.round(projTotal*0.38);
+    const sgP=Math.round(projTotal*0.24);
+    incoming.push({n:a.n,c:a.c,g,y:2014,gs:0,sl:0,sg:0,total:0,gsP,slP,sgP,projTotal,
+      type:'incoming',label:'Incoming · BW25 est.'});
+  });
+
+  const all=[...returning,...incoming].sort((a,b)=>b.projTotal-a.projTotal);
+  const top25=all.slice(0,25);
+
+  renderPredictTable(top25,'U14',g,qualCut,'U14 2026-27 Projected Top 25',
+    'Returning born-2013 athletes: current scores + 12-25% trajectory-weighted bump + WRC bonus. Incoming born-2014: projected from BW 2026 GS by-year rank (field of '+bw26FieldSize+'). SL still pending — projections will sharpen after Saturday.',
+    200);
+}
+function renderPredictU16(){
+  const g=predictG;
+  const qualCut=12;
+
+  // ── Returning athletes (born 2011, 2nd/final year) ──
+  const returning=U16.filter(a=>a.y===2011&&a.g===g).map(a=>{
+    // Trajectory: compare first 5 vs last 5 races
+    const races=(a.races||[]).map(e=>e&&e[1]||0);
+    const mid=Math.floor(races.length/2);
+    const firstH=races.slice(0,mid).reduce((s,v)=>s+v,0);
+    const secondH=races.slice(mid).reduce((s,v)=>s+v,0);
+    const traj=firstH>0?secondH/firstH:1;
+    const bump=Math.min(1.10+Math.max(0,traj-1)*0.08, 1.22);
+    // Regionals bonus: competed at U16 regionals and placed well
+    const regSrc=g==='W'?RW:RM;
+    const regMatch=regSrc.find(r=>r.n.split(',')[0]===a.n.split(',')[0]||r.n===a.n);
+    const regBoost=regMatch?Math.max(1,(30-([regMatch.sg,regMatch.gs,regMatch.sl].filter(v=>v!=null).reduce((s,v)=>s+v,0)/[regMatch.sg,regMatch.gs,regMatch.sl].filter(v=>v!=null).length||30))/30*0.12+1):1;
+    const gsP=Math.min(Math.round(a.gs*bump*regBoost),400);
+    const slP=Math.min(Math.round(a.sl*bump*regBoost),400);
+    const sgP=Math.min(Math.round(a.sg*bump*regBoost),400);
+    const projTotal=gsP+slP+sgP;
+    return{...a,gsP,slP,sgP,projTotal,type:'returning',label:'Returning (Yr 2)'};
+  });
+
+  // ── Incoming athletes (born 2012, 1st U16 year) ──
+  // These are aging-out U14 athletes. Best signals:
+  // 1. WRC 2026 result (national competition vs 6 divisions)
+  // 2. U14 2025-26 season score (full season data)
+  const wrcSrc=g==='W'?WRC_W:WRC_M;
+  const incoming=U14.filter(a=>a.y===2012&&a.g===g).map(a=>{
+    // U14 scores (best-2-of-4 per discipline)
+    const c=CFG.u14;
+    const ev=(a.runs||[]).map(e=>e&&e[1]||0);
+    const scDisc=idx=>idx.map(i=>ev[i]||0).sort((a,b)=>b-a).slice(0,2).reduce((s,v)=>s+v,0);
+    const gs14=scDisc(c.discIdx.GS),sl14=scDisc(c.discIdx.SL),sg14=scDisc(c.discIdx.SG);
+    const total14=gs14+sl14+sg14;
+    
+    // WRC result: top national finishers get strong signal boost
+    const wrcMatch=wrcSrc.find(w=>w.n.split(',')[0].toLowerCase()===a.n.split(',')[0].toLowerCase());
+    const wrcAvg=wrcMatch?avgWRC(wrcMatch):null;
+    // WRC multiplier: top-10 nationally = strong U16 signal
+    const wrcMult=wrcAvg!=null
+      ?(wrcAvg<=5?2.2:wrcAvg<=10?1.9:wrcAvg<=20?1.6:wrcAvg<=35?1.35:1.2)
+      :1.0;
+    
+    // Scale U14 best-2-of-4 → U16 cumulative (more races, higher totals)
+    // U14 max ~600, U16 max ~900 — scale factor ~1.5
+    const base=total14*1.5*wrcMult;
+    const gsP=Math.min(Math.round(base*0.37),400);
+    const slP=Math.min(Math.round(base*0.37),400);
+    const sgP=Math.min(Math.round(base*0.26),400);
+    const projTotal=gsP+slP+sgP;
+    const wrcNote=wrcMatch?`WRC avg #${wrcAvg.toFixed(1)}`:'';
+    return{...a,gs:gs14,sl:sl14,sg:sg14,gsP,slP,sgP,projTotal,
+      wrcNote,wrcAvg,type:'incoming',label:wrcNote?`Incoming · U14+${wrcNote}`:'Incoming · U14 est.'};
+  });
+
+  const all=[...returning,...incoming].sort((a,b)=>b.projTotal-a.projTotal);
+  const top25=all.slice(0,25);
+
+  renderPredictTable(top25,'U16',g,qualCut,'U16 2026-27 Projected Top 25',
+    'Returning born-2011: current scores + trajectory-weighted bump (10-22%) + Regionals bonus. Incoming born-2012: U14 season scores scaled ×1.5 for cumulative U16 format, with WRC national result multiplier (top-10 nationally = up to 2.2× boost).',
+    400);
+}
+function renderPredictTable(athletes, level, g, qualCut, title, note, maxPts){
+  const maxProj=athletes[0]?.projTotal||1;
+
+  const rows=athletes.map((a,i)=>{
+    const rk=i+1;
+    const isRet=a.type==='returning';
+    const isSPAC=a.c==='SPAC';
+    const qualColor=rk<=qualCut?'var(--green)':rk<=qualCut+4?'var(--amber)':'var(--text3)';
+    const typeColor=isRet?'var(--blue)':'var(--amber)';
+    const typeBg=isRet?'var(--blue-dim)':'var(--amber-dim)';
+    const barW=Math.round((a.projTotal/maxProj)*100);
+    const wrcBadge=a.wrcNote?`<span style="font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:800;padding:1px 6px;background:#1a3a8f;color:#fff;margin-left:4px;text-transform:uppercase;letter-spacing:.04em">${a.wrcNote}</span>`:'';
+    const spacBadge=isSPAC?`<span class="wrc-badge" style="margin-left:4px">SPAC</span>`:'';
+
+    return`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border2);background:${isSPAC?'var(--blue-dim)':'var(--surface)'}">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:${qualColor};width:32px;text-align:right;flex-shrink:0">${rk<=qualCut?'#'+rk:rk<=qualCut+4?'A'+( rk-qualCut):''+rk}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:.01em;text-transform:uppercase;display:flex;align-items:center;flex-wrap:wrap;gap:3px">${a.n}${spacBadge}${wrcBadge}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
+          <span style="font-size:11px;color:var(--text3)">${a.c}</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:1px 6px;background:${typeBg};color:${typeColor};text-transform:uppercase;letter-spacing:.04em">${a.label}</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:6px">
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">GS ${a.gsP} · SL ${a.slP} · SG ${a.sgP}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right;min-width:54px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:${qualColor};line-height:1">${a.projTotal}</div>
+        <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-family:'Barlow Condensed',sans-serif;font-weight:700">proj pts</div>
+      </div>
+      <div style="width:80px;flex-shrink:0">
+        <div style="height:5px;background:var(--border);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${barW}%;background:${rk<=qualCut?'var(--green)':rk<=qualCut+4?'var(--amber)':'var(--blue)'}"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const retCount=athletes.filter(a=>a.type==='returning').length;
+  const incCount=athletes.filter(a=>a.type==='incoming').length;
+  const spacCount=athletes.filter(a=>a.c==='SPAC').length;
+
+  document.getElementById('predict-content').innerHTML=`
+<h2>${title} — ${g==='W'?'Women':'Men'}</h2>
+<p class="sub">${note}</p>
+<div class="mg mg-4" style="margin-bottom:14px">
+  <div class="m"><div class="l">In top 25</div><div class="v">25</div></div>
+  <div class="m"><div class="l">Returning</div><div class="v" style="color:var(--blue)">${retCount}</div></div>
+  <div class="m"><div class="l">Incoming</div><div class="v" style="color:var(--amber)">${incCount}</div></div>
+  <div class="m"><div class="l">SPAC</div><div class="v" style="color:var(--blue)">${spacCount}</div></div>
+</div>
+<div class="ban ban-a">
+  <div class="bt">⚠️ This is a projection, not a prediction</div>
+  <div class="bd">Based on historical improvement rates and current scores. New athletes, summer training, injuries, and race conditions will change everything. Use this as a directional guide, not a definitive ranking.</div>
+</div>
+<div style="display:flex;gap:10px;margin-bottom:10px;font-size:11px;color:var(--text2);flex-wrap:wrap;align-items:center">
+  <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;background:var(--green)"></div><span>Projected qualifier (top ${qualCut})</span></div>
+  <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;background:var(--amber)"></div><span>Bubble zone</span></div>
+  <div style="display:flex;align-items:center;gap:5px"><div style="width:28px;height:14px;background:var(--blue-dim);border:1px solid var(--blue)"></div><span>Returning athlete</span></div>
+  <div style="display:flex;align-items:center;gap:5px"><div style="width:28px;height:14px;background:var(--amber-dim);border:1px solid rgba(180,83,9,.3)"></div><span>Incoming athlete</span></div>
+</div>
+<div style="border:1px solid var(--border);background:var(--surface)">${rows}</div>`;
+}
+
+
+
+
+
+// Wire up search
+const _si=document.getElementById('search-input');
+if(_si){
+  _si.addEventListener('input',function(){onSearch(this.value);});
+  _si.addEventListener('focus',function(){if(this.value.trim())document.getElementById('search-results').style.display='block';});
+}
 updateSnote();populateClubs();populateAthletes();
+
 </script>
 </div>
 </body>
