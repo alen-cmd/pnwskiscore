@@ -537,12 +537,14 @@ p.sub{font-size:12px;color:var(--text2);margin-bottom:12px}
   </div>
   <div class="tabs">
     <button class="tb on" onclick="showBWTab('bw-ov')">Overview</button>
-    <button class="tb" onclick="showBWTab('bw-rs')">Full Results</button>
+    <button class="tb" onclick="showBWTab('bw-gs')">GS Results</button>
+    <button class="tb" onclick="showBWTab('bw-sl')">SL Results</button>
     <button class="tb" onclick="showBWTab('bw-pp')">Class Pipeline</button>
     <button class="tb" onclick="showBWTab('bw-wt')">Incoming Watch ↑</button>
   </div>
   <div class="pnl on" id="bw-ov"></div>
-  <div class="pnl" id="bw-rs"></div>
+  <div class="pnl" id="bw-gs"></div>
+  <div class="pnl" id="bw-sl"></div>
   <div class="pnl" id="bw-pp"></div>
   <div class="pnl" id="bw-wt"></div>
 </div>
@@ -811,106 +813,8 @@ const BW25_M=[{n:"Olson, Gavin",c:"SPAC",by:13,sq:1,sqSc:30.25,gs:1,sl:2},{n:"Gu
 const BW25_W=[{n:"Bertell, Kaeli",c:"TARP",by:13,sq:1,sqSc:33.0,gs:1,sl:1},{n:"Ozegovic, Amina",c:"SPAC",by:13,sq:9,sqSc:28.25,gs:6,sl:5},{n:"Entrop, Sloane",c:"SPAC",by:13,sq:10,sqSc:27.875,gs:11,sl:14},{n:"Pettersen, Kenzie",c:"SPAC",by:13,sq:14,sqSc:27.25,gs:50,sl:25},{n:"Underwood, Emeline",c:"SPAC",by:13,sq:17,sqSc:26.875,gs:15,sl:24},{n:"Underwood, Nora",c:"SPAC",by:13,sq:49,sqSc:23.125,gs:47,sl:36},{n:"Chang, Harper",c:"SPAC",by:14,sq:33,sqSc:25.0,gs:24,sl:32},{n:"Brindza, Liesel",c:"SPAC",by:14,sq:70,sqSc:21.375,gs:86,sl:72},{n:"Stephenson, Addie",c:"SPAC",by:14,sq:73,sqSc:21.125,gs:83,sl:83},{n:"Johnson, Roslyn",c:"SPAC",by:14,sq:98,sqSc:16.5,gs:95,sl:85},{n:"Hoffman, Scarlet",c:"CSAT",by:13,sq:5,sqSc:30.75,gs:10,sl:8},{n:"Baroni, Jenna",c:"SARS",by:13,sq:8,sqSc:28.875,gs:4,sl:null},{n:"Webb, Sutton",c:"SARS",by:13,sq:44,sqSc:23.625,gs:2,sl:null},{n:"Gidley, Elsa",c:"SARS",by:13,sq:23,sqSc:25.75,gs:8,sl:13},{n:"Garren, Cailtyn",c:"MBSEF",by:13,sq:11,sqSc:27.75,gs:13,sl:10},{n:"Siebens, Aili",c:"MRST",by:13,sq:39,sqSc:24.375,gs:12,sl:4},{n:"Gaffney, Emery",c:"CMAC",by:13,sq:71,sqSc:21.375,gs:3,sl:3},{n:"Purchase, Florence",c:"CMAC",by:13,sq:7,sqSc:29.625,gs:25,sl:9},{n:"Graham, Brooke",c:"CMAC",by:13,sq:12,sqSc:27.625,gs:null,sl:20},{n:"Duff, Claire",c:"SARS",by:13,sq:28,sqSc:25.25,gs:null,sl:26},{n:"Tarnow, Maerin",c:"MBSEF",by:13,sq:19,sqSc:26.5,gs:null,sl:17},{n:"Hopkins, Lena",c:"WPSC",by:13,sq:2,sqSc:31.25,gs:9,sl:7},{n:"Rauber, Isabel",c:"MBSEF",by:13,sq:37,sqSc:24.5,gs:16,sl:26},{n:"Beyreuther, Hadley",c:"SARS",by:13,sq:77,sqSc:20.125,gs:27,sl:15},{n:"Tennyson, Charlotte",c:"BART",by:13,sq:36,sqSc:24.5,gs:14,sl:11},{n:"Sullivan, Eiden",c:"TARP",by:13,sq:35,sqSc:24.625,gs:32,sl:12},{n:"Brown, Lily",c:"LPRT",by:14,sq:53,sqSc:22.75,gs:7,sl:null}];
 
 // ══ BW 2026 DATA (Mount Bachelor · March 28-30, 2026) — COMING SOON ══
-const BW26_M=[];  // To be populated after the event
-const BW26_W=[
-  {n:"Olsson, Pep",c:"CSAT",by:2014,gsOv:1,gs:1,gsT:"1:23.33",sl:null,slT:""},
-  {n:"Brown, Lily",c:"LPRT",by:2014,gsOv:2,gs:2,gsT:"1:24.50",sl:null,slT:""},
-  {n:"Samuelson, Catherine",c:"LPRT",by:2014,gsOv:3,gs:3,gsT:"1:25.59",sl:null,slT:""},
-  {n:"Dix, Aubrey",c:"SARS",by:2014,gsOv:4,gs:4,gsT:"1:25.75",sl:null,slT:""},
-  {n:"Simon, Sierra",c:"SPAC",by:2015,gsOv:5,gs:1,gsT:"1:27.86",sl:null,slT:""},
-  {n:"Chang, Harper",c:"SPAC",by:2014,gsOv:6,gs:5,gsT:"1:28.39",sl:null,slT:""},
-  {n:"Barshis, Penelope",c:"CMAC",by:2015,gsOv:7,gs:2,gsT:"1:28.45",sl:null,slT:""},
-  {n:"Spitz, Chloe",c:"CMAC",by:2014,gsOv:8,gs:6,gsT:"1:29.18",sl:null,slT:""},
-  {n:"McCarry, Quinn",c:"CMAC",by:2014,gsOv:9,gs:7,gsT:"1:29.25",sl:null,slT:""},
-  {n:"Wang, Catherine",c:"CMAC",by:2014,gsOv:10,gs:8,gsT:"1:29.89",sl:null,slT:""},
-  {n:"Fong, Penelope",c:"MHSEF",by:2014,gsOv:11,gs:9,gsT:"1:30.09",sl:null,slT:""},
-  {n:"Tamfer, Charlotte",c:"CSAT",by:2015,gsOv:12,gs:3,gsT:"1:30.99",sl:null,slT:""},
-  {n:"Severn, Rhetta",c:"WPSC",by:2014,gsOv:13,gs:10,gsT:"1:31.10",sl:null,slT:""},
-  {n:"Zhou, Evelyn",c:"CMAC",by:2015,gsOv:14,gs:4,gsT:"1:32.42",sl:null,slT:""},
-  {n:"Conley, Addison",c:"LPRT",by:2015,gsOv:15,gs:5,gsT:"1:32.64",sl:null,slT:""},
-  {n:"Maier, Lena",c:"MRST",by:2014,gsOv:15,gs:11,gsT:"1:32.64",sl:null,slT:""},
-  {n:"Durrell, Esther",c:"MBSEF",by:2014,gsOv:17,gs:12,gsT:"1:32.77",sl:null,slT:""},
-  {n:"Offenbecher, Ava",c:"CMAC",by:2015,gsOv:18,gs:6,gsT:"1:32.97",sl:null,slT:""},
-  {n:"Kunkler, Georgia",c:"CSAT",by:2014,gsOv:19,gs:13,gsT:"1:33.10",sl:null,slT:""},
-  {n:"Craveiro, Stella",c:"MBSEF",by:2014,gsOv:20,gs:14,gsT:"1:33.13",sl:null,slT:""},
-  {n:"Hughes, Helena",c:"SARS",by:2014,gsOv:21,gs:15,gsT:"1:33.21",sl:null,slT:""},
-  {n:"Xia, Evelyn",c:"CMAC",by:2015,gsOv:22,gs:7,gsT:"1:33.54",sl:null,slT:""},
-  {n:"Mitchell, Margot",c:"SARS",by:2014,gsOv:23,gs:16,gsT:"1:33.78",sl:null,slT:""},
-  {n:"Scherr, Sissy Ever",c:"SARS",by:2015,gsOv:24,gs:8,gsT:"1:33.95",sl:null,slT:""},
-  {n:"Zhang, Genevra",c:"TAS",by:2014,gsOv:25,gs:17,gsT:"1:34.40",sl:null,slT:""},
-  {n:"Ozegovic, Leila",c:"SPAC",by:2015,gsOv:26,gs:9,gsT:"1:34.63",sl:null,slT:""},
-  {n:"Dobson - Cudahy, Madeleine",c:"CSAT",by:2014,gsOv:27,gs:18,gsT:"1:34.95",sl:null,slT:""},
-  {n:"Kunimoto, Paulina",c:"TAS",by:2014,gsOv:28,gs:19,gsT:"1:35.39",sl:null,slT:""},
-  {n:"Hunter, Emilia",c:"MBSEF",by:2014,gsOv:29,gs:20,gsT:"1:35.53",sl:null,slT:""},
-  {n:"Elling, Svea",c:"WPSC",by:2014,gsOv:30,gs:21,gsT:"1:35.98",sl:null,slT:""},
-  {n:"Prentice, Alessandra",c:"MHSEF",by:2015,gsOv:31,gs:10,gsT:"1:36.76",sl:null,slT:""},
-  {n:"Graeper, May",c:"CSAT",by:2014,gsOv:32,gs:22,gsT:"1:36.92",sl:null,slT:""},
-  {n:"Weber, Ella",c:"SPARC",by:2014,gsOv:33,gs:23,gsT:"1:38.19",sl:null,slT:""},
-  {n:"Schneider, Nora",c:"MSSRT",by:2015,gsOv:34,gs:11,gsT:"1:38.45",sl:null,slT:""},
-  {n:"Duhen, Sophie",c:"MHSEF",by:2015,gsOv:35,gs:12,gsT:"1:38.81",sl:null,slT:""},
-  {n:"Scott, Josie",c:"MBSEF",by:2014,gsOv:36,gs:24,gsT:"1:39.49",sl:null,slT:""},
-  {n:"Brindza, Liesel",c:"SPAC",by:2014,gsOv:37,gs:25,gsT:"1:39.86",sl:null,slT:""},
-  {n:"Ingraham, Ashley",c:"MRST",by:2015,gsOv:37,gs:13,gsT:"1:39.86",sl:null,slT:""},
-  {n:"Norbe, Stevie",c:"WPSC",by:2015,gsOv:39,gs:14,gsT:"1:39.97",sl:null,slT:""},
-  {n:"Leonard, Annabelle",c:"SARS",by:2014,gsOv:40,gs:26,gsT:"1:40.10",sl:null,slT:""},
-  {n:"McFarland, Madeline",c:"SARS",by:2014,gsOv:41,gs:27,gsT:"1:40.13",sl:null,slT:""},
-  {n:"Saylor, Sloane",c:"MRT",by:2015,gsOv:42,gs:15,gsT:"1:40.38",sl:null,slT:""},
-  {n:"Leahy, Amelia",c:"SPARC",by:2014,gsOv:43,gs:28,gsT:"1:40.47",sl:null,slT:""},
-  {n:"Dolan, Maryn",c:"MHSEF",by:2014,gsOv:44,gs:29,gsT:"1:40.62",sl:null,slT:""},
-  {n:"Bordelon, Zoe",c:"MBSEF",by:2014,gsOv:45,gs:30,gsT:"1:40.75",sl:null,slT:""},
-  {n:"Taylor, Jane",c:"SARS",by:2015,gsOv:46,gs:16,gsT:"1:40.85",sl:null,slT:""},
-  {n:"Byrd, Hayden",c:"MBSEF",by:2015,gsOv:47,gs:17,gsT:"1:41.04",sl:null,slT:""},
-  {n:"Mitchell, Sophia",c:"WPSC",by:2015,gsOv:48,gs:18,gsT:"1:41.79",sl:null,slT:""},
-  {n:"Tate, Memphis",c:"SARS",by:2015,gsOv:49,gs:19,gsT:"1:41.82",sl:null,slT:""},
-  {n:"Pallot, Chloe",c:"CMAC",by:2014,gsOv:50,gs:31,gsT:"1:41.90",sl:null,slT:""},
-  {n:"Shoemaker, Emerson",c:"SARS",by:2014,gsOv:51,gs:32,gsT:"1:42.25",sl:null,slT:""},
-  {n:"Connolly, Rachel",c:"MBSEF",by:2014,gsOv:52,gs:33,gsT:"1:42.54",sl:null,slT:""},
-  {n:"Barron, Ayla",c:"SPAC",by:2014,gsOv:53,gs:34,gsT:"1:42.55",sl:null,slT:""},
-  {n:"Si, Wynne",c:"SPARC",by:2015,gsOv:54,gs:20,gsT:"1:43.04",sl:null,slT:""},
-  {n:"Harker, Sage",c:"BART",by:2015,gsOv:55,gs:21,gsT:"1:44.55",sl:null,slT:""},
-  {n:"Gruber, Genevieve",c:"MHSEF",by:2015,gsOv:56,gs:22,gsT:"1:45.29",sl:null,slT:""},
-  {n:"Ibarra, Alice",c:"MAC",by:2014,gsOv:57,gs:35,gsT:"1:45.45",sl:null,slT:""},
-  {n:"Kudriavtseff, Paige",c:"CMAC",by:2015,gsOv:58,gs:23,gsT:"1:46.10",sl:null,slT:""},
-  {n:"Smeby, Olive",c:"CSAT",by:2014,gsOv:59,gs:36,gsT:"1:46.50",sl:null,slT:""},
-  {n:"Thompson, Colbie",c:"SPARC",by:2014,gsOv:60,gs:37,gsT:"1:46.52",sl:null,slT:""},
-  {n:"Chartrey, Isla",c:"SARS",by:2015,gsOv:61,gs:24,gsT:"1:46.65",sl:null,slT:""},
-  {n:"Berg, Aspen",c:"SARS",by:2014,gsOv:62,gs:38,gsT:"1:46.89",sl:null,slT:""},
-  {n:"Miller, Esme",c:"MBSEF",by:2014,gsOv:63,gs:39,gsT:"1:47.68",sl:null,slT:""},
-  {n:"Herriott, Evie",c:"MBSEF",by:2015,gsOv:64,gs:25,gsT:"1:47.77",sl:null,slT:""},
-  {n:"Merritt, Ellen",c:"SPAC",by:2015,gsOv:65,gs:26,gsT:"1:47.88",sl:null,slT:""},
-  {n:"Vavrosky, Roslyn",c:"LPRT",by:2015,gsOv:66,gs:27,gsT:"1:48.00",sl:null,slT:""},
-  {n:"McCallum, Molly",c:"SARS",by:2014,gsOv:67,gs:40,gsT:"1:48.98",sl:null,slT:""},
-  {n:"Masingale, Harper",c:"MSSRT",by:2014,gsOv:68,gs:41,gsT:"1:50.00",sl:null,slT:""},
-  {n:"Gage, Lucy",c:"MBSEF",by:2014,gsOv:69,gs:42,gsT:"1:50.62",sl:null,slT:""},
-  {n:"Hurl, Marti",c:"MBSEF",by:2014,gsOv:70,gs:43,gsT:"1:50.84",sl:null,slT:""},
-  {n:"Hellem, Mackenzie",c:"WPSC",by:2015,gsOv:71,gs:28,gsT:"1:51.86",sl:null,slT:""},
-  {n:"Bettesworth, Ila",c:"SARS",by:2015,gsOv:72,gs:29,gsT:"1:51.87",sl:null,slT:""},
-  {n:"Lagreid, Caroline",c:"SARS",by:2014,gsOv:73,gs:44,gsT:"1:51.92",sl:null,slT:""},
-  {n:"Conti, Frances",c:"CSAT",by:2015,gsOv:74,gs:30,gsT:"1:52.16",sl:null,slT:""},
-  {n:"Duncan, Helle",c:"BART",by:2015,gsOv:75,gs:31,gsT:"1:52.52",sl:null,slT:""},
-  {n:"Berg, Lily",c:"MBSEF",by:2014,gsOv:76,gs:45,gsT:"1:52.53",sl:null,slT:""},
-  {n:"Inklab, Natania",c:"WPSC",by:2015,gsOv:77,gs:32,gsT:"1:52.75",sl:null,slT:""},
-  {n:"Buciarski, Maya",c:"HART",by:2014,gsOv:78,gs:46,gsT:"1:52.99",sl:null,slT:""},
-  {n:"Obermire, Madison",c:"HART",by:2014,gsOv:79,gs:47,gsT:"1:53.14",sl:null,slT:""},
-  {n:"Johnson, Roslyn",c:"SPAC",by:2014,gsOv:80,gs:48,gsT:"1:53.38",sl:null,slT:""},
-  {n:"Montgomery, Lillian",c:"INDY",by:2015,gsOv:81,gs:33,gsT:"1:53.48",sl:null,slT:""},
-  {n:"Rosen, Sloane",c:"TAS",by:2014,gsOv:82,gs:49,gsT:"1:53.73",sl:null,slT:""},
-  {n:"Kaplanyan, Diana",c:"SPARC",by:2014,gsOv:83,gs:50,gsT:"1:53.98",sl:null,slT:""},
-  {n:"Benc, Ellie",c:"SARS",by:2015,gsOv:84,gs:34,gsT:"1:54.03",sl:null,slT:""},
-  {n:"Likens, Araya",c:"HART",by:2014,gsOv:85,gs:51,gsT:"1:54.07",sl:null,slT:""},
-  {n:"Robbins, Sydney",c:"TAS",by:2014,gsOv:86,gs:52,gsT:"1:54.71",sl:null,slT:""},
-  {n:"Uchikawa, Evelyn",c:"MBSEF",by:2015,gsOv:87,gs:35,gsT:"1:54.86",sl:null,slT:""},
-  {n:"Schoening, Wesley",c:"SPAC",by:2015,gsOv:88,gs:36,gsT:"1:56.27",sl:null,slT:""},
-  {n:"Chheng-Mikula, Hawthorne",c:"TAS",by:2015,gsOv:89,gs:37,gsT:"1:58.39",sl:null,slT:""},
-  {n:"Slone, Claire",c:"SARS",by:2014,gsOv:90,gs:53,gsT:"1:58.84",sl:null,slT:""},
-  {n:"Ellers, Larkin",c:"MBSEF",by:2015,gsOv:91,gs:38,gsT:"1:59.31",sl:null,slT:""},
-  {n:"Cummins, Eva",c:"SARS",by:2014,gsOv:92,gs:54,gsT:"1:59.69",sl:null,slT:""},
-  {n:"Delpit, Lila",c:"MBSEF",by:2015,gsOv:93,gs:39,gsT:"2:01.35",sl:null,slT:""},
-  {n:"Collins, Claire",c:"MBSEF",by:2015,gsOv:94,gs:40,gsT:"2:03.78",sl:null,slT:""},
-  {n:"Kelly, Ann",c:"TAS",by:2014,gsOv:94,gs:55,gsT:"2:03.78",sl:null,slT:""},
-  {n:"Lieb, Helena",c:"MSSRT",by:2015,gsOv:96,gs:41,gsT:"2:05.84",sl:null,slT:""},
-  {n:"Traynor, Juliet",c:"MBSEF",by:2015,gsOv:97,gs:42,gsT:"2:20.91",sl:null,slT:""}
-];
+const BW26_M=[{n:"Pavlovcic, Mateo",c:"CMAC",by:2015,gsOv:1,gs:1,gsT:"1:22.69",sl:null,slT:""},{n:"Lechleitner, Thatcher",c:"LPRT",by:2014,gsOv:2,gs:1,gsT:"1:25.06",sl:null,slT:""},{n:"Johnston, Rory",c:"INDY",by:2014,gsOv:3,gs:2,gsT:"1:25.33",sl:null,slT:""},{n:"Buyukcetin, Luca",c:"SPAC",by:2014,gsOv:4,gs:3,gsT:"1:25.62",sl:null,slT:""},{n:"Dahlberg, James",c:"TAS",by:2014,gsOv:5,gs:4,gsT:"1:28.20",sl:null,slT:""},{n:"Scoccolo, Brody",c:"CMAC",by:2014,gsOv:6,gs:5,gsT:"1:28.59",sl:null,slT:""},{n:"Sawyer, Lincoln",c:"LPRT",by:2014,gsOv:7,gs:6,gsT:"1:29.15",sl:null,slT:""},{n:"Elgee, Jack",c:"SARS",by:2014,gsOv:8,gs:7,gsT:"1:29.18",sl:null,slT:""},{n:"Vaughn, Levi",c:"MRT",by:2014,gsOv:9,gs:8,gsT:"1:29.75",sl:null,slT:""},{n:"Meyers, Aksel",c:"INDY",by:2015,gsOv:10,gs:2,gsT:"1:29.90",sl:null,slT:""},{n:"Hanchett, Henrik",c:"WPSC",by:2015,gsOv:11,gs:3,gsT:"1:29.96",sl:null,slT:""},{n:"Cardin, Miles",c:"SARS",by:2014,gsOv:12,gs:9,gsT:"1:30.26",sl:null,slT:""},{n:"Chartrey, Easton",c:"SARS",by:2014,gsOv:13,gs:10,gsT:"1:30.73",sl:null,slT:""},{n:"Marconi, Jackson",c:"SPARC",by:2015,gsOv:14,gs:4,gsT:"1:30.86",sl:null,slT:""},{n:"Wietecki, Samuel",c:"MRT",by:2014,gsOv:15,gs:11,gsT:"1:30.95",sl:null,slT:""},{n:"Roper, Saul",c:"HART",by:2014,gsOv:16,gs:12,gsT:"1:31.05",sl:null,slT:""},{n:"Pederson, Beau",c:"SARS",by:2014,gsOv:17,gs:13,gsT:"1:31.11",sl:null,slT:""},{n:"Wood, Chase",c:"MSSRT",by:2015,gsOv:18,gs:5,gsT:"1:31.50",sl:null,slT:""},{n:"Mirick, Mats",c:"MRST",by:2014,gsOv:19,gs:14,gsT:"1:31.57",sl:null,slT:""},{n:"Stewart, Coen",c:"SPAC",by:2013,gsOv:20,gs:1,gsT:"1:31.76",sl:null,slT:""},{n:"Hamer, Avi",c:"SARS",by:2014,gsOv:21,gs:15,gsT:"1:32.08",sl:null,slT:""},{n:"Alvis, Vince",c:"CSAT",by:2014,gsOv:22,gs:16,gsT:"1:32.77",sl:null,slT:""},{n:"Kitajima, Sosuke",c:"CMAC",by:2015,gsOv:23,gs:6,gsT:"1:32.81",sl:null,slT:""},{n:"Kujala, Gustav",c:"MRST",by:2014,gsOv:24,gs:17,gsT:"1:32.99",sl:null,slT:""},{n:"Barbizam, Grant",c:"TAS",by:2014,gsOv:25,gs:18,gsT:"1:33.83",sl:null,slT:""},{n:"Cochran, Kynen",c:"MHSEF",by:2014,gsOv:26,gs:19,gsT:"1:35.43",sl:null,slT:""},{n:"Baroni, Jonah",c:"SARS",by:2014,gsOv:27,gs:20,gsT:"1:35.59",sl:null,slT:""},{n:"Jansson, Eric",c:"SARS",by:2014,gsOv:28,gs:21,gsT:"1:35.80",sl:null,slT:""},{n:"Perrault, Forrest",c:"WPSC",by:2015,gsOv:29,gs:7,gsT:"1:35.86",sl:null,slT:""},{n:"Kepler, Avery",c:"MSSRT",by:2015,gsOv:30,gs:8,gsT:"1:36.90",sl:null,slT:""},{n:"Caldwell, Miles",c:"CSAT",by:2014,gsOv:31,gs:22,gsT:"1:38.72",sl:null,slT:""},{n:"Griffith, Tucker",c:"SPARC",by:2014,gsOv:32,gs:23,gsT:"1:38.90",sl:null,slT:""},{n:"Thompson, Luke",c:"MRT",by:2014,gsOv:33,gs:24,gsT:"1:39.28",sl:null,slT:""},{n:"Wuest, Blake",c:"LPRT",by:2015,gsOv:34,gs:9,gsT:"1:40.29",sl:null,slT:""},{n:"Friedlander, Hudson",c:"MRST",by:2015,gsOv:35,gs:10,gsT:"1:40.31",sl:null,slT:""},{n:"Keever, Kingman",c:"WPSC",by:2014,gsOv:36,gs:25,gsT:"1:40.75",sl:null,slT:""},{n:"Metzler, Bode",c:"CMAC",by:2015,gsOv:37,gs:11,gsT:"1:41.10",sl:null,slT:""},{n:"Langler, Braden",c:"SPAC",by:2014,gsOv:38,gs:26,gsT:"1:41.20",sl:null,slT:""},{n:"Cooper, Erik",c:"WPSC",by:2014,gsOv:39,gs:27,gsT:"1:41.90",sl:null,slT:""},{n:"English, Henry",c:"MHSEF",by:2015,gsOv:40,gs:12,gsT:"1:42.51",sl:null,slT:""},{n:"Heck, Holden",c:"MBSEF",by:2015,gsOv:40,gs:13,gsT:"1:42.51",sl:null,slT:""},{n:"Duvall, Daniel",c:"SPARC",by:2015,gsOv:42,gs:14,gsT:"1:43.14",sl:null,slT:""},{n:"Connor, Griffin",c:"SPAC",by:2015,gsOv:43,gs:15,gsT:"1:43.20",sl:null,slT:""},{n:"Brown, Chase",c:"MRT",by:2014,gsOv:44,gs:28,gsT:"1:43.22",sl:null,slT:""},{n:"Tham, Lucas",c:"SPAC",by:2014,gsOv:45,gs:29,gsT:"1:43.48",sl:null,slT:""},{n:"Korfiatis, Nico",c:"BART",by:2015,gsOv:46,gs:16,gsT:"1:44.51",sl:null,slT:""},{n:"Fowler, Samuel",c:"MAC",by:2014,gsOv:47,gs:30,gsT:"1:44.62",sl:null,slT:""},{n:"Zhang, Charlie",c:"CMAC",by:2014,gsOv:48,gs:31,gsT:"1:45.14",sl:null,slT:""},{n:"Webb, Emmett",c:"MBSEF",by:2015,gsOv:49,gs:17,gsT:"1:45.50",sl:null,slT:""},{n:"Mahre, Ethan",c:"WPSC",by:2014,gsOv:50,gs:32,gsT:"1:45.96",sl:null,slT:""},{n:"Lentini, Easton",c:"MBSEF",by:2015,gsOv:51,gs:18,gsT:"1:46.34",sl:null,slT:""},{n:"Arnold, Archer",c:"TAS",by:2015,gsOv:52,gs:19,gsT:"1:47.08",sl:null,slT:""},{n:"Greene, Talmadge",c:"LPRT",by:2015,gsOv:53,gs:20,gsT:"1:48.69",sl:null,slT:""},{n:"Bolding, Roman",c:"MBSEF",by:2014,gsOv:54,gs:33,gsT:"1:48.93",sl:null,slT:""},{n:"Mohammed, Ilyas",c:"MRST",by:2015,gsOv:55,gs:21,gsT:"1:49.33",sl:null,slT:""},{n:"Somerville, Bennett",c:"SARS",by:2014,gsOv:56,gs:34,gsT:"1:49.50",sl:null,slT:""},{n:"Tahir, Raffi",c:"MAC",by:2014,gsOv:57,gs:35,gsT:"1:50.12",sl:null,slT:""},{n:"Bates, Deacan",c:"TAS",by:2014,gsOv:58,gs:36,gsT:"1:50.21",sl:null,slT:""},{n:"Sanchez, Buchanan",c:"CMAC",by:2015,gsOv:59,gs:22,gsT:"1:50.38",sl:null,slT:""},{n:"Rhodes, Lucas",c:"LPRT",by:2014,gsOv:60,gs:37,gsT:"1:50.40",sl:null,slT:""},{n:"Stapleton, Parker",c:"MHSEF",by:2015,gsOv:61,gs:23,gsT:"1:50.63",sl:null,slT:""},{n:"Derting, Hank",c:"MRST",by:2015,gsOv:62,gs:24,gsT:"1:51.96",sl:null,slT:""},{n:"Bell, Pierce",c:"HART",by:2015,gsOv:63,gs:25,gsT:"1:52.30",sl:null,slT:""},{n:"Buckley, Bryn",c:"MBSEF",by:2014,gsOv:64,gs:38,gsT:"1:52.37",sl:null,slT:""},{n:"Francis, Callum",c:"MBSEF",by:2015,gsOv:65,gs:26,gsT:"1:52.42",sl:null,slT:""},{n:"Zhang, Ivan",c:"SPARC",by:2014,gsOv:66,gs:39,gsT:"1:53.00",sl:null,slT:""},{n:"Fuld, Leo",c:"MRST",by:2015,gsOv:67,gs:27,gsT:"1:54.58",sl:null,slT:""},{n:"Wang, Junhao",c:"SPAC",by:2014,gsOv:68,gs:40,gsT:"1:55.70",sl:null,slT:""},{n:"Bennett, William",c:"TAS",by:2014,gsOv:69,gs:41,gsT:"1:59.82",sl:null,slT:""},{n:"Schreiner, Jack",c:"MSSRT",by:2015,gsOv:70,gs:28,gsT:"2:00.78",sl:null,slT:""},{n:"Chen, Alan",c:"TAS",by:2015,gsOv:71,gs:29,gsT:"2:00.93",sl:null,slT:""},{n:"Samuel, Grant",c:"MHSEF",by:2014,gsOv:72,gs:42,gsT:"2:01.07",sl:null,slT:""},{n:"Noyes, Nikolas",c:"MSSRT",by:2015,gsOv:73,gs:30,gsT:"2:02.82",sl:null,slT:""},{n:"Chen, Bryan",c:"TAS",by:2015,gsOv:74,gs:31,gsT:"2:04.98",sl:null,slT:""},{n:"Stetson, Dean",c:"CMAC",by:2015,gsOv:75,gs:32,gsT:"2:07.39",sl:null,slT:""},{n:"Malin, Nathan",c:"MBSEF",by:2014,gsOv:76,gs:43,gsT:"2:09.51",sl:null,slT:""}];
+const BW26_W=[{n:"Olsson, Pep",c:"CSAT",by:2014,gsOv:1,gs:1,gsT:"1:23.33",sl:1,slOv:1,slT:"1:13.70"},{n:"Brown, Lily",c:"LPRT",by:2014,gsOv:2,gs:2,gsT:"1:24.50",sl:3,slOv:3,slT:"1:21.95"},{n:"Samuelson, Catherine",c:"LPRT",by:2014,gsOv:3,gs:3,gsT:"1:25.59",sl:4,slOv:4,slT:"1:23.94"},{n:"Dix, Aubrey",c:"SARS",by:2014,gsOv:4,gs:4,gsT:"1:25.75",sl:5,slOv:5,slT:"1:23.97"},{n:"Simon, Sierra",c:"SPAC",by:2015,gsOv:5,gs:1,gsT:"1:27.86",sl:2,slOv:12,slT:"1:27.22"},{n:"Chang, Harper",c:"SPAC",by:2014,gsOv:6,gs:5,gsT:"1:28.39",sl:7,slOv:7,slT:"1:24.20"},{n:"Barshis, Penelope",c:"CMAC",by:2015,gsOv:7,gs:2,gsT:"1:28.45",sl:null,slT:""},{n:"Spitz, Chloe",c:"CMAC",by:2014,gsOv:8,gs:6,gsT:"1:29.18",sl:12,slOv:15,slT:"1:28.68"},{n:"McCarry, Quinn",c:"CMAC",by:2014,gsOv:9,gs:7,gsT:"1:29.25",sl:11,slOv:13,slT:"1:28.17"},{n:"Wang, Catherine",c:"CMAC",by:2014,gsOv:10,gs:8,gsT:"1:29.89",sl:16,slOv:19,slT:"1:31.01"},{n:"Fong, Penelope",c:"MHSEF",by:2014,gsOv:11,gs:9,gsT:"1:30.09",sl:6,slOv:6,slT:"1:24.18"},{n:"Tamfer, Charlotte",c:"CSAT",by:2015,gsOv:12,gs:3,gsT:"1:30.99",sl:null,slT:""},{n:"Severn, Rhetta",c:"WPSC",by:2014,gsOv:13,gs:10,gsT:"1:31.10",sl:8,slOv:9,slT:"1:25.68"},{n:"Zhou, Evelyn",c:"CMAC",by:2015,gsOv:14,gs:4,gsT:"1:32.42",sl:null,slT:""},{n:"Conley, Addison",c:"LPRT",by:2015,gsOv:15,gs:5,gsT:"1:32.64",sl:7,slOv:26,slT:"1:31.93"},{n:"Maier, Lena",c:"MRST",by:2014,gsOv:15,gs:11,gsT:"1:32.64",sl:22,slOv:30,slT:"1:33.91"},{n:"Durrell, Esther",c:"MBSEF",by:2014,gsOv:17,gs:12,gsT:"1:32.77",sl:13,slOv:16,slT:"1:28.68"},{n:"Offenbecher, Ava",c:"CMAC",by:2015,gsOv:18,gs:6,gsT:"1:32.97",sl:11,slOv:39,slT:"1:39.29"},{n:"Kunkler, Georgia",c:"CSAT",by:2014,gsOv:19,gs:13,gsT:"1:33.10",sl:15,slOv:18,slT:"1:30.99"},{n:"Craveiro, Stella",c:"MBSEF",by:2014,gsOv:20,gs:14,gsT:"1:33.13",sl:40,slOv:60,slT:"1:44.53"},{n:"Hughes, Helena",c:"SARS",by:2014,gsOv:21,gs:15,gsT:"1:33.21",sl:9,slOv:10,slT:"1:26.17"},{n:"Xia, Evelyn",c:"CMAC",by:2015,gsOv:22,gs:7,gsT:"1:33.54",sl:6,slOv:24,slT:"1:31.84"},{n:"Mitchell, Margot",c:"SARS",by:2014,gsOv:23,gs:16,gsT:"1:33.78",sl:10,slOv:11,slT:"1:26.63"},{n:"Scherr, Sissy Ever",c:"SARS",by:2015,gsOv:24,gs:8,gsT:"1:33.95",sl:3,slOv:14,slT:"1:28.57"},{n:"Zhang, Genevra",c:"TAS",by:2014,gsOv:25,gs:17,gsT:"1:34.40",sl:27,slOv:37,slT:"1:38.58"},{n:"Ozegovic, Leila",c:"SPAC",by:2015,gsOv:26,gs:9,gsT:"1:34.63",sl:4,slOv:22,slT:"1:31.62"},{n:"Dobson - Cudahy, Madeleine",c:"CSAT",by:2014,gsOv:27,gs:18,gsT:"1:34.95",sl:null,slT:""},{n:"Kunimoto, Paulina",c:"TAS",by:2014,gsOv:28,gs:19,gsT:"1:35.39",sl:null,slT:""},{n:"Hunter, Emilia",c:"MBSEF",by:2014,gsOv:29,gs:20,gsT:"1:35.53",sl:14,slOv:17,slT:"1:30.88"},{n:"Elling, Svea",c:"WPSC",by:2014,gsOv:30,gs:21,gsT:"1:35.98",sl:34,slOv:52,slT:"1:41.98"},{n:"Prentice, Alessandra",c:"MHSEF",by:2015,gsOv:31,gs:10,gsT:"1:36.76",sl:1,slOv:8,slT:"1:25.35"},{n:"Graeper, May",c:"CSAT",by:2014,gsOv:32,gs:22,gsT:"1:36.92",sl:17,slOv:20,slT:"1:31.32"},{n:"Weber, Ella",c:"SPARC",by:2014,gsOv:33,gs:23,gsT:"1:38.19",sl:28,slOv:38,slT:"1:38.87"},{n:"Schneider, Nora",c:"MSSRT",by:2015,gsOv:34,gs:11,gsT:"1:38.45",sl:15,slOv:44,slT:"1:41.07"},{n:"Duhen, Sophie",c:"MHSEF",by:2015,gsOv:35,gs:12,gsT:"1:38.81",sl:9,slOv:31,slT:"1:34.77"},{n:"Scott, Josie",c:"MBSEF",by:2014,gsOv:36,gs:24,gsT:"1:39.49",sl:25,slOv:34,slT:"1:35.53"},{n:"Brindza, Liesel",c:"SPAC",by:2014,gsOv:37,gs:25,gsT:"1:39.86",sl:null,slT:""},{n:"Ingraham, Ashley",c:"MRST",by:2015,gsOv:37,gs:13,gsT:"1:39.86",sl:10,slOv:36,slT:"1:38.22"},{n:"Norbe, Stevie",c:"WPSC",by:2015,gsOv:39,gs:14,gsT:"1:39.97",sl:18,slOv:51,slT:"1:41.60"},{n:"Leonard, Annabelle",c:"SARS",by:2014,gsOv:40,gs:26,gsT:"1:40.10",sl:24,slOv:33,slT:"1:35.53"},{n:"McFarland, Madeline",c:"SARS",by:2014,gsOv:41,gs:27,gsT:"1:40.13",sl:30,slOv:45,slT:"1:41.09"},{n:"Saylor, Sloane",c:"MRT",by:2015,gsOv:42,gs:15,gsT:"1:40.38",sl:21,slOv:61,slT:"1:44.98"},{n:"Leahy, Amelia",c:"SPARC",by:2014,gsOv:43,gs:28,gsT:"1:40.47",sl:31,slOv:46,slT:"1:41.11"},{n:"Dolan, Maryn",c:"MHSEF",by:2014,gsOv:44,gs:29,gsT:"1:40.62",sl:18,slOv:21,slT:"1:31.38"},{n:"Bordelon, Zoe",c:"MBSEF",by:2014,gsOv:45,gs:30,gsT:"1:40.75",sl:21,slOv:28,slT:"1:33.12"},{n:"Taylor, Jane",c:"SARS",by:2015,gsOv:46,gs:16,gsT:"1:40.85",sl:14,slOv:43,slT:"1:41.04"},{n:"Byrd, Hayden",c:"MBSEF",by:2015,gsOv:47,gs:17,gsT:"1:41.04",sl:13,slOv:42,slT:"1:39.82"},{n:"Mitchell, Sophia",c:"WPSC",by:2015,gsOv:48,gs:18,gsT:"1:41.79",sl:8,slOv:29,slT:"1:33.26"},{n:"Tate, Memphis",c:"SARS",by:2015,gsOv:49,gs:19,gsT:"1:41.82",sl:16,slOv:47,slT:"1:41.31"},{n:"Pallot, Chloe",c:"CMAC",by:2014,gsOv:50,gs:31,gsT:"1:41.90",sl:23,slOv:32,slT:"1:34.88"},{n:"Shoemaker, Emerson",c:"SARS",by:2014,gsOv:51,gs:32,gsT:"1:42.25",sl:29,slOv:40,slT:"1:39.43"},{n:"Connolly, Rachel",c:"MBSEF",by:2014,gsOv:52,gs:33,gsT:"1:42.54",sl:42,slOv:67,slT:"1:45.47"},{n:"Barron, Ayla",c:"SPAC",by:2014,gsOv:53,gs:34,gsT:"1:42.55",sl:35,slOv:53,slT:"1:42.71"},{n:"Si, Wynne",c:"SPARC",by:2015,gsOv:54,gs:20,gsT:"1:43.04",sl:23,slOv:64,slT:"1:45.13"},{n:"Harker, Sage",c:"BART",by:2015,gsOv:55,gs:21,gsT:"1:44.55",sl:5,slOv:23,slT:"1:31.71"},{n:"Gruber, Genevieve",c:"MHSEF",by:2015,gsOv:56,gs:22,gsT:"1:45.29",sl:12,slOv:40,slT:"1:39.43"},{n:"Ibarra, Alice",c:"MAC",by:2014,gsOv:57,gs:35,gsT:"1:45.45",sl:null,slT:""},{n:"Kudriavtseff, Paige",c:"CMAC",by:2015,gsOv:58,gs:23,gsT:"1:46.10",sl:33,slOv:78,slT:"1:49.47"},{n:"Smeby, Olive",c:"CSAT",by:2014,gsOv:59,gs:36,gsT:"1:46.50",sl:26,slOv:35,slT:"1:37.88"},{n:"Thompson, Colbie",c:"SPARC",by:2014,gsOv:60,gs:37,gsT:"1:46.52",sl:46,slOv:79,slT:"1:50.18"},{n:"Chartrey, Isla",c:"SARS",by:2015,gsOv:61,gs:24,gsT:"1:46.65",sl:20,slOv:57,slT:"1:43.61"},{n:"Berg, Aspen",c:"SARS",by:2014,gsOv:62,gs:38,gsT:"1:46.89",sl:33,slOv:49,slT:"1:41.49"},{n:"Miller, Esme",c:"MBSEF",by:2014,gsOv:63,gs:39,gsT:"1:47.68",sl:36,slOv:55,slT:"1:42.85"},{n:"Herriott, Evie",c:"MBSEF",by:2015,gsOv:64,gs:25,gsT:"1:47.77",sl:35,slOv:85,slT:"1:53.81"},{n:"Merritt, Ellen",c:"SPAC",by:2015,gsOv:65,gs:26,gsT:"1:47.88",sl:31,slOv:75,slT:"1:48.27"},{n:"Vavrosky, Roslyn",c:"LPRT",by:2015,gsOv:66,gs:27,gsT:"1:48.00",sl:24,slOv:65,slT:"1:45.15"},{n:"McCallum, Molly",c:"SARS",by:2014,gsOv:67,gs:40,gsT:"1:48.98",sl:39,slOv:59,slT:"1:44.43"},{n:"Masingale, Harper",c:"MSSRT",by:2014,gsOv:68,gs:41,gsT:"1:50.00",sl:55,slOv:94,slT:"1:59.61"},{n:"Gage, Lucy",c:"MBSEF",by:2014,gsOv:69,gs:42,gsT:"1:50.62",sl:52,slOv:90,slT:"1:58.42"},{n:"Hurl, Marti",c:"MBSEF",by:2014,gsOv:70,gs:43,gsT:"1:50.84",sl:44,slOv:74,slT:"1:48.15"},{n:"Hellem, Mackenzie",c:"WPSC",by:2015,gsOv:71,gs:28,gsT:"1:51.86",sl:28,slOv:71,slT:"1:46.03"},{n:"Bettesworth, Ila",c:"SARS",by:2015,gsOv:72,gs:29,gsT:"1:51.87",sl:26,slOv:68,slT:"1:45.74"},{n:"Lagreid, Caroline",c:"SARS",by:2014,gsOv:73,gs:44,gsT:"1:51.92",sl:32,slOv:48,slT:"1:41.33"},{n:"Conti, Frances",c:"CSAT",by:2015,gsOv:74,gs:30,gsT:"1:52.16",sl:29,slOv:72,slT:"1:47.99"},{n:"Duncan, Helle",c:"BART",by:2015,gsOv:75,gs:31,gsT:"1:52.52",sl:32,slOv:76,slT:"1:49.04"},{n:"Berg, Lily",c:"MBSEF",by:2014,gsOv:76,gs:45,gsT:"1:52.53",sl:38,slOv:58,slT:"1:43.71"},{n:"Inklab, Natania",c:"WPSC",by:2015,gsOv:77,gs:32,gsT:"1:52.75",sl:19,slOv:54,slT:"1:42.72"},{n:"Buciarski, Maya",c:"HART",by:2014,gsOv:78,gs:46,gsT:"1:52.99",sl:54,slOv:93,slT:"1:59.52"},{n:"Obermire, Madison",c:"HART",by:2014,gsOv:79,gs:47,gsT:"1:53.14",sl:null,slT:""},{n:"Johnson, Roslyn",c:"SPAC",by:2014,gsOv:80,gs:48,gsT:"1:53.38",sl:48,slOv:81,slT:"1:51.37"},{n:"Montgomery, Lillian",c:"INDY",by:2015,gsOv:81,gs:33,gsT:"1:53.48",sl:25,slOv:66,slT:"1:45.21"},{n:"Rosen, Sloane",c:"TAS",by:2014,gsOv:82,gs:49,gsT:"1:53.73",sl:43,slOv:69,slT:"1:45.85"},{n:"Kaplanyan, Diana",c:"SPARC",by:2014,gsOv:83,gs:50,gsT:"1:53.98",sl:47,slOv:80,slT:"1:50.89"},{n:"Benc, Ellie",c:"SARS",by:2015,gsOv:84,gs:34,gsT:"1:54.03",sl:17,slOv:50,slT:"1:41.53"},{n:"Likens, Araya",c:"HART",by:2014,gsOv:85,gs:51,gsT:"1:54.07",sl:37,slOv:56,slT:"1:43.35"},{n:"Robbins, Sydney",c:"TAS",by:2014,gsOv:86,gs:52,gsT:"1:54.71",sl:51,slOv:87,slT:"1:55.79"},{n:"Uchikawa, Evelyn",c:"MBSEF",by:2015,gsOv:87,gs:35,gsT:"1:54.86",sl:30,slOv:73,slT:"1:48.05"},{n:"Schoening, Wesley",c:"SPAC",by:2015,gsOv:88,gs:36,gsT:"1:56.27",sl:37,slOv:88,slT:"1:56.50"},{n:"Chheng-Mikula, Hawthorne",c:"TAS",by:2015,gsOv:89,gs:37,gsT:"1:58.39",sl:null,slT:""},{n:"Slone, Claire",c:"SARS",by:2014,gsOv:90,gs:53,gsT:"1:58.84",sl:null,slT:""},{n:"Ellers, Larkin",c:"MBSEF",by:2015,gsOv:91,gs:38,gsT:"1:59.31",sl:41,slOv:96,slT:"2:05.81"},{n:"Cummins, Eva",c:"SARS",by:2014,gsOv:92,gs:54,gsT:"1:59.69",sl:49,slOv:82,slT:"1:52.55"},{n:"Delpit, Lila",c:"MBSEF",by:2015,gsOv:93,gs:39,gsT:"2:01.35",sl:34,slOv:83,slT:"1:52.98"},{n:"Collins, Claire",c:"MBSEF",by:2015,gsOv:94,gs:40,gsT:"2:03.78",sl:40,slOv:95,slT:"2:01.29"},{n:"Kelly, Ann",c:"TAS",by:2014,gsOv:94,gs:55,gsT:"2:03.78",sl:null,slT:""},{n:"Lieb, Helena",c:"MSSRT",by:2015,gsOv:96,gs:41,gsT:"2:05.84",sl:36,slOv:86,slT:"1:54.09"},{n:"Traynor, Juliet",c:"MBSEF",by:2015,gsOv:97,gs:42,gsT:"2:20.91",sl:42,slOv:97,slT:"2:18.13"}];
 const BW_MAP={"olson, gavin":{r:"Alt 17",t:56,tr:"drop"},"guldi, graham":{r:"TAlt 42",t:1,tr:"drop"},"colombo, dylan":{r:"TAlt 33",t:12,tr:"drop"},"bouffard, auguste":{r:"Alt 12",t:87,tr:"rise"},"dix, wyatt":{r:"7",t:268,tr:"rise"},"bonura, nico":{r:"2",t:470,tr:"rise"},"ambauen, brig":{r:"Alt 2",t:166,tr:"rise"},"kelly, leo":{r:"12",t:180,tr:"rise"},"jones, tennyson":{r:"Talt 6",t:120,tr:"rise"},"hatfield, luke":{r:"Alt 8",t:114,tr:"rise"},"schneider, carter":{r:"Alt 24",t:32,tr:"drop"},"ithomitis, logan":{r:"Alt 14",t:62,tr:"rise"},"jarrett, gage":{r:"Talt 16",t:61,tr:"rise"},"lull, august":{r:"Alt 9",t:97,tr:"rise"},"conta, maceo":{r:"Alt 25",t:29,tr:"drop"},"bertell, kaeli":{r:"1",t:492,tr:"rise"},"ozegovic, amina":{r:"Alt 28",t:21,tr:"drop"},"entrop, sloane":{r:"Alt 20",t:37,tr:"drop"},"pettersen, kenzie":{r:"Alt 38",t:1,tr:"drop"},"hoffman, scarlet":{r:"Alt 1",t:148,tr:"rise"},"baroni, jenna":{r:"Alt 2",t:124,tr:"rise"},"webb, sutton":{r:"12",t:190,tr:"rise"},"gidley, elsa":{r:"Alt 4",t:115,tr:"rise"},"garren, cailtyn":{r:"Alt 5",t:109,tr:"rise"},"siebens, aili":{r:"Alt 26",t:25,tr:"drop"},"gaffney, emery":{r:"Alt 10",t:70,tr:"drop"},"purchase, florence":{r:"Alt 12",t:65,tr:"neutral"},"graham, brooke":{r:"Alt 14",t:55,tr:"neutral"},"duff, claire":{r:"Alt 16",t:50,tr:"drop"},"tarnow, maerin":{r:"Alt 9",t:76,tr:"rise"},"rauber, isabel":{r:"Alt 35",t:4,tr:"drop"},"beyreuther, hadley":{r:"Talt 24",t:28,tr:"neutral"},"tennyson, charlotte":{r:"Alt 33",t:6,tr:"drop"},"sullivan, eiden":{r:"Alt 8",t:77,tr:"rise"},"hopkins, lena":{r:"Alt 15",t:53,tr:"drop"},"mccallum, ian":{r:"Alt 23",t:33,tr:"neutral"}};
 
 // ══ REGIONALS DATA ══
@@ -1340,7 +1244,7 @@ function bwData(){if(bwYear===2026)return bwGender==='M'?BW26_M:BW26_W;return bw
 function bwComp(a){return Math.round((a.sqSc/35)*60)+(PP[a.gs]||0)+(PP[a.sl]||0);}
 let bwClass='all';
 function setBWClass(c){bwClass=c;document.querySelectorAll('#bw-class-seg button').forEach((b,i)=>b.className=['all','2nd','1st'][i]===c?'on-a':'');renderBW();}
-function setBWYear(y){bwYear=y;bwClass='all';document.querySelectorAll('#bw-year-seg button').forEach((b,i)=>b.className=[2025,2026][i]===y?'on-a':'');document.querySelectorAll('#bw-class-seg button').forEach((b,i)=>b.className=i===0?'on-a':'');document.getElementById('bw-class-seg').style.display=y===2026?'flex':'none';const sub=document.getElementById('bw-hdr-sub');if(sub)sub.textContent=y===2025?'Lookout Pass · March 28–30, 2025 · Ultimate U12 season finale':'Mount Bachelor, OR · March 27–29, 2026 · Women GS complete · SL Saturday';populateBWClubs();renderBW();}
+function setBWYear(y){bwYear=y;bwClass='all';document.querySelectorAll('#bw-year-seg button').forEach((b,i)=>b.className=[2025,2026][i]===y?'on-a':'');document.querySelectorAll('#bw-class-seg button').forEach((b,i)=>b.className=i===0?'on-a':'');document.getElementById('bw-class-seg').style.display=y===2026?'flex':'none';const sub=document.getElementById('bw-hdr-sub');if(sub)sub.textContent=y===2025?'Lookout Pass · March 28–30, 2025 · Ultimate U12 season finale':(bwGender==='M'?'Mount Bachelor, OR · March 27–29, 2026 · Men GS complete · SL coming':'Mount Bachelor, OR · March 27–29, 2026 · Women GS + SL complete');populateBWClubs();renderBW();}
 function setBWG(g){bwGender=g;document.querySelectorAll('#bw-gseg button').forEach((b,i)=>b.className=['M','W'][i]===g?'on':'');populateBWClubs();renderBW();}
 function populateBWClubs(){const s=document.getElementById('bw-csel');const cl=[...new Set(bwData().map(a=>a.c))].sort();s.innerHTML='<option value="">All clubs</option>'+cl.map(c=>`<option value="${c}">${c}</option>`).join('');}
 function renderBW(){
@@ -1354,11 +1258,11 @@ function renderBW(){
     if(el)el.innerHTML='<div style="padding:32px 0;text-align:center"><div style="font-size:32px;margin-bottom:12px;opacity:.4">⛷</div><div style="font-family:Barlow Condensed,sans-serif;font-size:20px;font-weight:800;text-transform:uppercase;color:var(--amber);margin-bottom:6px">BW 2026 — '+msg+'</div><div style="font-size:14px;color:var(--text2);margin-bottom:4px">Mount Bachelor, Oregon · March 27–29, 2026</div><div style="font-size:12px;color:var(--text3)">Women GS (Fri) loaded · SL results added after Saturday.</div></div>';
     return;
   }
-  const tabs=['bw-ov','bw-rs','bw-pp','bw-wt'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'bw-ov';
-  if(bwYear===2026){({['bw-ov']:renderBW26Ov,['bw-rs']:renderBW26Rs,['bw-pp']:renderBW26Pp,['bw-wt']:renderBW26Wt})[id]();}
-  else{({['bw-ov']:renderBWOv,['bw-rs']:renderBWRs,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
+  const tabs=['bw-ov','bw-gs','bw-sl','bw-pp','bw-wt'],id=tabs.find(id=>document.getElementById(id)?.className.includes('on'))||'bw-ov';
+  if(bwYear===2026){({['bw-ov']:renderBW26Ov,['bw-gs']:renderBW26Gs,['bw-sl']:renderBW26Sl,['bw-pp']:renderBW26Pp,['bw-wt']:renderBW26Wt})[id]();}
+  else{({['bw-ov']:renderBWOv,['bw-gs']:renderBW26Gs,['bw-sl']:renderBW26Sl,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
 }
-function showBWTab(id){const ids=['bw-ov','bw-rs','bw-pp','bw-wt'];document.querySelectorAll('#bw-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#bw-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));if(bwYear===2026&&bwData().length)({['bw-ov']:renderBW26Ov,['bw-rs']:renderBW26Rs,['bw-pp']:renderBW26Pp,['bw-wt']:renderBW26Wt})[id]();else({['bw-ov']:renderBWOv,['bw-rs']:renderBWRs,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
+function showBWTab(id){const ids=['bw-ov','bw-gs','bw-sl','bw-pp','bw-wt'];document.querySelectorAll('#bw-area .tb').forEach((b,i)=>b.className='tb'+(ids[i]===id?' on':''));document.querySelectorAll('#bw-area .pnl').forEach(p=>p.className='pnl'+(p.id===id?' on':''));if(bwYear===2026&&bwData().length)({['bw-ov']:renderBW26Ov,['bw-gs']:renderBW26Gs,['bw-sl']:renderBW26Sl,['bw-pp']:renderBW26Pp,['bw-wt']:renderBW26Wt})[id]();else({['bw-ov']:renderBWOv,['bw-gs']:renderBW26Gs,['bw-sl']:renderBW26Sl,['bw-pp']:renderBWPp,['bw-wt']:renderBWWt})[id]();}
 
 // ── BW 2026 renderers ──
 function bw26Comp(a){const PP2=[0,100,80,60,50,45,40,36,32,28,25,22,20,18,16,14,12,10,9,8,7,6,5,4,3,2,1];const gs=(PP2[a.gs]||0),sl=a.sl?(PP2[a.sl]||0):0;return gs+sl;}
@@ -1374,8 +1278,8 @@ function renderBW26Ov(){
     return`<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border2)">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:${a.gsOv<=10?'var(--green)':'var(--text2)'};width:32px;text-align:center">#${a.gsOv}</div>
       <div style="flex:1"><div style="font-size:13px;font-weight:600">${a.n} ${byTag}</div>
-      <div style="font-size:11px;color:var(--text2)">GS (by yr): #${a.gs} · Time: ${a.gsT}</div></div>
-      ${a.sl?`<div style="font-size:12px;color:var(--text2)">SL #${a.sl}</div>`:'<div style="font-size:10px;color:var(--text3)">SL TBD</div>'}
+      <div style="font-size:11px;color:var(--text2)">GS #${a.gs}/yr · ${a.gsT}</div><div style="font-size:11px;color:var(--text2)">SL ${a.slT?`#${a.sl}/yr · ${a.slT}`:(a.sl===null&&'slOv' in a)?'<span style="color:var(--red)">DNF</span>':`—`}</div></div>
+      ${a.sl?`<div style="font-size:12px;color:var(--text2)">SL #${a.sl} · ${a.slT}</div>`:'<div style="font-size:10px;color:var(--text3)">SL DNF</div>'}
     </div>`;
   }).join('');
   const top5Ov=d.slice(0,5).map(a=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border2)">
@@ -1388,7 +1292,7 @@ function renderBW26Ov(){
   const metricCount=bwClass==='2nd'?d.filter(a=>a.by===2014).length:bwClass==='1st'?d.filter(a=>a.by===2015).length:d.length;
 
   document.getElementById('bw-ov').innerHTML=`
-    ${inProgress?'<div class="inprog">🔴 In Progress — Women GS complete · SL races Saturday · Men results coming</div>':''}
+    
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">${classLabel}</div>
     ${classNote}
     <div class="mg mg-4" style="margin-bottom:12px">
@@ -1405,41 +1309,50 @@ function renderBW26Ov(){
       </div>
     </div>`;
 }
-function renderBW26Rs(){
+function renderBW26Gs(){
   const d=bwData();
   const cf=document.getElementById('bw-csel').value;
-  // Apply class filter first, then club
   let data=[...d];
   if(bwClass==='2nd')data=data.filter(a=>a.by===2014);
   else if(bwClass==='1st')data=data.filter(a=>a.by===2015);
   if(cf)data=data.filter(a=>a.c===cf);
-  // For 1st year, sort by by-year place; otherwise overall
-  if(bwClass==='1st')data.sort((a,b)=>a.gs-b.gs);
-  else data.sort((a,b)=>a.gsOv-b.gsOv);
-  const showByYr=bwClass!=='1st';
-  const rows=data.map((a,i)=>{
+  data.sort((a,b)=>a.gsOv-b.gsOv);
+  const total=d.length, total14=d.filter(a=>a.by===2014).length, total15=d.filter(a=>a.by===2015).length;
+  const rows=data.map(a=>{
     const iS=a.c==='SPAC';
-    const dispRank=bwClass==='1st'?a.gs:a.gsOv;
-    const byTag=a.by===2014?`<span class="by14p">2014 → U14</span>`:`<span class="by13p" style="background:var(--purple-dim);color:var(--purple)">2015 · 1st yr</span>`;
-    const u14note=a.by===2015?`<span style="font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:1px 5px;background:var(--green-dim);color:var(--green);margin-left:4px">→ U14 in 2027-28</span>`:'';
-    return`<tr class="${iS?'sr':''}">
-      <td><b style="font-family:'DM Mono',monospace;color:${dispRank<=3?'var(--amber)':'var(--text2)'}">${dispRank}</b></td>
-      <td>${a.n}${iS?'<span class="spac-pill">SPAC</span>':''}${u14note}</td>
-      <td style="font-size:11px">${a.c}</td>
-      <td>${byTag}</td>
-      <td class="r" style="font-family:'DM Mono',monospace;font-size:12px">${a.gsT}</td>
-      ${showByYr?`<td class="r"><b>${a.gs}</b><span style="font-size:10px;color:var(--text3)"> /yr</span></td>`:''}
-      <td class="r">${a.sl!=null?a.sl:'<span style="color:var(--text3)">TBD</span>'}</td>
-    </tr>`;
+    const byTag=a.by===2014?'<span class="by14p">2014</span>':'<span class="by13p" style="background:var(--purple-dim);color:var(--purple)">2015</span>';
+    const byTotal=a.by===2014?total14:total15;
+    return '<tr class="'+(iS?'sr':'')+'"><td style="font-family:\'DM Mono\',monospace;font-weight:700;color:'+(a.gsOv<=3?'var(--amber)':a.gsOv<=10?'var(--green)':'var(--text2)')+'">#'+a.gsOv+'</td><td>'+a.n+(iS?'<span class="spac-pill">SPAC</span>':'')+'</td><td style="font-size:11px;color:var(--text2)">'+a.c+'</td><td>'+byTag+'</td><td class="r" style="font-family:\'DM Mono\',monospace;font-size:13px;font-weight:600">'+a.gsT+'</td><td class="r" style="font-size:12px">#'+a.gs+' <span style="font-size:10px;color:var(--text3)">of '+byTotal+'</span></td></tr>';
   }).join('');
-  const classHeader=bwClass==='1st'?'Rank in yr':'Overall';
-  document.getElementById('bw-rs').innerHTML=`
-    <div class="inprog" style="margin-bottom:10px">GS Women complete · SL Saturday · Men TBD</div>
-    <div class="tscroll"><table class="rtbl"><thead><tr>
-      <th>${classHeader}</th><th>Athlete</th><th>Club</th><th>Born</th><th class="r">GS Time</th>${showByYr?'<th class="r">By-Yr</th>':''}<th class="r">SL</th>
-    </tr></thead><tbody>${rows}</tbody></table></div>
-    ${showByYr?`<div style="font-size:11px;color:var(--text3);margin-top:8px;padding:8px 10px;background:var(--surface2);border-left:3px solid var(--border)"><b>Overall</b> = finish in the combined field (both birth years together). <b>By-Yr</b> = rank within same birth year only — since 2014-born athletes have a natural age advantage over 2015-born, By-Yr shows how each athlete did against their own class.</div>`:''}
-    `;
+  document.getElementById('bw-gs').innerHTML='<h2>GS Results — '+(bwGender==="M"?"Men":"Women")+' </h2><p class="sub">Giant Slalom · '+(bwGender==="M"?"Friday March 28":"Friday March 27")+' · '+total+' finishers · '+total14+' born-2014 · '+total15+' born-2015</p><div class="tscroll"><table class="rtbl"><thead><tr><th>Overall</th><th>Athlete</th><th>Club</th><th>Born</th><th class="r">Time</th><th class="r">By-Year Rank</th></tr></thead><tbody>'+rows+'</tbody></table></div><div style="font-size:11px;color:var(--text3);margin-top:8px;padding:8px 10px;background:var(--surface2);border-left:3px solid var(--border)"><b>Overall</b> = combined field rank. <b>By-Year</b> = rank vs same birth year only (2014-born have natural age advantage over 2015).</div>';
+}
+
+function renderBW26Sl(){
+  const d=bwData();
+  const cf=document.getElementById('bw-csel').value;
+  // Build SL-sorted data from athletes who have SL results
+  let data=[...d].filter(a=>'slOv' in a);
+  if(bwClass==='2nd')data=data.filter(a=>a.by===2014);
+  else if(bwClass==='1st')data=data.filter(a=>a.by===2015);
+  if(cf)data=data.filter(a=>a.c===cf);
+  const finishers=data.filter(a=>a.slT&&a.slT!=='');
+  const dnf=data.filter(a=>a.sl===null&&a.slT==='');
+  finishers.sort((a,b)=>a.slOv-b.slOv);
+  const total14sl=d.filter(a=>'slOv' in a&&a.by===2014&&a.slT&&a.slT!=='').length;
+  const total15sl=d.filter(a=>'slOv' in a&&a.by===2015&&a.slT&&a.slT!=='').length;
+  const totalFin=total14sl+total15sl;
+  const finRows=finishers.map(a=>{
+    const iS=a.c==='SPAC';
+    const byTag=a.by===2014?'<span class="by14p">2014</span>':'<span class="by13p" style="background:var(--purple-dim);color:var(--purple)">2015</span>';
+    const byTotal=a.by===2014?total14sl:total15sl;
+    return '<tr class="'+(iS?'sr':'')+'"><td style="font-family:\'DM Mono\',monospace;font-weight:700;color:'+(a.slOv<=3?'var(--amber)':a.slOv<=10?'var(--green)':'var(--text2)')+'">#'+a.slOv+'</td><td>'+a.n+(iS?'<span class="spac-pill">SPAC</span>':'')+'</td><td style="font-size:11px;color:var(--text2)">'+a.c+'</td><td>'+byTag+'</td><td class="r" style="font-family:\'DM Mono\',monospace;font-size:13px;font-weight:600">'+a.slT+'</td><td class="r" style="font-size:12px">#'+a.sl+' <span style="font-size:10px;color:var(--text3)">of '+byTotal+'</span></td></tr>';
+  }).join('');
+  const dnfRows=dnf.map(a=>{
+    const iS=a.c==='SPAC';
+    const byTag=a.by===2014?'<span class="by14p">2014</span>':'<span class="by13p" style="background:var(--purple-dim);color:var(--purple)">2015</span>';
+    return '<tr class="'+(iS?'sr':'')+'"><td style="color:var(--red);font-weight:700">DNF</td><td>'+a.n+(iS?'<span class="spac-pill">SPAC</span>':'')+'</td><td style="font-size:11px;color:var(--text2)">'+a.c+'</td><td>'+byTag+'</td><td class="r" style="color:var(--text3);font-size:11px">—</td><td class="r" style="color:var(--text3);font-size:11px">—</td></tr>';
+  }).join('');
+  document.getElementById('bw-sl').innerHTML='<h2>SL Results — '+(bwGender==="M"?"Men":"Women")+'</h2><p class="sub">Slalom · Saturday March 29 · '+totalFin+' finishers · '+total14sl+' born-2014 · '+total15sl+' born-2015</p><div class="tscroll"><table class="rtbl"><thead><tr><th>Overall</th><th>Athlete</th><th>Club</th><th>Born</th><th class="r">Time</th><th class="r">By-Year Rank</th></tr></thead><tbody>'+finRows+(dnfRows?('<tr><td colspan="6" style="padding:6px 10px;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface2);text-transform:uppercase;letter-spacing:.06em">Did Not Finish</td></tr>'+dnfRows):'')+'</tbody></table></div><div style="font-size:11px;color:var(--text3);margin-top:8px;padding:8px 10px;background:var(--surface2);border-left:3px solid var(--border)"><b>Overall</b> = combined field rank (98 finishers total). <b>By-Year</b> = rank within same birth year only.</div>';
 }
 
 function renderBW26Pp(){
@@ -1472,7 +1385,7 @@ function renderBW26Pp(){
   document.getElementById('bw-pp').innerHTML=`
 <h2>Class Pipeline — Born 2014 → U14 2026-27</h2>
 <p class="sub">These ${d.length} athletes enter U14 next season. GS by-year rank is the primary signal — no Skills Quest at BW 2026, so composite is GS + SL points only.</p>
-<div class="ban ban-a"><div class="bt">⚠️ GS only — SL results coming Saturday</div><div class="bd">Projections will sharpen once SL results are added. Athletes who specialize in SL may rank differently in the final composite.</div></div>
+
 <div class="mg mg-3" style="margin-bottom:12px">
   <div class="m"><div class="l">Entering U14</div><div class="v">${d.length}</div></div>
   <div class="m"><div class="l">SPAC</div><div class="v" style="color:var(--blue)">${d.filter(a=>a.c==='SPAC').length}</div></div>
@@ -1948,7 +1861,7 @@ function renderPredictU14(){
   const qualCut=g==='W'?14:12;
   const bw26Src=g==='W'?BW26_W:BW26_M;
   const bw25Src=g==='W'?BW25_W:BW25_M;
-  const bw26FieldSize=g==='W'?55:50; // approx born-2014 field sizes at BW 2026
+  const bw26Field14=bwData().filter(a=>a.by===2014).length,bw26Field15=bwData().filter(a=>a.by===2015).length;
 
   // ── Returning athletes (born 2013, 2nd year) ──
   const bw25SrcR=g==='W'?BW25_W:BW25_M;
@@ -2035,13 +1948,13 @@ function renderPredictU14(){
   // BW 2026 athletes (born 2014) - current data
   bw26Src.filter(a=>a.by===2014).forEach(a=>{
     const hasSL=a.sl!=null;
-    const projTotal=projFromBWRank(a.gs, bw26FieldSize, hasSL);
+    const projTotal=projFromBWRank(a.gs, a.by===2014?bw26Field14:bw26Field15, hasSL);
     const gsP=Math.round(projTotal*0.38);
     const slP=Math.round(projTotal*0.38);
     const sgP=Math.round(projTotal*0.24);
     incoming.push({n:a.n,c:a.c,g,y:2014,gs:0,sl:0,sg:0,total:0,gsP,slP,sgP,projTotal,
       bwRank:a.gs,bwOv:a.gsOv,bwT:a.gsT,hasSL,
-      type:'incoming',label:`Incoming · BW26 GS #${a.gs}/${bw26FieldSize}`});
+      type:'incoming',label:`Incoming · BW26 GS #${a.gs}/${a.by===2014?bw26Field14:bw26Field15}`});
   });
 
   // BW 2025 athletes (born 2014) NOT in BW26 data
